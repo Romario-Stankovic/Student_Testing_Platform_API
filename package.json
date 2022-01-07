@@ -1,0 +1,22 @@
+{
+  "name": "romario.restapi",
+  "version": "1.0.0",
+  "description": "API To access our MySQL database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Romario-Stankovic/Student_Testing_Platform_API.git"
+  },
+  "author": "Romario Stankovic <romario.01.orljevo@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Romario-Stankovic/Student_Testing_Platform_API/issues"
+  },
+  "homepage": "https://github.com/Romario-Stankovic/Student_Testing_Platform_API#readme",
+  "dependencies": {
+    "mysql2": "^2.3.3"
+  }
+}
