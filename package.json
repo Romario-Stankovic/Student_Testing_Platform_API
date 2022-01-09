@@ -1,8 +1,8 @@
 {
-  "name": "romario.restapi",
+  "name": "romario.testing_platform_api",
   "version": "1.0.0",
-  "description": "API To access our MySQL database",
-  "main": "index.js",
+  "description": "API To access MySQL database",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Romario-Stankovic/Student_Testing_Platform_API#readme",
   "dependencies": {
+    "express": "^4.17.2",
     "mysql2": "^2.3.3"
   }
 }
