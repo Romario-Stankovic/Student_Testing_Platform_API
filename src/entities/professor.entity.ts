@@ -1,17 +1,27 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {Column,Entity,Index,OneToMany,PrimaryGeneratedColumn} from "typeorm";
+import { Test } from "./test.entity";
 
-@Entity()
+@Index("uq_professor_username", ["username"], { unique: true })
+@Entity("professor")
 export class Professor {
-    @PrimaryGeneratedColumn({name: "professor_id", type: "int", unsigned: true})
-    professorID: number;
-    @Column({name: "first_name", type: "varchar", length: 50})
-    name: string;
-    @Column({name: "last_name", type:"varchar", length: 50})
-    lastName: string;
-    @Column({type: "varchar", length: 50, unique: true})
-    username: string;
-    @Column({type: "varchar", length: 256})
-    password: string;
-    @Column({name: "image_path", type: "varchar", length: 256})
-    image: string
+  @PrimaryGeneratedColumn({name: "professor_id", type: "int"})
+  professorID: number;
+
+  @Column({name: "first_name", type: "varchar", nullable: true, length: 50 })
+  firstName: string | null;
+
+  @Column({name: "last_name", type: "varchar", nullable: true, length: 50 })
+  lastName: string | null;
+
+  @Column({name: "username", type: "varchar", nullable: true, unique: true, length: 50})
+  username: string | null;
+
+  @Column({name: "password", type: "varchar", nullable: true, length: 256 })
+  password: string | null;
+
+  @Column({name: "image_path", type: "varchar", nullable: true, length: 256 })
+  imagePath: string | null;
+
+  @OneToMany(() => Test, (test) => test.professor)
+  tests: Test[];
 }
