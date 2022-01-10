@@ -43,4 +43,4 @@ const port = 4000;
 
 app.listen(port);
 
-console.log(`Server running and listeing on port ${port}`);
+console.log(`Server running and listening on port ${port}`);
