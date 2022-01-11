@@ -2,14 +2,14 @@ import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGenerat
 import { Answer } from "./answer.entity";
 import { Test } from "./test.entity";
 
-@Index("fk_question_test_id", ["testId"], {})
+@Index("fk_question_test_id", ["testID"], {})
 @Entity("question")
 export class Question {
   @PrimaryGeneratedColumn({ name: "question_id", type: "int"})
-  questionId: number;
+  questionID: number;
 
   @Column({name: "test_id", type: "int", nullable: true })
-  testId: number | null;
+  testID: number | null;
 
   @Column({name: "text", type:"text", nullable: true })
   text: string | null;
@@ -24,6 +24,6 @@ export class Question {
     onDelete: "RESTRICT",
     onUpdate: "RESTRICT",
   })
-  @JoinColumn([{ name: "test_id", referencedColumnName: "testId" }])
+  @JoinColumn([{ name: "test_id", referencedColumnName: "testID" }])
   test: Test;
 }

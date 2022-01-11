@@ -2,7 +2,7 @@ import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGenerat
 import { Question } from "./question.entity";
 import { WorkAnswer } from "./workAnswer.entity";
 
-@Index("fk_answer_question_id", ["questionId"], {})
+@Index("fk_answer_question_id", ["questionID"], {})
 @Entity("answer")
 export class Answer {
   @PrimaryGeneratedColumn({name: "answer_id",type: "int"})
@@ -25,7 +25,7 @@ export class Answer {
     onUpdate: "RESTRICT",
   })
   
-  @JoinColumn([{ name: "question_id", referencedColumnName: "questionId" }])
+  @JoinColumn([{ name: "question_id", referencedColumnName: "questionID" }])
   question: Question;
 
   @OneToMany(() => WorkAnswer, (workAnswer) => workAnswer.answer)

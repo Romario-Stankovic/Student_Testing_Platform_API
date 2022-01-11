@@ -2,18 +2,18 @@ import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn} f
 import { Answer } from "./answer.entity";
 import { Work } from "./work.entity";
 
-@Index("fk_work_answer_answer_id", ["answerId"], {})
-@Index("fk_work_answer_work_id", ["workId"], {})
+@Index("fk_work_answer_answer_id", ["answerID"], {})
+@Index("fk_work_answer_work_id", ["workID"], {})
 @Entity("work_answer")
 export class WorkAnswer {
   @PrimaryGeneratedColumn({name: "work_answer_id", type: "int"})
-  workAnswerId: number;
+  workAnswerID: number;
 
   @Column({ name: "work_id", type: "int", nullable: true })
-  workId: number | null;
+  workID: number | null;
 
   @Column({ name: "answer_id", type: "int", nullable: true })
-  answerId: number | null;
+  answerID: number | null;
 
   @Column({ name: "duration", type: "int", nullable: true })
   duration: number | null;
@@ -25,13 +25,13 @@ export class WorkAnswer {
     onDelete: "RESTRICT",
     onUpdate: "RESTRICT",
   })
-  @JoinColumn([{ name: "answer_id", referencedColumnName: "answerId" }])
+  @JoinColumn([{ name: "answer_id", referencedColumnName: "answerID" }])
   answer: Answer;
 
   @ManyToOne(() => Work, (work) => work.workAnswers, {
     onDelete: "RESTRICT",
     onUpdate: "RESTRICT",
   })
-  @JoinColumn([{ name: "work_id", referencedColumnName: "workId" }])
+  @JoinColumn([{ name: "work_id", referencedColumnName: "workID" }])
   work: Work;
 }

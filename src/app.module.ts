@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConfiguration } from './configs/database.config';
-import { AppController } from './app.controller';
+import { AppController } from './controllers/app.controller';
 import { Student } from './entities/student.entity';
 import { StudentService } from './services/student.service';
 import { Professor } from './entities/professor.entity';
@@ -11,6 +11,8 @@ import { Work } from './entities/work.entity';
 import { WorkAnswer } from './entities/workAnswer.entity';
 import { Test } from './entities/test.entity';
 import { Answer } from './entities/answer.entity';
+import { StudentController } from './controllers/student.controller';
+import { ProfessorController } from './controllers/professor.controller';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
@@ -32,7 +34,7 @@ import { Answer } from './entities/answer.entity';
   }),
   TypeOrmModule.forFeature([ Student, Professor])
   ],
-  controllers: [AppController],
+  controllers: [AppController, StudentController, ProfessorController],
   providers: [StudentService, ProfessorService],
 })
 export class AppModule { }
