@@ -4,18 +4,18 @@ import { AddAdministratorDTO } from "src/dtos/administrator.dto";
 import { Administrator } from "src/entities/administrator.entity";
 import { AdministratorService } from "src/services/administrator.service";
 
-@Controller()
+@Controller("api/admin/")
 export class AdministratorController {
     constructor(
         private administratorService : AdministratorService
     ) {}
 
-    @Get("api/admin/")
+    @Get()
     getAdminByID(@Query("id") id: number) : Promise<Administrator | APIResponse>{
         return this.administratorService.getByID(id);
     }
 
-    @Put("api/admin/")
+    @Put()
     putAdmin(@Body() data : AddAdministratorDTO): Promise<Administrator | APIResponse>{
         return this.administratorService.add(data);
     }

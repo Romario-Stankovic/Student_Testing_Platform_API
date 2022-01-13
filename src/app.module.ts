@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DatabaseConfiguration } from './configs/database.config';
+import { DatabaseConfiguration } from './configs/config';
 import { AppController } from './controllers/app.controller';
 import { Student } from './entities/student.entity';
 import { StudentService } from './services/student.service';
@@ -16,6 +16,7 @@ import { ProfessorController } from './controllers/professor.controller';
 import { Administrator } from './entities/administrator.entity';
 import { AdministratorController } from './controllers/administrator.controller';
 import { AdministratorService } from './services/administrator.service';
+import { AuthController } from './controllers/auth.controller';
 
 @Module({
   imports: [
@@ -43,7 +44,7 @@ import { AdministratorService } from './services/administrator.service';
     Administrator
   ])
   ],
-  controllers: [AppController, StudentController, ProfessorController, AdministratorController],
+  controllers: [AppController, AuthController, StudentController, ProfessorController, AdministratorController],
   providers: [StudentService, ProfessorService, AdministratorService],
 })
 export class AppModule { }

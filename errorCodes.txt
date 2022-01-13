@@ -1,9 +1,13 @@
-3000 - App Warning
+5000 - App Warning
+4000 - Auth Controller Error
 2000 - Controller Warning
 1000 - Service Warning
 0 - OK
 -1000 - Service Error
-    -1001 - Entry does not exist
-    -1002 - Entry insertion with duplicate unique value
+    -1001 - Error, Entry does not exist
+    -1002 - Error, Entry insertion with duplicate unique value
 -2000 - Controller Error
--3000 - App Error
+-4000 - Auth Controller Error
+    -4001 - Auth Error, user does not exist
+    -4002 - Auth Error, password does not match
+-5000 - App Error

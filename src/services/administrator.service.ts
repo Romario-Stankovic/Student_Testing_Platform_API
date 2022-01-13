@@ -24,6 +24,16 @@ export class AdministratorService {
 
     }
 
+    getByUsername(username: string) : Promise<Administrator | APIResponse>{
+        return new Promise(async (resolve) => {
+            let administrator = await this.administrator.findOne({where: {username: username}});
+            if(administrator == null){
+                resolve(new APIResponse("Error", -1001));
+            }
+            resolve(administrator);
+        });
+    }
+
     add(data: AddAdministratorDTO) : Promise<Administrator | APIResponse> {
         let passwordHash = crypto.createHash("sha512");
         passwordHash.update(data.password);

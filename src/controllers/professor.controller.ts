@@ -4,19 +4,19 @@ import { AddProfessorDTO } from "src/dtos/professor.dto";
 import { Professor } from "src/entities/professor.entity";
 import { ProfessorService } from "src/services/professor.service";
 
-@Controller()
+@Controller("api/professor/")
 
 export class ProfessorController {
     constructor(
         private professorService : ProfessorService
     ) { }
 
-    @Get("api/professor/")
+    @Get()
     getProfessorByID(@Query("id") id : number): Promise<Professor | APIResponse> {
       return this.professorService.getByID(id);
     }
 
-    @Put("api/professor/")
+    @Put()
     putProfessor(@Body() data : AddProfessorDTO): Promise<Professor | APIResponse>{
         return this.professorService.add(data);
     }

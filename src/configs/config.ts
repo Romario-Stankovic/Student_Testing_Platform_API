@@ -5,3 +5,5 @@ export const DatabaseConfiguration = {
     password: "app",
     database: "testing_platform"
 }
+
+export const JWTSecret : string = "this is a secret";

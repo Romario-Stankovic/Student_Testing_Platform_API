@@ -4,23 +4,23 @@ import { AddStudentDTO, EditStudentDTO } from "src/dtos/student.dto";
 import { Student } from "src/entities/student.entity";
 import { StudentService } from "src/services/student.service";
 
-@Controller()
+@Controller("api/student/")
 export class StudentController{
     constructor (
         private studentService : StudentService
     ) { }
 
-    @Get("api/student/")
+    @Get()
     getStudentWithIndex(@Query("index") index: number): Promise<Student | APIResponse> {
       return this.studentService.getByIndex(index);
     }
 
-    @Put("api/student/")
+    @Put()
     putStudent(@Body() data: AddStudentDTO): Promise<Student | APIResponse>{
       return this.studentService.add(data);
     }
 
-    @Post("api/student/")
+    @Post()
     postStudent(@Query("id") id : number, @Body() data: EditStudentDTO): Promise<Student | APIResponse> {
       return this.studentService.editByID(id, data);
     }
