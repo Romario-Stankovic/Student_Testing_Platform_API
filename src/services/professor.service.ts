@@ -1,10 +1,10 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { of } from "rxjs";
 import { APIResponse } from "src/api.response";
-import { AddProfessorDTO } from "src/dtos/professor/add.professor.dto";
+import { AddProfessorDTO } from "src/dtos/professor.dto";
 import { Professor } from "src/entities/professor.entity";
 import { Repository } from "typeorm";
+import * as crypto from "crypto";
 
 @Injectable()
 export class ProfessorService {
@@ -26,7 +26,6 @@ export class ProfessorService {
     }
 
     add(data : AddProfessorDTO): Promise<Professor | APIResponse>{
-        const crypto = require("crypto");
 
         let passwordHash = crypto.createHash("sha512");
         passwordHash.update(data.password);
@@ -38,14 +37,13 @@ export class ProfessorService {
         newProfessor.lastName = data.lastName;
         newProfessor.imagePath = data.imagePath;
         newProfessor.username = data.username;
-        newProfessor.password = passwordHashString;
+        newProfessor.passwordHash = passwordHashString;
 
         return new Promise((resolve) => {
             this.professor.save(newProfessor)
             .then(data => resolve(data))
             .catch(error => {
-                let resp : APIResponse = new APIResponse("Error", -1002);
-                resolve(resp);
+                resolve(new APIResponse("Error", -1002));
             });
         });
     }

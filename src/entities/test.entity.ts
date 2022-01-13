@@ -1,25 +1,25 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, } from "typeorm";
 import { Question } from "./question.entity";
 import { Professor } from "./professor.entity";
 import { Work } from "./work.entity";
 
-@Index("fk_test_professor_id", ["professorID"], {})
+@Index("fk_test_professor_id", ["professorId"], {})
 @Entity("test")
 export class Test {
   @PrimaryGeneratedColumn({name: "test_id", type: "int"})
-  testID: number;
+  testId: number;
 
   @Column({ name: "professor_id", type: "int", nullable: true })
-  professorID: number | null;
+  professorId: number | null;
 
-  @Column({ name: "name", type: "varchar", nullable: true, length: 100 })
-  name: string | null;
+  @Column({ name: "test_name", type: "varchar", length: 100 })
+  testName: string;
 
-  @Column({ name: "duration", type: "int", nullable: true })
-  duration: number | null;
+  @Column({ name: "duration", type: "int", default: () => "'0'"})
+  duration: number;
 
-  @Column({ name: "question_count", type: "int", nullable: true })
-  questionCount: number | null;
+  @Column({ name: "question_count", type: "int", default: () => "'0'"})
+  questionCount: number;
 
   @Column({ name: "start_at", type: "datetime", nullable: true })
   startAt: Date | null;
@@ -34,7 +34,7 @@ export class Test {
     onDelete: "RESTRICT",
     onUpdate: "RESTRICT",
   })
-  @JoinColumn([{ name: "professor_id", referencedColumnName: "professorID" }])
+  @JoinColumn([{ name: "professor_id", referencedColumnName: "professorId" }])
   professor: Professor;
 
   @OneToMany(() => Work, (work) => work.test)

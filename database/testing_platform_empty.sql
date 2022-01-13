@@ -16,6 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `administrator`
+--
+
+DROP TABLE IF EXISTS `administrator`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `administrator` (
+  `administrator_id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `last_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `username` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `password_hash` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`administrator_id`),
+  UNIQUE KEY `uq_administrator_username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `administrator`
+--
+
+
+--
 -- Table structure for table `answer`
 --
 
@@ -24,10 +47,10 @@ DROP TABLE IF EXISTS `answer`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `answer` (
   `answer_id` int(11) NOT NULL AUTO_INCREMENT,
-  `question_id` int(11) DEFAULT NULL,
-  `text` text COLLATE utf8_unicode_ci DEFAULT NULL,
+  `question_id` int(11) NOT NULL,
+  `answer_text` text COLLATE utf8_unicode_ci NOT NULL,
   `image_path` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `is_correct` tinyint(1) DEFAULT NULL,
+  `is_correct` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`answer_id`),
   KEY `fk_answer_question_id` (`question_id`),
   CONSTRAINT `fk_answer_question_id` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`)
@@ -48,10 +71,10 @@ DROP TABLE IF EXISTS `professor`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `professor` (
   `professor_id` int(11) NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `last_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `username` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `password` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `first_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `last_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `username` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `password_hash` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
   `image_path` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`professor_id`),
   UNIQUE KEY `uq_professor_username` (`username`)
@@ -72,9 +95,9 @@ DROP TABLE IF EXISTS `question`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `question` (
   `question_id` int(11) NOT NULL AUTO_INCREMENT,
-  `test_id` int(11) DEFAULT NULL,
-  `text` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `image_path` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `test_id` int(11) NOT NULL,
+  `question_text` text COLLATE utf8_unicode_ci NOT NULL,
+  `image_path` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`question_id`),
   KEY `fk_question_test_id` (`test_id`),
   CONSTRAINT `fk_question_test_id` FOREIGN KEY (`test_id`) REFERENCES `test` (`test_id`)
@@ -95,8 +118,8 @@ DROP TABLE IF EXISTS `student`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `student` (
   `student_id` int(11) NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `last_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `first_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `last_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `index_number` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `image_path` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`student_id`),
@@ -119,9 +142,9 @@ DROP TABLE IF EXISTS `test`;
 CREATE TABLE `test` (
   `test_id` int(11) NOT NULL AUTO_INCREMENT,
   `professor_id` int(11) DEFAULT NULL,
-  `name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `duration` int(11) DEFAULT NULL,
-  `question_count` int(11) DEFAULT NULL,
+  `test_name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `duration` int(11) NOT NULL DEFAULT 0,
+  `question_count` int(11) NOT NULL DEFAULT 0,
   `start_at` datetime DEFAULT NULL,
   `end_at` datetime DEFAULT NULL,
   PRIMARY KEY (`test_id`),
@@ -144,11 +167,11 @@ DROP TABLE IF EXISTS `work`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `work` (
   `work_id` int(11) NOT NULL AUTO_INCREMENT,
-  `student_id` int(11) DEFAULT NULL,
-  `test_id` int(11) DEFAULT NULL,
+  `student_id` int(11) NOT NULL,
+  `test_id` int(11) NOT NULL,
   `started_at` datetime DEFAULT NULL,
   `ended_at` datetime DEFAULT NULL,
-  `points` int(11) DEFAULT NULL,
+  `points` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`work_id`),
   UNIQUE KEY `uq_work_student_id_test_id` (`student_id`,`test_id`),
   KEY `fk_work_test_id` (`test_id`),
@@ -172,10 +195,10 @@ DROP TABLE IF EXISTS `work_answer`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `work_answer` (
   `work_answer_id` int(11) NOT NULL AUTO_INCREMENT,
-  `work_id` int(11) DEFAULT NULL,
-  `answer_id` int(11) DEFAULT NULL,
-  `duration` int(11) DEFAULT NULL,
-  `is_checked` tinyint(1) DEFAULT NULL,
+  `work_id` int(11) NOT NULL,
+  `answer_id` int(11) NOT NULL,
+  `duration` int(11) NOT NULL DEFAULT 0,
+  `is_checked` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`work_answer_id`),
   KEY `fk_work_answer_answer_id` (`answer_id`),
   KEY `fk_work_answer_work_id` (`work_id`),
@@ -198,4 +221,4 @@ CREATE TABLE `work_answer` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-07 13:34:27
+-- Dump completed on 2022-01-12 20:44:08

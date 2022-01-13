@@ -13,9 +13,13 @@ import { Test } from './entities/test.entity';
 import { Answer } from './entities/answer.entity';
 import { StudentController } from './controllers/student.controller';
 import { ProfessorController } from './controllers/professor.controller';
+import { Administrator } from './entities/administrator.entity';
+import { AdministratorController } from './controllers/administrator.controller';
+import { AdministratorService } from './services/administrator.service';
 
 @Module({
-  imports: [TypeOrmModule.forRoot({
+  imports: [
+    TypeOrmModule.forRoot({
     type: "mysql",
     host: DatabaseConfiguration.hostname,
     port: DatabaseConfiguration.port,
@@ -23,6 +27,7 @@ import { ProfessorController } from './controllers/professor.controller';
     password: DatabaseConfiguration.password,
     database: DatabaseConfiguration.database,
     entities: [
+      Administrator,
       Answer,
       Professor,
       Question,
@@ -32,9 +37,13 @@ import { ProfessorController } from './controllers/professor.controller';
       WorkAnswer
     ]
   }),
-  TypeOrmModule.forFeature([ Student, Professor])
+  TypeOrmModule.forFeature([
+    Student,
+    Professor,
+    Administrator
+  ])
   ],
-  controllers: [AppController, StudentController, ProfessorController],
-  providers: [StudentService, ProfessorService],
+  controllers: [AppController, StudentController, ProfessorController, AdministratorController],
+  providers: [StudentService, ProfessorService, AdministratorService],
 })
 export class AppModule { }

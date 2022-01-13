@@ -1,20 +1,20 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Answer } from "./answer.entity";
 import { Test } from "./test.entity";
 
-@Index("fk_question_test_id", ["testID"], {})
+@Index("fk_question_test_id", ["testId"], {})
 @Entity("question")
 export class Question {
-  @PrimaryGeneratedColumn({ name: "question_id", type: "int"})
-  questionID: number;
+  @PrimaryGeneratedColumn({name: "question_id", type: "int"})
+  questionId: number;
 
-  @Column({name: "test_id", type: "int", nullable: true })
-  testID: number | null;
+  @Column({ name: "test_id", type: "int"})
+  testId: number;
 
-  @Column({name: "text", type:"text", nullable: true })
-  text: string | null;
+  @Column({ name: "question_text", type: "text"})
+  questionText: string;
 
-  @Column({name: "image_path", type: "varchar", nullable: true, length: 255 })
+  @Column({ name: "image_path", type: "varchar", nullable: true, length: 256 })
   imagePath: string | null;
 
   @OneToMany(() => Answer, (answer) => answer.question)
@@ -24,6 +24,6 @@ export class Question {
     onDelete: "RESTRICT",
     onUpdate: "RESTRICT",
   })
-  @JoinColumn([{ name: "test_id", referencedColumnName: "testID" }])
+  @JoinColumn([{ name: "test_id", referencedColumnName: "testId" }])
   test: Test;
 }

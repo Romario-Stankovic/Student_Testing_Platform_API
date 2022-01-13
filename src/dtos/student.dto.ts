@@ -4,3 +4,9 @@ export class AddStudentDTO {
     index : string;
     imagePath : string;
 }
+
+export class EditStudentDTO {
+    firstName : string;
+    lastName : string;
+    imagePath : string;
+}

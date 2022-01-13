@@ -4,6 +4,6 @@
 0 - OK
 -1000 - Service Error
     -1001 - Entry does not exist
-    -1002 - Entry Insertion with duplicate unique value
+    -1002 - Entry insertion with duplicate unique value
 -2000 - Controller Error
 -3000 - App Error
