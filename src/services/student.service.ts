@@ -40,7 +40,7 @@ export class StudentService {
         newStudent.firstName = data.firstName;
         newStudent.lastName = data.lastName;
         newStudent.indexNumber = data.indexNumber;
-        newStudent.imagePath = data.imagePath;
+        newStudent.imagePath = null;
 
         try {
             this.student.save(newStudent);
@@ -60,8 +60,8 @@ export class StudentService {
 
         student.firstName = data.firstName;
         student.lastName = data.lastName;
-        student.imagePath = data.imagePath;
         student.indexNumber = data.indexNumber;
+        student.imagePath = null;
 
         try {
             this.student.save(student);
