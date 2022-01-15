@@ -1,5 +1,5 @@
 import { Body, Controller, Injectable, Post, Req } from "@nestjs/common";
-import { APIResponse } from "src/api.response";
+import { APIResponse } from "src/misc/api.response";
 import { JWTAdministratorDTO, LoginAdministratorDTO, LoginResponseAdministratorDTO } from "src/dtos/administrator.dto";
 import { AdministratorService } from "src/services/administrator.service";
 import * as crypto from "crypto";
@@ -19,10 +19,8 @@ export class AuthController {
     async login(@Body() data : LoginAdministratorDTO, @Req() request : Request) : Promise<LoginResponseAdministratorDTO | APIResponse>{
         let administrator = await this.administratorService.getByUsername(data.username);
 
-        if(administrator instanceof APIResponse){
-            return new Promise((resolve) => {
-                resolve(new APIResponse("Auth Error", -4001));
-            });
+        if(administrator == null){
+            return new Promise(resolve => {resolve(new APIResponse("Auth Error", 4001, "Wrong Username"))});
         }
 
         let passwordHash = crypto.createHash("sha512");
@@ -30,18 +28,16 @@ export class AuthController {
         let passwordHashString = passwordHash.digest("hex").toUpperCase();
 
         if(administrator.passwordHash != passwordHashString){
-            return new Promise((resolve) => {
-                resolve(new APIResponse("Auth Error", -4002));
-            });
+            return new Promise(resolve => {resolve(new APIResponse("Auth Error", 4002, "Wrong Password"))});
         }
 
         let dateTime = new Date();
-        dateTime.setDate(dateTime.getDate() + 1);
+        dateTime.setDate(dateTime.getDate() + 1); // Add 1 day to the current date
 
         let tokenData = new JWTAdministratorDTO(
             administrator.administratorId,
             administrator.username,
-            dateTime.getTime() / 1000,
+            dateTime.getTime(),
             request.ip.toString(),
             request.headers["user-agent"]
         );
@@ -56,8 +52,6 @@ export class AuthController {
             token
         );
 
-        return new Promise((resolve) => {
-            resolve(response);
-        });
+        return new Promise(resolve => {resolve(response)});
     }
 }

@@ -1,6 +1,5 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { APIResponse } from "src/api.response";
 import { AddProfessorDTO } from "src/dtos/professor.dto";
 import { Professor } from "src/entities/professor.entity";
 import { Repository } from "typeorm";
@@ -13,23 +12,30 @@ export class ProfessorService {
         private readonly professor: Repository<Professor>
     ) {}
 
-    getByID(id: number): Promise<Professor | APIResponse> {
+    async getByID(id: number): Promise<Professor | null> {
+        let professor = await this.professor.findOne(id);
 
-        return new Promise(async (resolve) => {
-            let professor = await this.professor.findOne(id);
-            if(professor == null){
-                resolve(new APIResponse("Error", -1001));
-            }
-            resolve(professor);
-        });
+        if(professor == undefined){
+            return new Promise(resolve => {resolve(null)});
+        }
+
+        return new Promise(resolve => {resolve(professor)});
 
     }
 
-    add(data : AddProfessorDTO): Promise<Professor | APIResponse>{
+    async getByUsername(username: string) : Promise<Professor | null>{
+        let professor = await this.professor.findOne({where: {username: username}});
+        if(professor == undefined){
+            return new Promise(resolve => {resolve(null)});
+        }
+
+        return new Promise(resolve => {resolve(professor)});
+    }
+
+    add(data : AddProfessorDTO): Promise<boolean>{
 
         let passwordHash = crypto.createHash("sha512");
         passwordHash.update(data.password);
-
         let passwordHashString = passwordHash.digest("hex").toUpperCase();
 
         let newProfessor : Professor = new Professor();
@@ -39,13 +45,12 @@ export class ProfessorService {
         newProfessor.username = data.username;
         newProfessor.passwordHash = passwordHashString;
 
-        return new Promise((resolve) => {
-            this.professor.save(newProfessor)
-            .then(data => resolve(data))
-            .catch(error => {
-                resolve(new APIResponse("Error", -1002));
-            });
-        });
+        try {
+            this.professor.save(newProfessor);
+            return new Promise(resolve => {resolve(true)});
+        }catch(error){
+            return new Promise(resolve => {resolve(false)});
+        }
     }
 
 }

@@ -6,4 +6,5 @@ export const DatabaseConfiguration = {
     database: "testing_platform"
 }
 
+// JSON Web Token
 export const JWTSecret : string = "this is a secret";

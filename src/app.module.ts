@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConfiguration } from './configs/config';
 import { AppController } from './controllers/app.controller';
@@ -17,6 +17,9 @@ import { Administrator } from './entities/administrator.entity';
 import { AdministratorController } from './controllers/administrator.controller';
 import { AdministratorService } from './services/administrator.service';
 import { AuthController } from './controllers/auth.controller';
+import { AdminAuthMiddleware } from './middlewares/adminAuth.middleware';
+import { QuestionController } from './controllers/question.controller';
+import { QuestionService } from './services/question.service';
 
 @Module({
   imports: [
@@ -41,10 +44,21 @@ import { AuthController } from './controllers/auth.controller';
   TypeOrmModule.forFeature([
     Student,
     Professor,
-    Administrator
+    Administrator,
+    Question,
+    Answer
   ])
   ],
-  controllers: [AppController, AuthController, StudentController, ProfessorController, AdministratorController],
-  providers: [StudentService, ProfessorService, AdministratorService],
+  controllers: [AppController, AuthController, StudentController, ProfessorController, AdministratorController, QuestionController],
+  providers: [StudentService, ProfessorService, AdministratorService, QuestionService],
+  exports: [AdministratorService]
 })
-export class AppModule { }
+export class AppModule implements NestModule {
+  
+  configure(consumer: MiddlewareConsumer) {
+    /* consumer.apply(AdminAuthMiddleware)
+    .exclude("auth/*")
+    .forRoutes("api/*") */
+  }
+  
+}
