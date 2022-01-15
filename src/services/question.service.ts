@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { resolve } from "path/posix";
 import { Question } from "src/entities/question.entity";
 import { Repository } from "typeorm";
 
@@ -13,10 +12,10 @@ export class QuestionService {
 
     async getByID(id: number) : Promise<Question | null> {
 
-        let question = await this.question.findOne(id);
+        let question = await this.question.findOne(id, {relations: ["answers"]});
 
         if(question == undefined){
-            return new Promise(resovle => {resolve(null)});
+            return new Promise(resolve => {resolve(null)});
         }
 
         return new Promise(resolve => {resolve(question)});

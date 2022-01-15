@@ -51,6 +51,11 @@ export class StudentController{
     @Post()
     async postStudent(@Query("id") id : number, @Body() data: EditStudentDTO): Promise<APIResponse> {
 
+      let student = await this.studentService.getByID(id);
+      if(student == null){
+        return new Promise(resolve => {resolve(new APIResponse("Error", 2001, "Student does not exist"))});
+      }
+
       if(data.firstName == null || data.firstName.length == 0){
         return new Promise(resolve => {resolve(new APIResponse("Error", 2002, "First name not valid"))});
       }
@@ -63,7 +68,7 @@ export class StudentController{
         return new Promise(resolve => {resolve(new APIResponse("Error", 2002, "Index number not valid"))});
       }
 
-      let student = await this.studentService.getByIndex(data.indexNumber);
+      student = await this.studentService.getByIndex(data.indexNumber);
       if (student != null && student.studentId != id) {
         return new Promise(resolve => { resolve(new APIResponse("Error", 2003, "Index already exists")) });
       }
