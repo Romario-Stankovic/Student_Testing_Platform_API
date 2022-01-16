@@ -6,6 +6,7 @@ import { StudentService } from "src/services/student.service";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { StorageConfiguration } from "src/configs/config";
 import { diskStorage } from "multer";
+import { validateIndexNumber, validateLastName, validateName } from "src/misc/validations";
 
 @Controller("api/student/")
 export class StudentController{
@@ -17,7 +18,7 @@ export class StudentController{
     async getStudentWithIndex(@Query("index") index: string): Promise<Student | APIResponse> {
       let student = await this.studentService.getByIndex(index);
       if(student == null){
-        return new Promise(resolve => {resolve(new APIResponse("Error", 2001, "Not found"))})
+        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.NULL_ENTRY, "Not Found!"))});
       }
 
       return new Promise(resolve => {resolve(student)});
@@ -27,28 +28,28 @@ export class StudentController{
     @Put()
     async putStudent(@Body() data: AddStudentDTO): Promise<APIResponse>{
 
-      if(data.firstName == null || data.firstName.length == 0){
-        return new Promise(resolve => {resolve(new APIResponse("Error", 2002, "First name not valid"))});
+      if(!validateName(data.firstName)){
+        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.VALIDATION_FAILED, "Invalid firstName"))});
       }
 
-      if(data.lastName == null || data.lastName.length == 0){
-        return new Promise(resolve => {resolve(new APIResponse("Error", 2002, "Last name not valid"))});
+      if(!validateLastName(data.lastName)){
+        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.VALIDATION_FAILED, "Invalid lastName"))});
       }
 
-      if(data.indexNumber == null || data.indexNumber.length != 10 || isNaN(Number.parseInt(data.indexNumber))){
-        return new Promise(resolve => {resolve(new APIResponse("Error", 2002, "Index number not valid"))});
+      if(!validateIndexNumber(data.indexNumber)){
+        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.VALIDATION_FAILED, "Invalid indexNumber"))});
       }
 
       let student = await this.studentService.getByIndex(data.indexNumber);
       if (student != null) {
-        return new Promise(resolve => { resolve(new APIResponse("Error", 2003, "Index already exists")) });
+        return new Promise(resolve => { resolve(APIResponse.fromTemplate(APIResponse.DUPLICATE_UNIQUE_VALUE, "Index number taken")) });
       }
 
       if(!(await this.studentService.add(data))){
-        return new Promise(resolve => {resolve(new APIResponse("Error", 1001, "Failed to save"))});
+        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.SAVE_FAILED, "Failed to save"))});
       }
       
-      return new Promise(resolve => {resolve(new APIResponse("OK!", 0, "Student added successfully"))});
+      return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.OK, "Student added successfully"))});
     }
 
     @Post()
@@ -56,31 +57,31 @@ export class StudentController{
 
       let student = await this.studentService.getByID(id);
       if(student == null){
-        return new Promise(resolve => {resolve(new APIResponse("Error", 2001, "Student does not exist"))});
+        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.NULL_ENTRY, "Student does not exist"))});
       }
 
-      if(data.firstName == null || data.firstName.length == 0){
-        return new Promise(resolve => {resolve(new APIResponse("Error", 2002, "First name not valid"))});
+      if(!validateName(data.firstName)){
+        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.VALIDATION_FAILED, "Invalid firstName"))});
       }
 
-      if(data.lastName == null || data.lastName.length == 0){
-        return new Promise(resolve => {resolve(new APIResponse("Error", 2002, "Last name not valid"))});
+      if(!validateLastName(data.lastName)){
+        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.VALIDATION_FAILED, "Invalid lastName"))});
       }
 
-      if(data.indexNumber == null || data.indexNumber.length != 10 || isNaN(Number.parseInt(data.indexNumber))){
-        return new Promise(resolve => {resolve(new APIResponse("Error", 2002, "Index number not valid"))});
+      if(!validateIndexNumber(data.indexNumber)){
+        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.VALIDATION_FAILED, "Invalid indexNumber"))});
       }
 
       student = await this.studentService.getByIndex(data.indexNumber);
       if (student != null && student.studentId != id) {
-        return new Promise(resolve => { resolve(new APIResponse("Error", 2003, "Index already exists")) });
+        return new Promise(resolve => { resolve(APIResponse.fromTemplate(APIResponse.DUPLICATE_UNIQUE_VALUE, "Index number taken")) });
       }
 
       if(!(await this.studentService.editByID(id, data))){
-        return new Promise(resolve => {resolve(new APIResponse("Error", 1001))});
+        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.SAVE_FAILED, "Failed to save"))});
       }
 
-      return new Promise(resolve => {resolve(new APIResponse("OK!", 0, "Edit Successful"))});
+      return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.OK, "Student edited successfully"))});
 
     }
 
@@ -89,7 +90,7 @@ export class StudentController{
       "image",
       {
         storage: diskStorage({
-          destination: StorageConfiguration.images,
+          destination: StorageConfiguration.image.destination,
           filename: (request, file, callback) => {
             let originalName: string = file.originalname;
             let normalizedName = originalName.replace(/\s+/g, "-");
@@ -122,12 +123,12 @@ export class StudentController{
         },
         limits: {
           files: 1,
-          fieldSize: StorageConfiguration.maxImageSize
+          fileSize: StorageConfiguration.image.maxSize
         }
       }
     ))
-    uploadPhoto(@UploadedFile() image : Express.Multer.File){
-        console.log(image.filename);
+    async uploadPhoto(@UploadedFile() image){
+        console.log(image);
     }
 
 }

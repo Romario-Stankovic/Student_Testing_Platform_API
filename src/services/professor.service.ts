@@ -2,8 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { AddProfessorDTO } from "src/dtos/professor.dto";
 import { Professor } from "src/entities/professor.entity";
-import { Repository } from "typeorm";
 import * as crypto from "crypto";
+import { Repository } from "typeorm/repository/Repository";
 
 @Injectable()
 export class ProfessorService {

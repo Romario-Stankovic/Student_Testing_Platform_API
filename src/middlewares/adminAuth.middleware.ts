@@ -2,14 +2,20 @@ import { HttpException, HttpStatus, Injectable, NestMiddleware } from "@nestjs/c
 import { NextFunction } from "express";
 import { AdministratorService } from "src/services/administrator.service";
 import * as jwt from "jsonwebtoken";
-import { JWTAdministratorDTO } from "src/dtos/administrator.dto";
 import { JWTSecret } from "src/configs/config";
 import { Request } from "express";
+import { JwtDTO } from "src/dtos/auth.dto";
+import { StudentService } from "src/services/student.service";
+import { ProfessorService } from "src/services/professor.service";
 
 @Injectable()
 export class AdminAuthMiddleware implements NestMiddleware {
 
-    constructor (private readonly administratorService : AdministratorService){
+    constructor (
+        private readonly administratorService : AdministratorService,
+        private readonly studentService : StudentService,
+        private readonly professorService : ProfessorService
+        ){
 
     }
 
@@ -27,8 +33,12 @@ export class AdminAuthMiddleware implements NestMiddleware {
             throw new HttpException("Bad token", HttpStatus.UNAUTHORIZED);
         }
 
-        let tokenData : JWTAdministratorDTO;
-        tokenData = jwt.verify(tokenParts[1], JWTSecret);
+        let tokenData : JwtDTO;
+        try {
+            tokenData = jwt.verify(tokenParts[1], JWTSecret);
+        }catch(error) {
+            throw new HttpException("Bad token", HttpStatus.UNAUTHORIZED);
+        }
 
         if(!tokenData){
             throw new HttpException("Bad token", HttpStatus.UNAUTHORIZED);
@@ -42,10 +52,21 @@ export class AdminAuthMiddleware implements NestMiddleware {
             throw new HttpException("Bad token", HttpStatus.UNAUTHORIZED);
         }
 
-        let admin = await this.administratorService.getByID(tokenData.administratorId);
-
-        if(admin == null){
-            throw new HttpException("Administrator not found", HttpStatus.UNAUTHORIZED);
+        if (tokenData.role == "administrator") {
+            let admin = await this.administratorService.getByID(tokenData.id);
+            if (admin == null) {
+                throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
+            }
+        }else if(tokenData.role == "student"){
+            let student = await this.studentService.getByID(tokenData.id);
+            if(student == null){
+                throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
+            }
+        }else if(tokenData.role == "professor"){
+            let professor = await this.professorService.getByID(tokenData.id);
+            if(professor == null){
+                throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
+            }
         }
 
         let currentTimeStamp = new Date().getTime();

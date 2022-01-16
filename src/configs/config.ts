@@ -10,8 +10,11 @@ export const DatabaseConfiguration = {
 export const JWTSecret : string = "this is a secret";
 
 export const StorageConfiguration = {
-    storage: "storage/",
-    images: "storage/images/",
+    mainDestination: "storage/",
 
-    maxImageSize: 1024 * 1024 * 3 //Bytes => 3MB
+    image: {
+        destination: "storage/images",
+        maxSize: 1024 * 1024 * 3 //(Bytes) 3 MB
+    }
+
 }
