@@ -3,9 +3,6 @@ import { APIResponse } from "src/misc/api.response";
 import { AddStudentDTO, EditStudentDTO } from "src/dtos/student.dto";
 import { Student } from "src/entities/student.entity";
 import { StudentService } from "src/services/student.service";
-import { FileInterceptor } from "@nestjs/platform-express";
-import { StorageConfiguration } from "src/configs/config";
-import { diskStorage } from "multer";
 import { validateIndexNumber, validateLastName, validateName } from "src/misc/validations";
 
 @Controller("api/student/")
@@ -83,52 +80,6 @@ export class StudentController{
 
       return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.OK, "Student edited successfully"))});
 
-    }
-
-    @Post("uploadPhoto")
-    @UseInterceptors(FileInterceptor(
-      "image",
-      {
-        storage: diskStorage({
-          destination: StorageConfiguration.image.destination,
-          filename: (request, file, callback) => {
-            let originalName: string = file.originalname;
-            let normalizedName = originalName.replace(/\s+/g, "-");
-            let now = new Date();
-  
-            let datePart = "";
-            let radnomPart = "";
-  
-            datePart += now.getFullYear().toString() + (now.getMonth() + 1).toString() + now.getDate().toString();
-            radnomPart = new Array(10).fill(0).map(e => (Math.random() * 9).toFixed(0).toString()).join("");
-  
-            let fileName = datePart + "-" + radnomPart + "-" + normalizedName;
-            callback(null, fileName);
-            
-          }
-        }),
-        fileFilter: (request, file, callback) => {
-          if(!file.originalname.match(/\.(jpg|png)$/)){
-            callback(new Error("Wrong file format"), false);
-            return;
-          }
-
-          if(!(file.mimetype.includes("jpeg") || file.mimetype.includes("png"))){
-            callback(new Error("Bad content"), false);
-            return;
-          }
-
-          callback(null, true);
-
-        },
-        limits: {
-          files: 1,
-          fileSize: StorageConfiguration.image.maxSize
-        }
-      }
-    ))
-    async uploadPhoto(@UploadedFile() image){
-        console.log(image);
     }
 
 }

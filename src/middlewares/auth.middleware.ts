@@ -75,6 +75,8 @@ export class AdminAuthMiddleware implements NestMiddleware {
             throw new HttpException("Token has expired", HttpStatus.UNAUTHORIZED);
         }
 
+        request.token = tokenData;
+
         next();
     }
 

@@ -22,7 +22,7 @@ export class AuthController {
 
     }
 
-    generateToken(id : number, identity : string, role : string, expDays : number, ip : string, userAgent : string) : string{
+    generateToken(id : number, identity : string, role : ("administrator" | "professor" | "student"), expDays : number, ip : string, userAgent : string) : string{
         let dateTime = new Date();
         dateTime.setDate(dateTime.getDate() + expDays); // Add 1 day to the current date
 
@@ -39,6 +39,16 @@ export class AuthController {
         return token;
     }
 
+    checkPassword(storedPassword, receivedPassword){
+        let hash = crypto.createHash("sha512");
+        hash.update(receivedPassword);
+        if(storedPassword != hash.digest("hex").toUpperCase()){
+            return false;
+        }
+
+        return true;
+    }
+
     @Post("login/admin")
     async administratorLogin(@Body() data : LoginAdministratorDTO, @Req() request : Request) : Promise<LoginResponseAdministratorDTO | APIResponse>{
         let administrator = await this.administratorService.getByUsername(data.username);
@@ -47,15 +57,11 @@ export class AuthController {
             return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.USER_DOES_NOT_EXIST, "Wrong username"))});
         }
 
-        let passwordHash = crypto.createHash("sha512");
-        passwordHash.update(data.password);
-        let passwordHashString = passwordHash.digest("hex").toUpperCase();
-
-        if(administrator.passwordHash != passwordHashString){
+        if(!this.checkPassword(administrator.passwordHash, data.password)){
             return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.PASSWORD_MISSMATCH, "Wrong password"))});
         }
 
-        let token = this.generateToken(administrator.administratorId, administrator.username, "administrator", 1, request.ip.toString(), request.headers["user-agent"]);
+        let token = this.generateToken(administrator.administratorId, administrator.username, "administrator", 14, request.ip.toString(), request.headers["user-agent"]);
 
         let response : LoginResponseAdministratorDTO = new LoginResponseAdministratorDTO(
             administrator.administratorId,
@@ -75,16 +81,12 @@ export class AuthController {
         if(professor == null){
             return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.USER_DOES_NOT_EXIST, "Wrong username"))});
         }
-
-        let passwordHash = crypto.createHash("sha512");
-        passwordHash.update(data.password);
-        let passwordHashString = passwordHash.digest("hex").toUpperCase();
-
-        if(professor.passwordHash != passwordHashString){
+        
+        if(!this.checkPassword(professor.passwordHash, data.password)){
             return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.PASSWORD_MISSMATCH, "Wrong password"))});
         }
 
-        let token = this.generateToken(professor.professorId, professor.username, "professor", 1, request.ip.toString(), request.headers["user-agent"]);
+        let token = this.generateToken(professor.professorId, professor.username, "professor", 14, request.ip.toString(), request.headers["user-agent"]);
 
         let response : LoginResponseProfessorDTO = new LoginResponseProfessorDTO(
             professor.professorId,
@@ -106,7 +108,7 @@ export class AuthController {
             return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.USER_DOES_NOT_EXIST, "Wrong index number"))});
         }
 
-        let token = this.generateToken(student.studentId, student.indexNumber, "student", 1, request.ip.toString(), request.headers["user-agent"]);
+        let token = this.generateToken(student.studentId, student.indexNumber, "student", 14, request.ip.toString(), request.headers["user-agent"]);
 
         let response : LoginResponseStudentDTO = new LoginResponseStudentDTO(
             student.studentId,

@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Put, Query } from "@nestjs/common";
+import { Body, Controller, Get, Put, Query, UseGuards } from "@nestjs/common";
 import { APIResponse } from "src/misc/api.response";
 import { AddAdministratorDTO } from "src/dtos/administrator.dto";
 import { Administrator } from "src/entities/administrator.entity";
 import { AdministratorService } from "src/services/administrator.service";
 import { validateLastName, validateName, validatePassword, validateUsername } from "src/misc/validations";
+import { AllowedRoles } from "src/misc/allow.role.decorator";
+import { RoleGuard } from "src/guards/role.guard";
 
 @Controller("api/admin/")
 export class AdministratorController {
@@ -11,6 +13,8 @@ export class AdministratorController {
         private administratorService : AdministratorService
     ) {}
 
+    @UseGuards(RoleGuard)
+    @AllowedRoles("administrator")
     @Get()
     async getAdminByID(@Query("id") id: number) : Promise<Administrator | APIResponse>{
         let administrator = await this.administratorService.getByID(id);
@@ -21,6 +25,8 @@ export class AdministratorController {
         return new Promise(resolve => {resolve(administrator)});
     }
 
+    @UseGuards(RoleGuard)
+    @AllowedRoles("administrator")
     @Put()
     async putAdmin(@Body() data : AddAdministratorDTO): Promise<Administrator | APIResponse>{
         
