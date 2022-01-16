@@ -58,10 +58,17 @@ export class StudentService {
             return new Promise(resolve => {resolve(false)});
         }
 
-        student.firstName = data.firstName;
-        student.lastName = data.lastName;
-        student.indexNumber = data.indexNumber;
-        student.imagePath = null;
+        if(data.firstName != null){
+            student.firstName = data.firstName;
+        }
+
+        if(data.lastName != null){
+            student.lastName = data.lastName;
+        }
+        
+        if(data.indexNumber != null){
+            student.indexNumber = data.indexNumber;
+        }
 
         try {
             this.student.save(student);

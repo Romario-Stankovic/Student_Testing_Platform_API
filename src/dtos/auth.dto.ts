@@ -1,4 +1,4 @@
-export class JwtDTO {
+export class JSONWebToken {
     id : number;
     identity : string;
     role : "administrator" | "professor" | "student";
@@ -26,4 +26,58 @@ export class JwtDTO {
         }
     }
 
+}
+
+export class LoginResponseAdministratorDTO {
+    administratorId : number;
+    username : string;
+    firstName : string;
+    lastName : string;
+    token : string;
+
+    constructor(administratorId : number, username : string, firstName : string, lastName : string, token : string){
+        this.administratorId = administratorId;
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.token = token;
+    }
+
+}
+
+export class LoginResponseProfessorDTO {
+    professorId : number;
+    username : string;
+    firstName : string;
+    lastName : string;
+    imagePath : string | null;
+    token : string;
+
+    constructor(professorId : number, username : string, firstName : string, lastName : string, imagePath : string | null, token : string){
+        this.professorId = professorId;
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.imagePath = imagePath;
+        this.token = token;
+    }
+
+}
+
+export class LoginResponseStudentDTO {
+    studentId : number;
+    firstName : string;
+    lastName : string;
+    indexNumber : string;
+    imagePath : string | null;
+    token : string;
+
+    constructor(studentId : number, firstName : string, lastName : string, indexNumber : string, imagePath : string | null, token : string){
+        this.studentId = studentId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.indexNumber = indexNumber;
+        this.imagePath = imagePath;
+        this.token = token;
+    }
 }

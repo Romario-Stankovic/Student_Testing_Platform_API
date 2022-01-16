@@ -14,7 +14,6 @@ export class RoleGuard implements CanActivate{
         const allowedToRoles = this.reflector.get<("administrator" | "professor" | "student")[]>("allowedRoles", context.getHandler());
 
         if(!allowedToRoles.includes(request.token.role)){
-            console.log(request.token.role);
             return false;
         }
 

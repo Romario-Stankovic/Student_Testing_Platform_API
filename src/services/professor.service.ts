@@ -41,7 +41,6 @@ export class ProfessorService {
         let newProfessor : Professor = new Professor();
         newProfessor.firstName = data.firstName;
         newProfessor.lastName = data.lastName;
-        newProfessor.imagePath = data.imagePath;
         newProfessor.username = data.username;
         newProfessor.passwordHash = passwordHashString;
 

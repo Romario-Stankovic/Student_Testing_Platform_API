@@ -4,7 +4,7 @@ import { AdministratorService } from "src/services/administrator.service";
 import * as jwt from "jsonwebtoken";
 import { JWTSecret } from "src/configs/config";
 import { Request } from "express";
-import { JwtDTO } from "src/dtos/auth.dto";
+import { JSONWebToken } from "src/dtos/auth.dto";
 import { StudentService } from "src/services/student.service";
 import { ProfessorService } from "src/services/professor.service";
 
@@ -33,7 +33,7 @@ export class AdminAuthMiddleware implements NestMiddleware {
             throw new HttpException("Bad token", HttpStatus.UNAUTHORIZED);
         }
 
-        let tokenData : JwtDTO;
+        let tokenData : JSONWebToken;
         try {
             tokenData = jwt.verify(tokenParts[1], JWTSecret);
         }catch(error) {

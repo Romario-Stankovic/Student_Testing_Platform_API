@@ -1,16 +1,16 @@
 import { Body, Controller, Post, Req } from "@nestjs/common";
 import { APIResponse } from "src/misc/api.response";
-import { LoginAdministratorDTO, LoginResponseAdministratorDTO } from "src/dtos/administrator.dto";
+import { LoginAdministratorDTO } from "src/dtos/administrator.dto";
 import { AdministratorService } from "src/services/administrator.service";
 import * as crypto from "crypto";
 import * as jwt from "jsonwebtoken";
 import { Request } from "express";
 import { JWTSecret } from "src/configs/config";
-import { JwtDTO } from "src/dtos/auth.dto";
-import { LoginProfessorDTO, LoginResponseProfessorDTO } from "src/dtos/professor.dto";
+import { JSONWebToken, LoginResponseAdministratorDTO, LoginResponseProfessorDTO, LoginResponseStudentDTO } from "src/dtos/auth.dto";
+import { LoginProfessorDTO } from "src/dtos/professor.dto";
 import { ProfessorService } from "src/services/professor.service";
 import { StudentService } from "src/services/student.service";
-import { LoginResponseStudentDTO, LoginStudentDTO } from "src/dtos/student.dto";
+import { LoginStudentDTO } from "src/dtos/student.dto";
 
 @Controller("auth/")
 export class AuthController {
@@ -26,7 +26,7 @@ export class AuthController {
         let dateTime = new Date();
         dateTime.setDate(dateTime.getDate() + expDays); // Add 1 day to the current date
 
-        let tokenData = new JwtDTO(
+        let tokenData = new JSONWebToken(
             id,
             identity,
             role,
@@ -54,11 +54,11 @@ export class AuthController {
         let administrator = await this.administratorService.getByUsername(data.username);
 
         if(administrator == null){
-            return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.USER_DOES_NOT_EXIST, "Wrong username"))});
+            return new Promise(resolve => {resolve(APIResponse.USER_DOES_NOT_EXIST)});
         }
 
         if(!this.checkPassword(administrator.passwordHash, data.password)){
-            return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.PASSWORD_MISSMATCH, "Wrong password"))});
+            return new Promise(resolve => {resolve(APIResponse.PASSWORD_MISSMATCH)});
         }
 
         let token = this.generateToken(administrator.administratorId, administrator.username, "administrator", 14, request.ip.toString(), request.headers["user-agent"]);
@@ -79,11 +79,11 @@ export class AuthController {
         let professor = await this.professorService.getByUsername(data.username);
 
         if(professor == null){
-            return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.USER_DOES_NOT_EXIST, "Wrong username"))});
+            return new Promise(resolve => {resolve(APIResponse.USER_DOES_NOT_EXIST)});
         }
         
         if(!this.checkPassword(professor.passwordHash, data.password)){
-            return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.PASSWORD_MISSMATCH, "Wrong password"))});
+            return new Promise(resolve => {resolve(APIResponse.PASSWORD_MISSMATCH)});
         }
 
         let token = this.generateToken(professor.professorId, professor.username, "professor", 14, request.ip.toString(), request.headers["user-agent"]);
@@ -105,7 +105,7 @@ export class AuthController {
         let student = await this.studentService.getByIndex(data.indexNumber);
 
         if(student == null){
-            return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.USER_DOES_NOT_EXIST, "Wrong index number"))});
+            return new Promise(resolve => {resolve(APIResponse.USER_DOES_NOT_EXIST)});
         }
 
         let token = this.generateToken(student.studentId, student.indexNumber, "student", 14, request.ip.toString(), request.headers["user-agent"]);

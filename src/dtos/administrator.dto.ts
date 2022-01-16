@@ -1,28 +1,33 @@
+import * as Validator from "class-validator";
+
 export class AddAdministratorDTO {
+    @Validator.IsNotEmpty()
+    @Validator.IsString()
+    @Validator.Length(1, 50)
     firstName : string;
+
+    @Validator.IsNotEmpty()
+    @Validator.IsString()
+    @Validator.Length(1, 50)
     lastName : string;
+
+    @Validator.IsNotEmpty()
+    @Validator.IsString()
+    @Validator.Length(1, 50)
     username : string;
+
+    @Validator.IsNotEmpty()
+    @Validator.IsString()
+    @Validator.Length(8)
     password : string;
 }
 
 export class LoginAdministratorDTO {
+    @Validator.IsNotEmpty()
+    @Validator.IsString()
     username : string;
+
+    @Validator.IsNotEmpty()
+    @Validator.IsString()
     password : string;
-}
-
-export class LoginResponseAdministratorDTO {
-    administratorId : number;
-    username : string;
-    firstName : string;
-    lastName : string;
-    token : string;
-
-    constructor(administratorId : number, username : string, firstName : string, lastName : string, token : string){
-        this.administratorId = administratorId;
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.token = token;
-    }
-
 }

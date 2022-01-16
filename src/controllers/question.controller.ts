@@ -14,7 +14,7 @@ export class QuestionController {
         let question = await this.questionService.getByID(id);
 
         if(question == null){
-            return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.NULL_ENTRY, "Not Found!"))});
+            return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
         }
 
         return new Promise(resolve => {resolve(question)});

@@ -3,7 +3,6 @@ import { APIResponse } from "src/misc/api.response";
 import { AddStudentDTO, EditStudentDTO } from "src/dtos/student.dto";
 import { Student } from "src/entities/student.entity";
 import { StudentService } from "src/services/student.service";
-import { validateIndexNumber, validateLastName, validateName } from "src/misc/validations";
 
 @Controller("api/student/")
 export class StudentController{
@@ -15,7 +14,7 @@ export class StudentController{
     async getStudentWithIndex(@Query("index") index: string): Promise<Student | APIResponse> {
       let student = await this.studentService.getByIndex(index);
       if(student == null){
-        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.NULL_ENTRY, "Not Found!"))});
+        return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
       }
 
       return new Promise(resolve => {resolve(student)});
@@ -25,28 +24,16 @@ export class StudentController{
     @Put()
     async putStudent(@Body() data: AddStudentDTO): Promise<APIResponse>{
 
-      if(!validateName(data.firstName)){
-        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.VALIDATION_FAILED, "Invalid firstName"))});
-      }
-
-      if(!validateLastName(data.lastName)){
-        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.VALIDATION_FAILED, "Invalid lastName"))});
-      }
-
-      if(!validateIndexNumber(data.indexNumber)){
-        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.VALIDATION_FAILED, "Invalid indexNumber"))});
-      }
-
       let student = await this.studentService.getByIndex(data.indexNumber);
       if (student != null) {
-        return new Promise(resolve => { resolve(APIResponse.fromTemplate(APIResponse.DUPLICATE_UNIQUE_VALUE, "Index number taken")) });
+        return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE) });
       }
 
       if(!(await this.studentService.add(data))){
-        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.SAVE_FAILED, "Failed to save"))});
+        return new Promise(resolve => {resolve(APIResponse.SAVE_FAILED)});
       }
       
-      return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.OK, "Student added successfully"))});
+      return new Promise(resolve => {resolve(APIResponse.OK)});
     }
 
     @Post()
@@ -54,31 +41,19 @@ export class StudentController{
 
       let student = await this.studentService.getByID(id);
       if(student == null){
-        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.NULL_ENTRY, "Student does not exist"))});
-      }
-
-      if(!validateName(data.firstName)){
-        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.VALIDATION_FAILED, "Invalid firstName"))});
-      }
-
-      if(!validateLastName(data.lastName)){
-        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.VALIDATION_FAILED, "Invalid lastName"))});
-      }
-
-      if(!validateIndexNumber(data.indexNumber)){
-        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.VALIDATION_FAILED, "Invalid indexNumber"))});
+        return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
       }
 
       student = await this.studentService.getByIndex(data.indexNumber);
       if (student != null && student.studentId != id) {
-        return new Promise(resolve => { resolve(APIResponse.fromTemplate(APIResponse.DUPLICATE_UNIQUE_VALUE, "Index number taken")) });
+        return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE) });
       }
 
       if(!(await this.studentService.editByID(id, data))){
-        return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.SAVE_FAILED, "Failed to save"))});
+        return new Promise(resolve => {resolve(APIResponse.SAVE_FAILED)});
       }
 
-      return new Promise(resolve => {resolve(APIResponse.fromTemplate(APIResponse.OK, "Student edited successfully"))});
+      return new Promise(resolve => {resolve(APIResponse.OK)});
 
     }
 
