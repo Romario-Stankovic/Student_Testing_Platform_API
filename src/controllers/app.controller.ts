@@ -1,7 +1,9 @@
-import { Controller, Get, Param, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { Body, Controller, Get, Head, Header, Param, Post, Put, Query, Req, UploadedFile, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage, memoryStorage } from 'multer';
 import { StorageConfiguration } from 'src/configs/config';
+
+import { Request } from 'express';
 
 @Controller("api/tests")
 export class AppController {
@@ -54,6 +56,13 @@ export class AppController {
   ))
   async uploadPhoto(@UploadedFile() image){
       console.log(image);
+  }
+
+  @Post("uploadPhoto2")
+  @UseInterceptors(FileInterceptor("file"))
+  async uploadPhoto2(@UploadedFile() file : Express.Multer.File, @Body() body, @Req() req : Request) {
+    console.log(req.headers);
+    console.log(file);
   }
 
 }

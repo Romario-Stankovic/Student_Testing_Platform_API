@@ -2,7 +2,7 @@ export class JSONWebToken {
     id : number;
     identity : string;
     role : "administrator" | "professor" | "student";
-    exp_date: number; // UNIX timestamp
+    exp_date: number; // UNIX timestamp in seconds
     ip : string;
     user_agent : string;
 

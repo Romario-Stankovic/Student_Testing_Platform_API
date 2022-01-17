@@ -22,15 +22,19 @@ export class AuthController {
 
     }
 
-    generateToken(id : number, identity : string, role : ("administrator" | "professor" | "student"), expDays : number, ip : string, userAgent : string) : string{
-        let dateTime = new Date();
-        dateTime.setDate(dateTime.getDate() + expDays); // Add 1 day to the current date
+    private getDatePlus(seconds : number, minutes : number = 0, hours : number = 0, days : number = 0){
+        return Math.round((new Date().getTime()/1000)) + seconds + minutes * 60 + hours * 3600 + days * 86400; //Return UNIX time
+    }
+
+    private generateToken(id : number, identity : string, role : ("administrator" | "professor" | "student"), ip : string, userAgent : string, exp_in_secods = 0, exp_in_minutes = 0, exp_in_hours = 0, exp_in_days = 0) : string{
+
+        let expDate = this.getDatePlus(exp_in_secods, exp_in_minutes, exp_in_hours, exp_in_days);
 
         let tokenData = new JSONWebToken(
             id,
             identity,
             role,
-            dateTime.getTime(),
+            expDate,
             ip,
             userAgent
         );
@@ -39,7 +43,7 @@ export class AuthController {
         return token;
     }
 
-    checkPassword(storedPassword, receivedPassword){
+    private checkPassword(storedPassword, receivedPassword){
         let hash = crypto.createHash("sha512");
         hash.update(receivedPassword);
         if(storedPassword != hash.digest("hex").toUpperCase()){
@@ -61,7 +65,7 @@ export class AuthController {
             return new Promise(resolve => {resolve(APIResponse.PASSWORD_MISSMATCH)});
         }
 
-        let token = this.generateToken(administrator.administratorId, administrator.username, "administrator", 14, request.ip.toString(), request.headers["user-agent"]);
+        let token = this.generateToken(administrator.administratorId, administrator.username, "administrator", request.ip.toString(), request.headers["user-agent"], 0, 0, 0, 1);
 
         let response : LoginResponseAdministratorDTO = new LoginResponseAdministratorDTO(
             administrator.administratorId,
@@ -86,7 +90,7 @@ export class AuthController {
             return new Promise(resolve => {resolve(APIResponse.PASSWORD_MISSMATCH)});
         }
 
-        let token = this.generateToken(professor.professorId, professor.username, "professor", 14, request.ip.toString(), request.headers["user-agent"]);
+        let token = this.generateToken(professor.professorId, professor.username, "professor", request.ip.toString(), request.headers["user-agent"], 0, 0, 5);
 
         let response : LoginResponseProfessorDTO = new LoginResponseProfessorDTO(
             professor.professorId,
@@ -108,7 +112,7 @@ export class AuthController {
             return new Promise(resolve => {resolve(APIResponse.USER_DOES_NOT_EXIST)});
         }
 
-        let token = this.generateToken(student.studentId, student.indexNumber, "student", 14, request.ip.toString(), request.headers["user-agent"]);
+        let token = this.generateToken(student.studentId, student.indexNumber, "student", request.ip.toString(), request.headers["user-agent"], 0, 0, 5);
 
         let response : LoginResponseStudentDTO = new LoginResponseStudentDTO(
             student.studentId,

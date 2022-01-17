@@ -17,7 +17,7 @@ import { Administrator } from './entities/administrator.entity';
 import { AdministratorController } from './controllers/administrator.controller';
 import { AdministratorService } from './services/administrator.service';
 import { AuthController } from './controllers/auth.controller';
-import { AdminAuthMiddleware } from './middlewares/auth.middleware';
+import { AuthenticationMiddleware } from './middlewares/auth.middleware';
 import { QuestionController } from './controllers/question.controller';
 import { QuestionService } from './services/question.service';
 
@@ -56,7 +56,7 @@ import { QuestionService } from './services/question.service';
 export class AppModule implements NestModule {
   
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AdminAuthMiddleware)
+    consumer.apply(AuthenticationMiddleware)
     .exclude("auth/*")
     .forRoutes("api/*")
   }

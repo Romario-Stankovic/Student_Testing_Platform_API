@@ -9,7 +9,7 @@ import { StudentService } from "src/services/student.service";
 import { ProfessorService } from "src/services/professor.service";
 
 @Injectable()
-export class AdminAuthMiddleware implements NestMiddleware {
+export class AuthenticationMiddleware implements NestMiddleware {
 
     constructor (
         private readonly administratorService : AdministratorService,
@@ -69,9 +69,9 @@ export class AdminAuthMiddleware implements NestMiddleware {
             }
         }
 
-        let currentTimeStamp = new Date().getTime();
+        let currentTimestamp = Math.round(new Date().getTime() / 1000);
 
-        if(currentTimeStamp >= tokenData.exp_date){
+        if(currentTimestamp >= tokenData.exp_date){
             throw new HttpException("Token has expired", HttpStatus.UNAUTHORIZED);
         }
 

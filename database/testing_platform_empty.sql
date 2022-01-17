@@ -30,13 +30,14 @@ CREATE TABLE `administrator` (
   `password_hash` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`administrator_id`),
   UNIQUE KEY `uq_administrator_username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `administrator`
 --
 
+INSERT INTO `administrator` VALUES (1,'Temporary','Administrator','admin','C7AD44CBAD762A5DA0A452F9E854FDC1E0E7A52A38015F23F3EAB1D80B931DD472634DFAC71CD34EBC35D16AB7FB8A90C81F975113D6C7538DC69DD8DE9077EC');
 
 --
 -- Table structure for table `answer`
@@ -221,4 +222,4 @@ CREATE TABLE `work_answer` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-12 20:44:08
+-- Dump completed on 2022-01-17 17:20:58
