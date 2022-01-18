@@ -32,9 +32,9 @@ export class AuthController {
     private generateToken(id : number, identity : string, role : ("administrator" | "professor" | "student"), ip : string, userAgent : string, type : "access" | "refresh") : [token : string, expDate : Date]{
         let expiringDate = 0;
         if(type == "access"){
-            expiringDate = this.getDatePlus(0,1,0,0);
+            expiringDate = this.getDatePlus(0,5,0,0);
         }else if(type = "refresh"){
-            expiringDate = this.getDatePlus(0,3,0,0);
+            expiringDate = this.getDatePlus(0,0,0,14);
         }
 
         let tokenData = new JSONWebToken(
