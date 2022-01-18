@@ -20,6 +20,8 @@ import { AuthController } from './controllers/auth.controller';
 import { AuthenticationMiddleware } from './middlewares/auth.middleware';
 import { QuestionController } from './controllers/question.controller';
 import { QuestionService } from './services/question.service';
+import { Token } from './entities/token.entity';
+import { TokenService } from './services/token.service';
 
 @Module({
   imports: [
@@ -38,7 +40,8 @@ import { QuestionService } from './services/question.service';
       Student,
       Test,
       Work,
-      WorkAnswer
+      WorkAnswer,
+      Token
     ]
   }),
   TypeOrmModule.forFeature([
@@ -46,11 +49,12 @@ import { QuestionService } from './services/question.service';
     Professor,
     Administrator,
     Question,
-    Answer
+    Answer,
+    Token
   ])
   ],
   controllers: [AppController, AuthController, StudentController, ProfessorController, AdministratorController, QuestionController],
-  providers: [StudentService, ProfessorService, AdministratorService, QuestionService],
+  providers: [StudentService, ProfessorService, AdministratorService, QuestionService, TokenService],
   exports: [AdministratorService]
 })
 export class AppModule implements NestModule {

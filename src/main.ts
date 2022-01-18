@@ -15,7 +15,7 @@ async function main() {
   })
 
   app.useGlobalPipes(new ValidationPipe());
-
+  app.enableCors();
   await app.listen(port);
   console.log(`Server running and listening on port ${port}`);
 }

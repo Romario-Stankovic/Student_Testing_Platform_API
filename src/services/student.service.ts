@@ -54,7 +54,7 @@ export class StudentService {
     async editByID(id: number, data: EditStudentDTO): Promise<boolean> {
         let student = await this.getByID(id);
 
-        if (student == null) {
+        if (student == undefined) {
             return new Promise(resolve => {resolve(false)});
         }
 

@@ -48,7 +48,11 @@ export class AuthenticationMiddleware implements NestMiddleware {
             throw new HttpException("Bad token", HttpStatus.UNAUTHORIZED);
         }
 
-        if(tokenData.user_agent != request.headers["user-agent"]){
+        if(tokenData.userAgent != request.headers["user-agent"]){
+            throw new HttpException("Bad token", HttpStatus.UNAUTHORIZED);
+        }
+
+        if(tokenData.type == "refresh"){
             throw new HttpException("Bad token", HttpStatus.UNAUTHORIZED);
         }
 
@@ -71,7 +75,7 @@ export class AuthenticationMiddleware implements NestMiddleware {
 
         let currentTimestamp = Math.round(new Date().getTime() / 1000);
 
-        if(currentTimestamp >= tokenData.exp_date){
+        if(currentTimestamp >= tokenData.expDate){
             throw new HttpException("Token has expired", HttpStatus.UNAUTHORIZED);
         }
 
