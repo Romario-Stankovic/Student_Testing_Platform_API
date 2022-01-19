@@ -17,24 +17,24 @@ import { Token } from "src/entities/token.entity";
 @Controller("auth/")
 export class AuthController {
     constructor(
-        private readonly administratorService : AdministratorService,
-        private readonly professorService : ProfessorService,
-        private readonly studentService : StudentService,
-        private readonly tokenService : TokenService
-    ){
+        private readonly administratorService: AdministratorService,
+        private readonly professorService: ProfessorService,
+        private readonly studentService: StudentService,
+        private readonly tokenService: TokenService
+    ) {
 
     }
 
-    private getDatePlus(seconds : number, minutes : number = 0, hours : number = 0, days : number = 0) : number{
-        return Math.round((new Date().getTime()/1000)) + seconds + minutes * 60 + hours * 3600 + days * 86400; //Return UNIX time in seconds
+    private getDatePlus(seconds: number, minutes: number = 0, hours: number = 0, days: number = 0): number {
+        return Math.round((new Date().getTime() / 1000)) + seconds + minutes * 60 + hours * 3600 + days * 86400; //Return UNIX time in seconds
     }
 
-    private generateToken(id : number, identity : string, role : ("administrator" | "professor" | "student"), ip : string, userAgent : string, type : "access" | "refresh") : [token : string, expDate : Date]{
+    private generateToken(id: number, identity: string, role: ("administrator" | "professor" | "student"), ip: string, userAgent: string, type: "access" | "refresh"): [token: string, expDate: Date] {
         let expiringDate = 0;
-        if(type == "access"){
-            expiringDate = this.getDatePlus(0,5,0,0);
-        }else if(type = "refresh"){
-            expiringDate = this.getDatePlus(0,0,0,14);
+        if (type == "access") {
+            expiringDate = this.getDatePlus(0, 5, 0, 0);
+        } else if (type = "refresh") {
+            expiringDate = this.getDatePlus(0, 0, 0, 14);
         }
 
         let tokenData = new JSONWebToken(
@@ -48,13 +48,13 @@ export class AuthController {
         );
 
         let token: string = jwt.sign(tokenData.toPlainObject(), JWTSecret);
-        return [token, new Date(expiringDate*1000)];
+        return [token, new Date(expiringDate * 1000)];
     }
 
-    private checkPassword(storedPassword, receivedPassword){
+    private checkPassword(storedPassword, receivedPassword) {
         let hash = crypto.createHash("sha512");
         hash.update(receivedPassword);
-        if(storedPassword != hash.digest("hex").toUpperCase()){
+        if (storedPassword != hash.digest("hex").toUpperCase()) {
             return false;
         }
 
@@ -62,15 +62,15 @@ export class AuthController {
     }
 
     @Post("login/admin")
-    async administratorLogin(@Body() data : LoginAdministratorDTO, @Req() request : Request) : Promise<LoginResponse | APIResponse>{
+    async administratorLogin(@Body() data: LoginAdministratorDTO, @Req() request: Request): Promise<LoginResponse | APIResponse> {
         let administrator = await this.administratorService.getByUsername(data.username);
 
-        if(administrator == null){
-            return new Promise(resolve => {resolve(APIResponse.USER_DOES_NOT_EXIST)});
+        if (administrator == null) {
+            return new Promise(resolve => { resolve(APIResponse.USER_DOES_NOT_EXIST); });
         }
 
-        if(!this.checkPassword(administrator.passwordHash, data.password)){
-            return new Promise(resolve => {resolve(APIResponse.PASSWORD_MISSMATCH)});
+        if (!this.checkPassword(administrator.passwordHash, data.password)) {
+            return new Promise(resolve => { resolve(APIResponse.PASSWORD_MISSMATCH); });
         }
 
         let token = this.generateToken(administrator.administratorId, administrator.username, "administrator", request.ip.toString(), request.headers["user-agent"], "access");
@@ -78,25 +78,25 @@ export class AuthController {
 
         try {
             await this.tokenService.add(administrator.administratorId, "administrator", refreshToken[0], refreshToken[1]);
-        }catch {
-            return new Promise(resolve => {resolve(APIResponse.SAVE_FAILED)});
+        } catch {
+            return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
         let response = new LoginResponse(administrator.administratorId, administrator.username, token[0], refreshToken[0], refreshToken[1].toISOString());
 
-        return new Promise(resolve => {resolve(response)});
+        return new Promise(resolve => { resolve(response); });
     }
 
     @Post("login/professor")
-    async professorLogin(@Body() data : LoginProfessorDTO, @Req() request : Request) : Promise<LoginResponse | APIResponse>{
+    async professorLogin(@Body() data: LoginProfessorDTO, @Req() request: Request): Promise<LoginResponse | APIResponse> {
         let professor = await this.professorService.getByUsername(data.username);
 
-        if(professor == null){
-            return new Promise(resolve => {resolve(APIResponse.USER_DOES_NOT_EXIST)});
+        if (professor == null) {
+            return new Promise(resolve => { resolve(APIResponse.USER_DOES_NOT_EXIST); });
         }
-        
-        if(!this.checkPassword(professor.passwordHash, data.password)){
-            return new Promise(resolve => {resolve(APIResponse.PASSWORD_MISSMATCH)});
+
+        if (!this.checkPassword(professor.passwordHash, data.password)) {
+            return new Promise(resolve => { resolve(APIResponse.PASSWORD_MISSMATCH); });
         }
 
         let token = this.generateToken(professor.professorId, professor.username, "professor", request.ip.toString(), request.headers["user-agent"], "access");
@@ -105,21 +105,21 @@ export class AuthController {
 
         try {
             await this.tokenService.add(professor.professorId, "professor", refreshToken[0], refreshToken[1]);
-        }catch{
-            return new Promise(resolve => {resolve(APIResponse.SAVE_FAILED)});
+        } catch {
+            return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
         let response = new LoginResponse(professor.professorId, professor.username, token[0], refreshToken[0], refreshToken[1].toISOString());
 
-        return new Promise(resolve => {resolve(response)});
+        return new Promise(resolve => { resolve(response); });
     }
 
     @Post("login/student")
-    async studentLogin(@Body() data : LoginStudentDTO, @Req() request : Request) : Promise<LoginResponse | APIResponse>{
+    async studentLogin(@Body() data: LoginStudentDTO, @Req() request: Request): Promise<LoginResponse | APIResponse> {
         let student = await this.studentService.getByIndex(data.indexNumber);
 
-        if(student == null){
-            return new Promise(resolve => {resolve(APIResponse.USER_DOES_NOT_EXIST)});
+        if (student == null) {
+            return new Promise(resolve => { resolve(APIResponse.USER_DOES_NOT_EXIST); });
         }
 
         let token = this.generateToken(student.studentId, student.indexNumber, "student", request.ip.toString(), request.headers["user-agent"], "access");
@@ -128,50 +128,50 @@ export class AuthController {
 
         try {
             await this.tokenService.add(student.studentId, "student", refreshToken[0], refreshToken[1]);
-        }catch{
-            return new Promise(resolve => {resolve(APIResponse.SAVE_FAILED)});
+        } catch {
+            return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
         let response = new LoginResponse(student.studentId, student.indexNumber, token[0], refreshToken[0], refreshToken[1].toISOString());
 
-        return new Promise(resolve => {resolve(response)});
+        return new Promise(resolve => { resolve(response); });
     }
 
     @Post("token/refresh")
-    async tokenRefresh(@Req() request : Request, @Body() data : RefreshTokenDTO) : Promise<LoginResponse | APIResponse>{
-        let refreshToken : Token = await this.tokenService.getToken(data.refreshToken);
+    async tokenRefresh(@Req() request: Request, @Body() data: RefreshTokenDTO): Promise<LoginResponse | APIResponse> {
+        let refreshToken: Token = await this.tokenService.getToken(data.refreshToken);
 
-        if(refreshToken == null){
-            return new Promise(resolve => {resolve(APIResponse.TOKEN_NOT_FOUND)});
+        if (refreshToken == null) {
+            return new Promise(resolve => { resolve(APIResponse.TOKEN_NOT_FOUND); });
         }
-        
-        if(refreshToken.isValid == false){
-            return new Promise(resolve => {resolve(APIResponse.INVALID_TOKEN)});
-        }
-        
-        let currentTimestamp = Math.round(new Date().getTime()/1000);
 
-        if(currentTimestamp >= refreshToken.expiresAt.getTime()){
-            return new Promise(resolve => {resolve(APIResponse.INVALID_TOKEN)});
+        if (refreshToken.isValid == false) {
+            return new Promise(resolve => { resolve(APIResponse.INVALID_TOKEN); });
         }
-        
-        let refreshTokenData : JSONWebToken;
-        
+
+        let currentTimestamp = Math.round(new Date().getTime() / 1000);
+
+        if (currentTimestamp >= refreshToken.expiresAt.getTime()) {
+            return new Promise(resolve => { resolve(APIResponse.INVALID_TOKEN); });
+        }
+
+        let refreshTokenData: JSONWebToken;
+
         try {
             refreshTokenData = jwt.verify(data.refreshToken, JWTSecret);
-        }catch (error){
+        } catch (error) {
             throw new HttpException("Bad token found", HttpStatus.UNAUTHORIZED);
         }
 
-        if(!refreshTokenData){
+        if (!refreshTokenData) {
             throw new HttpException("Bad token found", HttpStatus.UNAUTHORIZED);
         }
-        
-        if(refreshTokenData.ip != request.ip.toString()){
+
+        if (refreshTokenData.ip != request.ip.toString()) {
             throw new HttpException("Bad token found", HttpStatus.UNAUTHORIZED);
         }
-        
-        if(refreshTokenData.userAgent != request.headers["user-agent"]){
+
+        if (refreshTokenData.userAgent != request.headers["user-agent"]) {
             throw new HttpException("Bad token found", HttpStatus.UNAUTHORIZED);
         }
 
@@ -182,10 +182,10 @@ export class AuthController {
             refreshTokenData.identity,
             newToken[0],
             refreshToken[0],
-            new Date(refreshTokenData.expDate*1000).toISOString()
+            new Date(refreshTokenData.expDate * 1000).toISOString()
         );
 
-        return new Promise(resolve => {resolve(response)});
+        return new Promise(resolve => { resolve(response); });
 
     }
 

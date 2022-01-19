@@ -11,17 +11,17 @@ import { ProfessorService } from "src/services/professor.service";
 @Injectable()
 export class AuthenticationMiddleware implements NestMiddleware {
 
-    constructor (
-        private readonly administratorService : AdministratorService,
-        private readonly studentService : StudentService,
-        private readonly professorService : ProfessorService
-        ){
+    constructor(
+        private readonly administratorService: AdministratorService,
+        private readonly studentService: StudentService,
+        private readonly professorService: ProfessorService
+    ) {
 
     }
 
     async use(request: Request, response: Response, next: NextFunction) {
-        
-        if(!request.headers.authorization){
+
+        if (!request.headers.authorization) {
             throw new HttpException("Token not found", HttpStatus.UNAUTHORIZED);
         }
 
@@ -29,30 +29,30 @@ export class AuthenticationMiddleware implements NestMiddleware {
 
         const tokenParts = token.split(" ");
 
-        if(tokenParts.length != 2){
+        if (tokenParts.length != 2) {
             throw new HttpException("Bad token", HttpStatus.UNAUTHORIZED);
         }
 
-        let tokenData : JSONWebToken;
+        let tokenData: JSONWebToken;
         try {
             tokenData = jwt.verify(tokenParts[1], JWTSecret);
-        }catch(error) {
+        } catch (error) {
             throw new HttpException("Bad token", HttpStatus.UNAUTHORIZED);
         }
 
-        if(!tokenData){
+        if (!tokenData) {
             throw new HttpException("Bad token", HttpStatus.UNAUTHORIZED);
         }
 
-        if(tokenData.ip != request.ip.toString()){
+        if (tokenData.ip != request.ip.toString()) {
             throw new HttpException("Bad token", HttpStatus.UNAUTHORIZED);
         }
 
-        if(tokenData.userAgent != request.headers["user-agent"]){
+        if (tokenData.userAgent != request.headers["user-agent"]) {
             throw new HttpException("Bad token", HttpStatus.UNAUTHORIZED);
         }
 
-        if(tokenData.type == "refresh"){
+        if (tokenData.type == "refresh") {
             throw new HttpException("Bad token", HttpStatus.UNAUTHORIZED);
         }
 
@@ -61,21 +61,21 @@ export class AuthenticationMiddleware implements NestMiddleware {
             if (admin == null) {
                 throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
             }
-        }else if(tokenData.role == "student"){
+        } else if (tokenData.role == "student") {
             let student = await this.studentService.getByID(tokenData.id);
-            if(student == null){
+            if (student == null) {
                 throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
             }
-        }else if(tokenData.role == "professor"){
+        } else if (tokenData.role == "professor") {
             let professor = await this.professorService.getByID(tokenData.id);
-            if(professor == null){
+            if (professor == null) {
                 throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
             }
         }
 
         let currentTimestamp = Math.round(new Date().getTime() / 1000);
 
-        if(currentTimestamp >= tokenData.expDate){
+        if (currentTimestamp >= tokenData.expDate) {
             throw new HttpException("Token has expired", HttpStatus.UNAUTHORIZED);
         }
 

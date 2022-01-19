@@ -5,30 +5,30 @@ export class AddProfessorDTO {
     @Validator.IsNotEmpty()
     @Validator.IsString()
     @Validator.Length(1, 50)
-    firstName : string;
+    firstName: string;
 
     @Validator.IsNotEmpty()
     @Validator.IsString()
     @Validator.Length(1, 50)
-    lastName : string;
+    lastName: string;
 
     @Validator.IsNotEmpty()
     @Validator.IsString()
     @Validator.Length(1, 50)
-    username : string;
+    username: string;
 
     @Validator.IsNotEmpty()
     @Validator.IsString()
     @Validator.Length(8)
-    password : string;
+    password: string;
 }
 
 export class LoginProfessorDTO {
     @Validator.IsNotEmpty()
     @Validator.IsString()
-    username : string;
+    username: string;
 
     @Validator.IsNotEmpty()
     @Validator.IsString()
-    password : string;
+    password: string;
 }

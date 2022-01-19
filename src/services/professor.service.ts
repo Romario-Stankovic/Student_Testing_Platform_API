@@ -10,35 +10,35 @@ export class ProfessorService {
     constructor(
         @InjectRepository(Professor)
         private readonly professor: Repository<Professor>
-    ) {}
+    ) { }
 
     async getByID(id: number): Promise<Professor | null> {
         let professor = await this.professor.findOne(id);
 
-        if(professor == undefined){
-            return new Promise(resolve => {resolve(null)});
+        if (professor == undefined) {
+            return new Promise(resolve => { resolve(null); });
         }
 
-        return new Promise(resolve => {resolve(professor)});
+        return new Promise(resolve => { resolve(professor); });
 
     }
 
-    async getByUsername(username: string) : Promise<Professor | null>{
-        let professor = await this.professor.findOne({where: {username: username}});
-        if(professor == undefined){
-            return new Promise(resolve => {resolve(null)});
+    async getByUsername(username: string): Promise<Professor | null> {
+        let professor = await this.professor.findOne({ where: { username: username } });
+        if (professor == undefined) {
+            return new Promise(resolve => { resolve(null); });
         }
 
-        return new Promise(resolve => {resolve(professor)});
+        return new Promise(resolve => { resolve(professor); });
     }
 
-    add(data : AddProfessorDTO): Promise<boolean>{
+    add(data: AddProfessorDTO): Promise<boolean> {
 
         let passwordHash = crypto.createHash("sha512");
         passwordHash.update(data.password);
         let passwordHashString = passwordHash.digest("hex").toUpperCase();
 
-        let newProfessor : Professor = new Professor();
+        let newProfessor: Professor = new Professor();
         newProfessor.firstName = data.firstName;
         newProfessor.lastName = data.lastName;
         newProfessor.username = data.username;
@@ -46,9 +46,9 @@ export class ProfessorService {
 
         try {
             this.professor.save(newProfessor);
-            return new Promise(resolve => {resolve(true)});
-        }catch(error){
-            return new Promise(resolve => {resolve(false)});
+            return new Promise(resolve => { resolve(true); });
+        } catch (error) {
+            return new Promise(resolve => { resolve(false); });
         }
     }
 

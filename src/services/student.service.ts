@@ -15,27 +15,27 @@ export class StudentService {
 
         let student = await this.student.findOne(id);
 
-        if(student == undefined) {
-            return new Promise(resolve => {resolve(null)});
+        if (student == undefined) {
+            return new Promise(resolve => { resolve(null); });
         }
 
-        return new Promise(resolve => {resolve(student)});
+        return new Promise(resolve => { resolve(student); });
 
     }
 
     async getByIndex(index: string): Promise<Student | null> {
 
-        let student = await this.student.findOne({where: {indexNumber : index}});
+        let student = await this.student.findOne({ where: { indexNumber: index } });
 
-        if(student == undefined){
-            return new Promise(resolve => {resolve(null)});
+        if (student == undefined) {
+            return new Promise(resolve => { resolve(null); });
         }
 
-        return new Promise(resolve => {resolve(student)});
+        return new Promise(resolve => { resolve(student); });
     }
 
     add(data: AddStudentDTO): Promise<boolean> {
-        
+
         let newStudent = new Student();
         newStudent.firstName = data.firstName;
         newStudent.lastName = data.lastName;
@@ -44,9 +44,9 @@ export class StudentService {
 
         try {
             this.student.save(newStudent);
-            return new Promise(resolve => {resolve(true)});
-        }catch(error){
-            return new Promise(resolve => {resolve(false)});
+            return new Promise(resolve => { resolve(true); });
+        } catch (error) {
+            return new Promise(resolve => { resolve(false); });
         }
 
     }
@@ -55,26 +55,26 @@ export class StudentService {
         let student = await this.getByID(id);
 
         if (student == undefined) {
-            return new Promise(resolve => {resolve(false)});
+            return new Promise(resolve => { resolve(false); });
         }
 
-        if(data.firstName != null){
+        if (data.firstName != null) {
             student.firstName = data.firstName;
         }
 
-        if(data.lastName != null){
+        if (data.lastName != null) {
             student.lastName = data.lastName;
         }
-        
-        if(data.indexNumber != null){
+
+        if (data.indexNumber != null) {
             student.indexNumber = data.indexNumber;
         }
 
         try {
             this.student.save(student);
-            return new Promise(resolve => {resolve(true)});
-        }catch(error){
-            return new Promise(resolve => {resolve(false)});
+            return new Promise(resolve => { resolve(true); });
+        } catch (error) {
+            return new Promise(resolve => { resolve(false); });
         }
 
     }

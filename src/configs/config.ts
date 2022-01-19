@@ -4,10 +4,10 @@ export const DatabaseConfiguration = {
     username: "app",
     password: "app",
     database: "testing_platform"
-}
+};
 
 // JSON Web Token
-export const JWTSecret : string = "this is a secret";
+export const JWTSecret: string = "this is a secret";
 
 export const StorageConfiguration = {
     mainDestination: "storage/",
@@ -19,4 +19,4 @@ export const StorageConfiguration = {
         maxAge: 1000 * 60 * 60 * 24, //(ms) 1 Day, keep in browser cache for 1 day
     }
 
-}
+};

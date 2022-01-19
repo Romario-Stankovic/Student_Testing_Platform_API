@@ -7,10 +7,10 @@ import { Repository } from "typeorm";
 export class TokenService {
     constructor(
         @InjectRepository(Token)
-        private readonly token : Repository<Token>
-    ){}
+        private readonly token: Repository<Token>
+    ) { }
 
-    add(userId : number, userRole : "administrator" | "professor" | "student", token: string, expiresAt : Date) : Promise<boolean>{
+    add(userId: number, userRole: "administrator" | "professor" | "student", token: string, expiresAt: Date): Promise<boolean> {
         let newToken = new Token();
         newToken.userId = userId;
         newToken.userRole = userRole;
@@ -19,52 +19,52 @@ export class TokenService {
 
         try {
             this.token.save(newToken);
-            return new Promise(resolve => {resolve(true)});
-        }catch(error){
-            return new Promise(resolve => {resolve(false)});
+            return new Promise(resolve => { resolve(true); });
+        } catch (error) {
+            return new Promise(resolve => { resolve(false); });
         }
     }
 
     async getToken(tokenString: string): Promise<Token | null> {
-        let token = await this.token.findOne({where: {token: tokenString}});
+        let token = await this.token.findOne({ where: { token: tokenString } });
 
-        if(token == undefined){
-            return new Promise(resolve => {resolve(null)});
+        if (token == undefined) {
+            return new Promise(resolve => { resolve(null); });
         }
 
-        return new Promise(resolve => {resolve(token)});
+        return new Promise(resolve => { resolve(token); });
 
     }
 
-    async invalidateToken(tokenString : string) : Promise<boolean> {
-        let token = await this.token.findOne({where: {token: tokenString}});
+    async invalidateToken(tokenString: string): Promise<boolean> {
+        let token = await this.token.findOne({ where: { token: tokenString } });
 
-        if(token == undefined){
-            return new Promise(resolve => {resolve(false)});
+        if (token == undefined) {
+            return new Promise(resolve => { resolve(false); });
         }
         token.isValid = false;
 
         try {
             await this.token.save(token);
-            return new Promise(resolve => {resolve(true)});
-        }catch {
-            return new Promise(resolve => {resolve(false)});
+            return new Promise(resolve => { resolve(true); });
+        } catch {
+            return new Promise(resolve => { resolve(false); });
         }
 
     }
 
-    async invalidateAllTokensFor(id: number, role: "administrator" | "professor" | "student") : Promise<boolean>{
-        let tokens = await this.token.find({where: {userId: id, userRole: role}});
+    async invalidateAllTokensFor(id: number, role: "administrator" | "professor" | "student"): Promise<boolean> {
+        let tokens = await this.token.find({ where: { userId: id, userRole: role } });
 
-        if(tokens.length == 0){
-            return new Promise(resolve => {resolve(false)});
+        if (tokens.length == 0) {
+            return new Promise(resolve => { resolve(false); });
         }
 
-        for(let token of tokens){
+        for (let token of tokens) {
             this.invalidateToken(token.token);
         }
 
-        return new Promise(resolve => {resolve(true)});
+        return new Promise(resolve => { resolve(true); });
 
     }
 

@@ -1,15 +1,15 @@
 import * as Validator from "class-validator";
 
 export class JSONWebToken {
-    id : number;
-    identity : string;
-    role : "administrator" | "professor" | "student";
+    id: number;
+    identity: string;
+    role: "administrator" | "professor" | "student";
     expDate: number; // UNIX timestamp in seconds
-    ip : string;
-    userAgent : string;
+    ip: string;
+    userAgent: string;
     type: "access" | "refresh";
 
-    constructor(id : number, identity : string, role : ("administrator" | "professor" | "student"), expDate : number, ip : string, userAgent : string, type: ("access" | "refresh")){
+    constructor(id: number, identity: string, role: ("administrator" | "professor" | "student"), expDate: number, ip: string, userAgent: string, type: ("access" | "refresh")) {
         this.id = id;
         this.identity = identity;
         this.role = role;
@@ -22,13 +22,13 @@ export class JSONWebToken {
     toPlainObject() {
         return {
             id: this.id,
-            identity : this.identity,
+            identity: this.identity,
             role: this.role,
             expDate: this.expDate,
             ip: this.ip,
-            userAgent : this.userAgent,
+            userAgent: this.userAgent,
             type: this.type
-        }
+        };
     }
 
 }
@@ -36,17 +36,17 @@ export class JSONWebToken {
 export class RefreshTokenDTO {
     @Validator.IsNotEmpty()
     @Validator.IsString()
-    refreshToken : string;
+    refreshToken: string;
 }
 
 export class LoginResponse {
-    id : number;
-    identity : string;
-    token : string;
-    refreshToken : string;
+    id: number;
+    identity: string;
+    token: string;
+    refreshToken: string;
     refreshTokenExpiresAt: string;
 
-    constructor(id : number, identity : string, token : string, refreshToken : string, refreshTokenExpiresAt : string){
+    constructor(id: number, identity: string, token: string, refreshToken: string, refreshTokenExpiresAt: string) {
         this.id = id;
         this.identity = identity;
         this.token = token;

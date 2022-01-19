@@ -5,19 +5,19 @@ import { QuestionService } from "src/services/question.service";
 
 @Controller("api/question/")
 export class QuestionController {
-    constructor (
-        private questionService : QuestionService
+    constructor(
+        private questionService: QuestionService
     ) { }
 
     @Get()
-    async getQuestionWithAnswers(@Query("id") id : number) : Promise<Question | APIResponse> {
+    async getQuestionWithAnswers(@Query("id") id: number): Promise<Question | APIResponse> {
         let question = await this.questionService.getByID(id);
 
-        if(question == null){
-            return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
+        if (question == null) {
+            return new Promise(resolve => { resolve(APIResponse.NULL_ENTRY); });
         }
 
-        return new Promise(resolve => {resolve(question)});
+        return new Promise(resolve => { resolve(question); });
 
     }
 

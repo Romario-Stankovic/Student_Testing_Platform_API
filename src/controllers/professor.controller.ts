@@ -15,10 +15,10 @@ export class ProfessorController {
     async getProfessorByID(@Query("id") id: number): Promise<Professor | APIResponse> {
         let professor = await this.professorService.getByID(id);
         if (professor == null) {
-            return new Promise(resolve => { resolve(APIResponse.NULL_ENTRY) });
+            return new Promise(resolve => { resolve(APIResponse.NULL_ENTRY); });
         }
 
-        return new Promise(resolve => { resolve(professor) });
+        return new Promise(resolve => { resolve(professor); });
 
     }
 
@@ -27,15 +27,15 @@ export class ProfessorController {
 
         let professor = await this.professorService.getByUsername(data.username);
 
-        if(professor != null){
-            return new Promise(resolve => {resolve(APIResponse.DUPLICATE_UNIQUE_VALUE)});
+        if (professor != null) {
+            return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE); });
         }
 
-        if(!(await this.professorService.add(data))){
-            return new Promise(resolve => {resolve(APIResponse.SAVE_FAILED)});
+        if (!(await this.professorService.add(data))) {
+            return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
-        return new Promise(resolve => {resolve(APIResponse.OK)});
+        return new Promise(resolve => { resolve(APIResponse.OK); });
 
     }
 

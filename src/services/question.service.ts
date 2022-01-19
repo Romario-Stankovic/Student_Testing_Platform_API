@@ -8,17 +8,17 @@ export class QuestionService {
     constructor(
         @InjectRepository(Question)
         private readonly question: Repository<Question>
-    ){}
+    ) { }
 
-    async getByID(id: number) : Promise<Question | null> {
+    async getByID(id: number): Promise<Question | null> {
 
-        let question = await this.question.findOne(id, {relations: ["answers"]});
+        let question = await this.question.findOne(id, { relations: ["answers"] });
 
-        if(question == undefined){
-            return new Promise(resolve => {resolve(null)});
+        if (question == undefined) {
+            return new Promise(resolve => { resolve(null); });
         }
 
-        return new Promise(resolve => {resolve(question)});
+        return new Promise(resolve => { resolve(question); });
 
     }
 

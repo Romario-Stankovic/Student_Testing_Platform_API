@@ -1,21 +1,21 @@
 import * as Validator from "class-validator";
 
 export class AddStudentDTO {
-    
-    @Validator.IsNotEmpty()
-    @Validator.IsString()
-    @Validator.Length(1, 50)
-    firstName : string;
 
     @Validator.IsNotEmpty()
     @Validator.IsString()
     @Validator.Length(1, 50)
-    lastName : string;
-    
+    firstName: string;
+
+    @Validator.IsNotEmpty()
+    @Validator.IsString()
+    @Validator.Length(1, 50)
+    lastName: string;
+
     @Validator.IsNotEmpty()
     @Validator.IsString()
     @Validator.Matches(/^[0-9]{10}$/)
-    indexNumber : string;
+    indexNumber: string;
 }
 
 export class EditStudentDTO {
@@ -24,24 +24,24 @@ export class EditStudentDTO {
     @Validator.IsNotEmpty()
     @Validator.IsString()
     @Validator.Length(1, 50)
-    firstName : string | null;
+    firstName: string | null;
 
     @Validator.IsOptional()
     @Validator.IsNotEmpty()
     @Validator.IsString()
     @Validator.Length(1, 50)
-    lastName : string | null;
-    
+    lastName: string | null;
+
     @Validator.IsOptional()
     @Validator.IsNotEmpty()
     @Validator.IsString()
     @Validator.Matches(/^[0-9]{10}$/)
-    indexNumber : string | null;
+    indexNumber: string | null;
 }
 
 export class LoginStudentDTO {
     @Validator.IsNotEmpty()
     @Validator.IsString()
     @Validator.Matches(/^[0-9]{10}$/)
-    indexNumber : string;
+    indexNumber: string;
 }

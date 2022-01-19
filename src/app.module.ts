@@ -24,45 +24,45 @@ import { Token } from './entities/token.entity';
 import { TokenService } from './services/token.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot({
-    type: "mysql",
-    host: DatabaseConfiguration.hostname,
-    port: DatabaseConfiguration.port,
-    username: DatabaseConfiguration.username,
-    password: DatabaseConfiguration.password,
-    database: DatabaseConfiguration.database,
-    entities: [
-      Administrator,
-      Answer,
-      Professor,
-      Question,
-      Student,
-      Test,
-      Work,
-      WorkAnswer,
-      Token
-    ]
-  }),
-  TypeOrmModule.forFeature([
-    Student,
-    Professor,
-    Administrator,
-    Question,
-    Answer,
-    Token
-  ])
-  ],
-  controllers: [AppController, AuthController, StudentController, ProfessorController, AdministratorController, QuestionController],
-  providers: [StudentService, ProfessorService, AdministratorService, QuestionService, TokenService],
-  exports: [AdministratorService]
+    imports: [
+        TypeOrmModule.forRoot({
+            type: "mysql",
+            host: DatabaseConfiguration.hostname,
+            port: DatabaseConfiguration.port,
+            username: DatabaseConfiguration.username,
+            password: DatabaseConfiguration.password,
+            database: DatabaseConfiguration.database,
+            entities: [
+                Administrator,
+                Answer,
+                Professor,
+                Question,
+                Student,
+                Test,
+                Work,
+                WorkAnswer,
+                Token
+            ]
+        }),
+        TypeOrmModule.forFeature([
+            Student,
+            Professor,
+            Administrator,
+            Question,
+            Answer,
+            Token
+        ])
+    ],
+    controllers: [AppController, AuthController, StudentController, ProfessorController, AdministratorController, QuestionController],
+    providers: [StudentService, ProfessorService, AdministratorService, QuestionService, TokenService],
+    exports: [AdministratorService]
 })
 export class AppModule implements NestModule {
-  
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthenticationMiddleware)
-    .exclude("auth/*")
-    .forRoutes("api/*")
-  }
-  
+
+    configure(consumer: MiddlewareConsumer) {
+        consumer.apply(AuthenticationMiddleware)
+            .exclude("auth/*")
+            .forRoutes("api/*");
+    }
+
 }

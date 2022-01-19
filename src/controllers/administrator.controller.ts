@@ -9,36 +9,36 @@ import { RoleGuard } from "src/guards/role.guard";
 @Controller("api/admin/")
 export class AdministratorController {
     constructor(
-        private administratorService : AdministratorService
-    ) {}
+        private administratorService: AdministratorService
+    ) { }
 
     @UseGuards(RoleGuard)
     @AllowedRoles("administrator")
     @Get()
-    async getAdminByID(@Query("id") id: number) : Promise<Administrator | APIResponse>{
+    async getAdminByID(@Query("id") id: number): Promise<Administrator | APIResponse> {
         let administrator = await this.administratorService.getByID(id);
-        if(administrator == null){
-            return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
+        if (administrator == null) {
+            return new Promise(resolve => { resolve(APIResponse.NULL_ENTRY); });
         }
 
-        return new Promise(resolve => {resolve(administrator)});
+        return new Promise(resolve => { resolve(administrator); });
     }
 
     @UseGuards(RoleGuard)
     @AllowedRoles("administrator")
     @Put()
-    async putAdmin(@Body() data : AddAdministratorDTO): Promise<Administrator | APIResponse>{
+    async putAdmin(@Body() data: AddAdministratorDTO): Promise<Administrator | APIResponse> {
 
         let administrator = await this.administratorService.getByUsername(data.username);
-        if(administrator != null){
-            return new Promise(resolve => {resolve(APIResponse.DUPLICATE_UNIQUE_VALUE)});
+        if (administrator != null) {
+            return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE); });
         }
 
-        if(!(await this.administratorService.add(data))){
-            return new Promise(resolve => {resolve(APIResponse.SAVE_FAILED)});
+        if (!(await this.administratorService.add(data))) {
+            return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
-        return new Promise(resolve => {resolve(APIResponse.OK)});
+        return new Promise(resolve => { resolve(APIResponse.OK); });
     }
 
 }
