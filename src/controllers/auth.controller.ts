@@ -26,7 +26,7 @@ export class AuthController {
     }
 
     private getDatePlus(seconds: number, minutes: number = 0, hours: number = 0, days: number = 0): number {
-        return Math.round((new Date().getTime() / 1000)) + seconds + minutes * 60 + hours * 3600 + days * 86400; //Return UNIX time in seconds
+        return (new Date().getTime() + seconds * 1000 + minutes * 60_000 + hours * 3_600_000 + days * 86_400_000); //Return UNIX time in seconds
     }
 
     private generateToken(id: number, identity: string, role: ("administrator" | "professor" | "student"), ip: string, userAgent: string, type: "access" | "refresh"): [token: string, expDate: Date] {
@@ -48,7 +48,7 @@ export class AuthController {
         );
 
         let token: string = jwt.sign(tokenData.toPlainObject(), JWTSecret);
-        return [token, new Date(expiringDate * 1000)];
+        return [token, new Date(expiringDate)];
     }
 
     private checkPassword(storedPassword, receivedPassword) {
@@ -149,7 +149,7 @@ export class AuthController {
             return new Promise(resolve => { resolve(APIResponse.INVALID_TOKEN); });
         }
 
-        let currentTimestamp = Math.round(new Date().getTime() / 1000);
+        let currentTimestamp = new Date().getTime();
 
         if (currentTimestamp >= refreshToken.expiresAt.getTime()) {
             return new Promise(resolve => { resolve(APIResponse.INVALID_TOKEN); });
@@ -175,6 +175,27 @@ export class AuthController {
             throw new HttpException("Bad token found", HttpStatus.UNAUTHORIZED);
         }
 
+        if(refreshTokenData.role == "administrator"){
+            let administrator = await this.administratorService.getByID(refreshTokenData.id);
+            if(administrator == null){
+                throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
+            }
+        }
+
+        if(refreshTokenData.role == "professor"){
+            let professor = await this.professorService.getByID(refreshTokenData.id);
+            if(professor == null){
+                throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
+            }
+        }
+
+        if(refreshTokenData.role == "student"){
+            let student = await this.studentService.getByID(refreshTokenData.id);
+            if(student == null){
+                throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
+            }
+        }
+
         let newToken = this.generateToken(refreshTokenData.id, refreshTokenData.identity, refreshTokenData.role, refreshTokenData.ip, refreshTokenData.userAgent, "access");
 
         let response = new LoginResponse(
@@ -182,7 +203,7 @@ export class AuthController {
             refreshTokenData.identity,
             newToken[0],
             refreshToken[0],
-            new Date(refreshTokenData.expDate * 1000).toISOString()
+            new Date(refreshTokenData.expDate).toISOString()
         );
 
         return new Promise(resolve => { resolve(response); });

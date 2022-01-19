@@ -171,8 +171,8 @@ CREATE TABLE `token` (
   `user_id` int(11) DEFAULT NULL,
   `user_role` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `token` text COLLATE utf8_unicode_ci NOT NULL,
-  `expires_at` datetime NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `expires_at` datetime NOT NULL,
   `is_valid` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`token_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -246,4 +246,4 @@ CREATE TABLE `work_answer` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-18 19:26:59
+-- Dump completed on 2022-01-19 13:52:33

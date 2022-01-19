@@ -4,7 +4,7 @@ export class JSONWebToken {
     id: number;
     identity: string;
     role: "administrator" | "professor" | "student";
-    expDate: number; // UNIX timestamp in seconds
+    expDate: number; // UNIX timestamp in milis
     ip: string;
     userAgent: string;
     type: "access" | "refresh";

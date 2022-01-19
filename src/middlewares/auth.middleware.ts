@@ -57,8 +57,8 @@ export class AuthenticationMiddleware implements NestMiddleware {
         }
 
         if (tokenData.role == "administrator") {
-            let admin = await this.administratorService.getByID(tokenData.id);
-            if (admin == null) {
+            let administrator = await this.administratorService.getByID(tokenData.id);
+            if (administrator == null) {
                 throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
             }
         } else if (tokenData.role == "student") {
@@ -73,7 +73,7 @@ export class AuthenticationMiddleware implements NestMiddleware {
             }
         }
 
-        let currentTimestamp = Math.round(new Date().getTime() / 1000);
+        let currentTimestamp = new Date().getTime();
 
         if (currentTimestamp >= tokenData.expDate) {
             throw new HttpException("Token has expired", HttpStatus.UNAUTHORIZED);
