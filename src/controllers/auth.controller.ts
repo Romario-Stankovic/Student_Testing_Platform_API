@@ -1,16 +1,16 @@
 import { Body, Controller, HttpException, HttpStatus, Post, Req, UseGuards } from "@nestjs/common";
 import { APIResponse } from "src/misc/api.response";
-import { LoginAdministratorDTO } from "src/dtos/administrator.dto";
+import { IdentityAdministratorDTO, LoginAdministratorDTO } from "src/dtos/administrator.dto";
 import { AdministratorService } from "src/services/administrator.service";
 import * as crypto from "crypto";
 import * as jwt from "jsonwebtoken";
 import { Request } from "express";
 import { JWTSecret } from "src/configs/config";
 import { JSONWebToken, LoginResponse, RefreshTokenDTO } from "src/dtos/auth.dto";
-import { LoginProfessorDTO } from "src/dtos/professor.dto";
+import { IdentityProfessorDTO, LoginProfessorDTO } from "src/dtos/professor.dto";
 import { ProfessorService } from "src/services/professor.service";
 import { StudentService } from "src/services/student.service";
-import { LoginStudentDTO } from "src/dtos/student.dto";
+import { IdentityStudentDTO, LoginStudentDTO } from "src/dtos/student.dto";
 import { TokenService } from "src/services/token.service";
 import { Token } from "src/entities/token.entity";
 
@@ -142,17 +142,17 @@ export class AuthController {
         let refreshToken: Token = await this.tokenService.getToken(data.refreshToken);
 
         if (refreshToken == null) {
-            return new Promise(resolve => { resolve(APIResponse.TOKEN_NOT_FOUND); });
+            return new Promise(resolve => { resolve(APIResponse.TOKEN_NOT_FOUND)});
         }
 
         if (refreshToken.isValid == false) {
-            return new Promise(resolve => { resolve(APIResponse.INVALID_TOKEN); });
+            return new Promise(resolve => { resolve(APIResponse.INVALID_TOKEN)});
         }
 
         let currentTimestamp = new Date().getTime();
 
         if (currentTimestamp >= refreshToken.expiresAt.getTime()) {
-            return new Promise(resolve => { resolve(APIResponse.INVALID_TOKEN); });
+            return new Promise(resolve => { resolve(APIResponse.INVALID_TOKEN)});
         }
 
         let refreshTokenData: JSONWebToken;
@@ -160,39 +160,39 @@ export class AuthController {
         try {
             refreshTokenData = jwt.verify(data.refreshToken, JWTSecret);
         } catch (error) {
-            throw new HttpException("Bad token found", HttpStatus.UNAUTHORIZED);
+            return new Promise(resolve => { resolve(APIResponse.BAD_TOKEN)});
         }
 
         if (!refreshTokenData) {
-            throw new HttpException("Bad token found", HttpStatus.UNAUTHORIZED);
+            return new Promise(resolve => { resolve(APIResponse.BAD_TOKEN)});
         }
 
         if (refreshTokenData.ip != request.ip.toString()) {
-            throw new HttpException("Bad token found", HttpStatus.UNAUTHORIZED);
+            return new Promise(resolve => { resolve(APIResponse.BAD_TOKEN)});
         }
 
         if (refreshTokenData.userAgent != request.headers["user-agent"]) {
-            throw new HttpException("Bad token found", HttpStatus.UNAUTHORIZED);
+            return new Promise(resolve => { resolve(APIResponse.BAD_TOKEN)});
         }
 
         if(refreshTokenData.role == "administrator"){
             let administrator = await this.administratorService.getByID(refreshTokenData.id);
             if(administrator == null){
-                throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
+                return new Promise(resolve => { resolve(APIResponse.USER_DOES_NOT_EXIST)});
             }
         }
 
         if(refreshTokenData.role == "professor"){
             let professor = await this.professorService.getByID(refreshTokenData.id);
             if(professor == null){
-                throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
+                return new Promise(resolve => { resolve(APIResponse.USER_DOES_NOT_EXIST)});
             }
         }
 
         if(refreshTokenData.role == "student"){
             let student = await this.studentService.getByID(refreshTokenData.id);
             if(student == null){
-                throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
+                return new Promise(resolve => { resolve(APIResponse.USER_DOES_NOT_EXIST)});
             }
         }
 
@@ -202,12 +202,35 @@ export class AuthController {
             refreshTokenData.id,
             refreshTokenData.identity,
             newToken[0],
-            refreshToken[0],
+            refreshToken.token,
             new Date(refreshTokenData.expDate).toISOString()
         );
 
         return new Promise(resolve => { resolve(response); });
 
+    }
+
+    @Post("token/identity")
+    async getTokenHolderIdentity(@Req() request : Request) : Promise<IdentityStudentDTO | IdentityAdministratorDTO | IdentityProfessorDTO>{
+        let token = request.token;
+        if(token.role == "administrator"){
+            let admin = await this.administratorService.getByID(token.id);
+            return new Promise(resolve => {resolve(
+                new IdentityAdministratorDTO(token.id, token.role,admin.firstName, admin.lastName, admin.username)
+            )});
+        }
+        else if(token.role == "professor"){
+            let professor = await this.professorService.getByID(token.id);
+            return new Promise(resolve => {resolve(
+                new IdentityProfessorDTO(token.id, token.role,professor.firstName, professor.lastName, professor.username, professor.imagePath)
+            )});
+        }
+        else if(token.role == "student"){
+            let student = await this.studentService.getByID(token.id);
+            return new Promise(resolve => {resolve(
+                new IdentityStudentDTO(token.id, token.role,student.firstName, student.lastName, student.indexNumber, student.imagePath)
+            )});
+        }
     }
 
 }

@@ -32,3 +32,22 @@ export class LoginProfessorDTO {
     @Validator.IsString()
     password: string;
 }
+
+export class IdentityProfessorDTO {
+    id:number;
+    role:string;
+    firstName : string;
+    lastName : string;
+    username : string;
+    imagePath : string | null;
+
+    constructor(id:number, role:string, firstName : string, lastName : string, username : string, imagePath : string | null){
+        this.id = id;
+        this.role = role;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.imagePath = imagePath;
+    }
+
+}

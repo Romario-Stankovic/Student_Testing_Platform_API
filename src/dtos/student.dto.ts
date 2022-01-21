@@ -45,3 +45,21 @@ export class LoginStudentDTO {
     @Validator.Matches(/^[0-9]{10}$/)
     indexNumber: string;
 }
+
+export class IdentityStudentDTO {
+    id: number;
+    role: string;
+    firstName : string;
+    lastName : string;
+    indexNumber : string;
+    imagePath : string | null;
+
+    constructor(id:number, role: string, firstName : string, lastName : string, indexNumber : string, imagePath : string | null){
+        this.id = id;
+        this.role = role;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.indexNumber = indexNumber;
+        this.imagePath = imagePath;
+    }
+}

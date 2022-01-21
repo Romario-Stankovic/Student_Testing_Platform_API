@@ -22,5 +22,6 @@ export class APIResponse {
     static readonly PASSWORD_MISSMATCH = new APIResponse("Authentication Error", 4002); // Received password (when hashed) does not match the one stored in the database
     static readonly TOKEN_NOT_FOUND = new APIResponse("Authentication Error", 4003); // While searching for the token, the specific query failed to find a entry
     static readonly INVALID_TOKEN = new APIResponse("Authentication Error", 4004); // The token sent is no longer valid or expired
+    static readonly BAD_TOKEN = new APIResponse("Authentication Error", 4005); // We got a bad token
     /* 5000 */
 }

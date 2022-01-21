@@ -31,3 +31,19 @@ export class LoginAdministratorDTO {
     @Validator.IsString()
     password: string;
 }
+
+export class IdentityAdministratorDTO {
+    id:number;
+    role:string;
+    firstName : string;
+    lastName : string;
+    username : string;
+
+    constructor(id:number, role:string,firstName : string, lastName : string, username : string){
+        this.id = id;
+        this.role = role;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+    }
+}
