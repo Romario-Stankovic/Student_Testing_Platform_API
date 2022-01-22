@@ -9,11 +9,11 @@ import { Repository } from "typeorm/repository/Repository";
 export class AdministratorService {
     constructor(
         @InjectRepository(Administrator)
-        private readonly administrator: Repository<Administrator>
+        private readonly repository: Repository<Administrator>
     ) { }
 
     async getByID(id: number): Promise<Administrator | null> {
-        let administrator = await this.administrator.findOne(id);
+        let administrator = await this.repository.findOne(id);
 
         if (administrator == undefined) {
             return new Promise(resolve => { resolve(null); });
@@ -24,7 +24,7 @@ export class AdministratorService {
     }
 
     async getByUsername(username: string): Promise<Administrator | null> {
-        let administrator = await this.administrator.findOne({ where: { username: username } });
+        let administrator = await this.repository.findOne({ where: { username: username } });
 
         if (administrator == undefined) {
             return new Promise(resolve => { resolve(null); });
@@ -46,7 +46,7 @@ export class AdministratorService {
         newAdmin.passwordHash = passwordHashString;
 
         try {
-            let admin = this.administrator.save(newAdmin);
+            let admin = this.repository.save(newAdmin);
             return new Promise(resolve => { resolve(admin); });
         } catch (error) {
             return new Promise(resolve => { resolve(null); });

@@ -8,7 +8,7 @@ import { Repository } from "typeorm";
 export class AnswerService {
     constructor(
         @InjectRepository(Answer)
-        private readonly answer: Repository<Answer>
+        private readonly repository: Repository<Answer>
     ){}
 
     add(data: AddAnswerDTO) : Promise<Answer | null>{
@@ -19,7 +19,7 @@ export class AnswerService {
         newAnswer.isCorrect = data.isCorrect;
 
         try {
-            let answer = this.answer.save(newAnswer);
+            let answer = this.repository.save(newAnswer);
             return new Promise(resolve => {resolve(answer)});
         }catch (error){
             return new Promise(resolve => {resolve(null)});

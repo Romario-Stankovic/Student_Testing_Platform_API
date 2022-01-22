@@ -7,7 +7,7 @@ import { Repository } from "typeorm";
 export class TokenService {
     constructor(
         @InjectRepository(Token)
-        private readonly token: Repository<Token>
+        private readonly repository: Repository<Token>
     ) { }
 
     add(userId: number, userRole: "administrator" | "professor" | "student", token: string, expiresAt: Date): Promise<Token | null> {
@@ -18,7 +18,7 @@ export class TokenService {
         newToken.expiresAt = expiresAt;
 
         try {
-            let token = this.token.save(newToken);
+            let token = this.repository.save(newToken);
             return new Promise(resolve => { resolve(token); });
         } catch (error) {
             return new Promise(resolve => { resolve(null); });
@@ -26,7 +26,7 @@ export class TokenService {
     }
 
     async getToken(tokenString: string): Promise<Token | null> {
-        let token = await this.token.findOne({ where: { token: tokenString } });
+        let token = await this.repository.findOne({ where: { token: tokenString } });
 
         if (token == undefined) {
             return new Promise(resolve => { resolve(null); });
@@ -37,7 +37,7 @@ export class TokenService {
     }
 
     async invalidateToken(tokenString: string): Promise<boolean> {
-        let token = await this.token.findOne({ where: { token: tokenString } });
+        let token = await this.repository.findOne({ where: { token: tokenString } });
 
         if (token == undefined) {
             return new Promise(resolve => { resolve(false); });
@@ -45,7 +45,7 @@ export class TokenService {
         token.isValid = false;
 
         try {
-            await this.token.save(token);
+            await this.repository.save(token);
             return new Promise(resolve => { resolve(true); });
         } catch {
             return new Promise(resolve => { resolve(false); });
@@ -54,7 +54,7 @@ export class TokenService {
     }
 
     async invalidateAllTokensFor(id: number, role: "administrator" | "professor" | "student"): Promise<boolean> {
-        let tokens = await this.token.find({ where: { userId: id, userRole: role } });
+        let tokens = await this.repository.find({ where: { userId: id, userRole: role } });
 
         if (tokens.length == 0) {
             return new Promise(resolve => { resolve(false); });

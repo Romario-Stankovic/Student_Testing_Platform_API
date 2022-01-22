@@ -9,11 +9,11 @@ import { Repository } from "typeorm/repository/Repository";
 export class ProfessorService {
     constructor(
         @InjectRepository(Professor)
-        private readonly professor: Repository<Professor>
+        private readonly repository: Repository<Professor>
     ) { }
 
     async getByID(id: number): Promise<Professor | null> {
-        let professor = await this.professor.findOne(id);
+        let professor = await this.repository.findOne(id);
 
         if (professor == undefined) {
             return new Promise(resolve => { resolve(null); });
@@ -24,7 +24,7 @@ export class ProfessorService {
     }
 
     async getByUsername(username: string): Promise<Professor | null> {
-        let professor = await this.professor.findOne({ where: { username: username } });
+        let professor = await this.repository.findOne({ where: { username: username } });
         if (professor == undefined) {
             return new Promise(resolve => { resolve(null); });
         }
@@ -45,7 +45,7 @@ export class ProfessorService {
         newProfessor.passwordHash = passwordHashString;
 
         try {
-            let professor = this.professor.save(newProfessor);
+            let professor = this.repository.save(newProfessor);
             return new Promise(resolve => { resolve(professor); });
         } catch (error) {
             return new Promise(resolve => { resolve(null); });

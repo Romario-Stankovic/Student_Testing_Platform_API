@@ -10,12 +10,12 @@ import { Repository } from "typeorm/repository/Repository";
 export class TestService {
     constructor(
         @InjectRepository(Test)
-        private readonly test: Repository<Test>
+        private readonly repository: Repository<Test>
     ) { }
 
     async getById(id: number): Promise<Test | null> {
 
-        let test = await this.test.findOne(id);
+        let test = await this.repository.findOne(id);
 
         if (test == undefined) {
             return new Promise(resolve => { resolve(null); });
@@ -27,7 +27,7 @@ export class TestService {
 
     async getAllActive(): Promise<Test[] | null> {
         let current = new Date();
-        let tests = await this.test.find({where: {startAt: LessThanOrEqual(current), endAt: MoreThan(current)}});
+        let tests = await this.repository.find({where: {startAt: LessThanOrEqual(current), endAt: MoreThan(current)}});
 
         if(tests.length == 0){
             return new Promise(resolve => {resolve(null)});
@@ -38,7 +38,7 @@ export class TestService {
     }
 
     async getByProfessorId(id : number) : Promise<Test[] | null> {
-        let tests = await this.test.find({where: {professorId: id}});
+        let tests = await this.repository.find({where: {professorId: id}});
 
         if(tests.length == 0){
             return new Promise(resolve => {resolve(null)});
@@ -58,7 +58,7 @@ export class TestService {
         newTest.endAt = data.endAt;
 
         try {
-            let test = this.test.save(newTest);
+            let test = this.repository.save(newTest);
             return new Promise(resolve => {resolve(test)});
         }catch (error){
             return new Promise(resolve => {resolve(null)});

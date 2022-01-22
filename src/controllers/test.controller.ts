@@ -1,18 +1,13 @@
 import { Body, Controller, Get, Put, Query } from "@nestjs/common";
-import { AddQuestionDTO } from "src/dtos/question.dto";
 import { AddTestDTO } from "src/dtos/test.dto";
 import { Test } from "src/entities/test.entity";
 import { APIResponse } from "src/misc/api.response";
-import { AnswerService } from "src/services/answer.service";
-import { QuestionService } from "src/services/question.service";
 import { TestService } from "src/services/test.service";
 
 @Controller("api/test/")
 export class TestController {
     constructor(
         private testService: TestService,
-        private questionService : QuestionService,
-        private answerService : AnswerService
     ){}
 
     @Get()

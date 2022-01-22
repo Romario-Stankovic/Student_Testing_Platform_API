@@ -8,12 +8,12 @@ import { Repository } from "typeorm/repository/Repository";
 export class QuestionService {
     constructor(
         @InjectRepository(Question)
-        private readonly question: Repository<Question>
+        private readonly repository: Repository<Question>
     ) { }
 
     async getByID(id: number): Promise<Question | null> {
 
-        let question = await this.question.findOne(id, { relations: ["answers"] });
+        let question = await this.repository.findOne(id, { relations: ["answers"] });
 
         if (question == undefined) {
             return new Promise(resolve => { resolve(null); });
@@ -30,7 +30,7 @@ export class QuestionService {
         newQuestion.imagePath = data.imagePath;
 
         try {
-            let question = this.question.save(newQuestion);
+            let question = this.repository.save(newQuestion);
             return new Promise(resolve => {resolve(question)});
         }catch (error){
             return new Promise(resolve => {resolve(null)});

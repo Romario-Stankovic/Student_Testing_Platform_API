@@ -8,12 +8,12 @@ import { Repository } from 'typeorm/repository/Repository';
 export class StudentService {
     constructor(
         @InjectRepository(Student)
-        private readonly student: Repository<Student>
+        private readonly repository: Repository<Student>
     ) { }
 
     async getByID(id: number): Promise<Student | null> {
 
-        let student = await this.student.findOne(id);
+        let student = await this.repository.findOne(id);
 
         if (student == undefined) {
             return new Promise(resolve => { resolve(null); });
@@ -25,7 +25,7 @@ export class StudentService {
 
     async getByIndex(index: string): Promise<Student | null> {
 
-        let student = await this.student.findOne({ where: { indexNumber: index } });
+        let student = await this.repository.findOne({ where: { indexNumber: index } });
 
         if (student == undefined) {
             return new Promise(resolve => { resolve(null); });
@@ -43,7 +43,7 @@ export class StudentService {
         newStudent.imagePath = null;
 
         try {
-            let student = this.student.save(newStudent);
+            let student = this.repository.save(newStudent);
             return new Promise(resolve => { resolve(student); });
         } catch (error) {
             return new Promise(resolve => { resolve(null); });
@@ -71,7 +71,7 @@ export class StudentService {
         }
 
         try {
-            let updatedStudent = this.student.save(student);
+            let updatedStudent = this.repository.save(student);
             return new Promise(resolve => { resolve(updatedStudent); });
         } catch (error) {
             return new Promise(resolve => { resolve(null); });
