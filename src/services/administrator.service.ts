@@ -33,7 +33,7 @@ export class AdministratorService {
         return new Promise(resolve => { resolve(administrator); });
     }
 
-    add(data: AddAdministratorDTO): Promise<boolean> {
+    add(data: AddAdministratorDTO): Promise<Administrator | null> {
 
         let passwordHash = crypto.createHash("sha512");
         passwordHash.update(data.password);
@@ -46,10 +46,10 @@ export class AdministratorService {
         newAdmin.passwordHash = passwordHashString;
 
         try {
-            this.administrator.save(newAdmin);
-            return new Promise(resolve => { resolve(true); });
+            let admin = this.administrator.save(newAdmin);
+            return new Promise(resolve => { resolve(admin); });
         } catch (error) {
-            return new Promise(resolve => { resolve(false); });
+            return new Promise(resolve => { resolve(null); });
         }
 
     }

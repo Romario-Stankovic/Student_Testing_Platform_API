@@ -29,7 +29,9 @@ export class StudentController {
             return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE); });
         }
 
-        if (!(await this.studentService.add(data))) {
+        let dbstudent = await this.studentService.add(data);
+
+        if (dbstudent == null) {
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
@@ -49,7 +51,9 @@ export class StudentController {
             return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE); });
         }
 
-        if (!(await this.studentService.editByID(id, data))) {
+        let dbstudent = await this.studentService.editByID(id, data);
+
+        if (dbstudent == null) {
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 

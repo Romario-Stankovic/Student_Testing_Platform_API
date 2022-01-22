@@ -22,6 +22,9 @@ import { QuestionController } from './controllers/question.controller';
 import { QuestionService } from './services/question.service';
 import { Token } from './entities/token.entity';
 import { TokenService } from './services/token.service';
+import { TestController } from './controllers/test.controller';
+import { TestService } from './services/test.service';
+import { AnswerService } from './services/answer.service';
 
 @Module({
     imports: [
@@ -39,23 +42,41 @@ import { TokenService } from './services/token.service';
                 Question,
                 Student,
                 Test,
+                Token,
                 Work,
-                WorkAnswer,
-                Token
+                WorkAnswer
             ]
         }),
         TypeOrmModule.forFeature([
-            Student,
-            Professor,
             Administrator,
-            Question,
             Answer,
-            Token
+            Professor,
+            Question,
+            Student,
+            Test,
+            Token,
+            Work,
+            WorkAnswer
         ])
     ],
-    controllers: [AppController, AuthController, StudentController, ProfessorController, AdministratorController, QuestionController],
-    providers: [StudentService, ProfessorService, AdministratorService, QuestionService, TokenService],
-    exports: [AdministratorService]
+    controllers: [
+        AdministratorController,
+        AppController,
+        AuthController,
+        ProfessorController,
+        QuestionController,
+        StudentController,
+        TestController
+    ],
+    providers: [
+        AdministratorService,
+        AnswerService,
+        ProfessorService,
+        QuestionService,
+        StudentService,
+        TestService,
+        TokenService
+    ]
 })
 export class AppModule implements NestModule {
 

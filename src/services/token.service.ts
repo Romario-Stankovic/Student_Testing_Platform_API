@@ -10,7 +10,7 @@ export class TokenService {
         private readonly token: Repository<Token>
     ) { }
 
-    add(userId: number, userRole: "administrator" | "professor" | "student", token: string, expiresAt: Date): Promise<boolean> {
+    add(userId: number, userRole: "administrator" | "professor" | "student", token: string, expiresAt: Date): Promise<Token | null> {
         let newToken = new Token();
         newToken.userId = userId;
         newToken.userRole = userRole;
@@ -18,10 +18,10 @@ export class TokenService {
         newToken.expiresAt = expiresAt;
 
         try {
-            this.token.save(newToken);
-            return new Promise(resolve => { resolve(true); });
+            let token = this.token.save(newToken);
+            return new Promise(resolve => { resolve(token); });
         } catch (error) {
-            return new Promise(resolve => { resolve(false); });
+            return new Promise(resolve => { resolve(null); });
         }
     }
 

@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { AddQuestionDTO } from "src/dtos/question.dto";
 import { Question } from "src/entities/question.entity";
 import { Repository } from "typeorm/repository/Repository";
 
@@ -19,6 +20,21 @@ export class QuestionService {
         }
 
         return new Promise(resolve => { resolve(question); });
+
+    }
+
+    add(data : AddQuestionDTO) : Promise<Question | null>{
+        let newQuestion = new Question();
+        newQuestion.testId = data.testId;
+        newQuestion.questionText = data.questionText;
+        newQuestion.imagePath = data.imagePath;
+
+        try {
+            let question = this.question.save(newQuestion);
+            return new Promise(resolve => {resolve(question)});
+        }catch (error){
+            return new Promise(resolve => {resolve(null)});
+        }
 
     }
 

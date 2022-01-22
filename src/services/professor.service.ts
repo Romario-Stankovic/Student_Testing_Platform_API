@@ -32,7 +32,7 @@ export class ProfessorService {
         return new Promise(resolve => { resolve(professor); });
     }
 
-    add(data: AddProfessorDTO): Promise<boolean> {
+    add(data: AddProfessorDTO): Promise<Professor | null> {
 
         let passwordHash = crypto.createHash("sha512");
         passwordHash.update(data.password);
@@ -45,10 +45,10 @@ export class ProfessorService {
         newProfessor.passwordHash = passwordHashString;
 
         try {
-            this.professor.save(newProfessor);
-            return new Promise(resolve => { resolve(true); });
+            let professor = this.professor.save(newProfessor);
+            return new Promise(resolve => { resolve(professor); });
         } catch (error) {
-            return new Promise(resolve => { resolve(false); });
+            return new Promise(resolve => { resolve(null); });
         }
     }
 

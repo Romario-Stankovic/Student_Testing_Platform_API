@@ -76,9 +76,8 @@ export class AuthController {
         let token = this.generateToken(administrator.administratorId, administrator.username, "administrator", request.ip.toString(), request.headers["user-agent"], "access");
         let refreshToken = this.generateToken(administrator.administratorId, administrator.username, "administrator", request.ip.toString(), request.headers["user-agent"], "refresh");
 
-        try {
-            await this.tokenService.add(administrator.administratorId, "administrator", refreshToken[0], refreshToken[1]);
-        } catch {
+        let dbtoken = await this.tokenService.add(administrator.administratorId, "administrator", refreshToken[0], refreshToken[1]);
+        if(dbtoken == null){
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
@@ -103,9 +102,8 @@ export class AuthController {
 
         let refreshToken = this.generateToken(professor.professorId, professor.username, "professor", request.ip.toString(), request.headers["user-agent"], "refresh");
 
-        try {
-            await this.tokenService.add(professor.professorId, "professor", refreshToken[0], refreshToken[1]);
-        } catch {
+        let dbtoken = await this.tokenService.add(professor.professorId, "professor", refreshToken[0], refreshToken[1]);
+        if(dbtoken == null){
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
@@ -126,9 +124,8 @@ export class AuthController {
 
         let refreshToken = this.generateToken(student.studentId, student.indexNumber, "student", request.ip.toString(), request.headers["user-agent"], "refresh");
 
-        try {
-            await this.tokenService.add(student.studentId, "student", refreshToken[0], refreshToken[1]);
-        } catch {
+        let dbtoken = await this.tokenService.add(student.studentId, "student", refreshToken[0], refreshToken[1]);
+        if(dbtoken == null){
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 

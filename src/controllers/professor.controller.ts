@@ -37,7 +37,9 @@ export class ProfessorController {
             return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE); });
         }
 
-        if (!(await this.professorService.add(data))) {
+        let dbprofessor = await this.professorService.add(data);
+
+        if (dbprofessor == null) {
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 

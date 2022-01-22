@@ -34,7 +34,7 @@ export class StudentService {
         return new Promise(resolve => { resolve(student); });
     }
 
-    add(data: AddStudentDTO): Promise<boolean> {
+    add(data: AddStudentDTO): Promise<Student | null> {
 
         let newStudent = new Student();
         newStudent.firstName = data.firstName;
@@ -43,19 +43,19 @@ export class StudentService {
         newStudent.imagePath = null;
 
         try {
-            this.student.save(newStudent);
-            return new Promise(resolve => { resolve(true); });
+            let student = this.student.save(newStudent);
+            return new Promise(resolve => { resolve(student); });
         } catch (error) {
-            return new Promise(resolve => { resolve(false); });
+            return new Promise(resolve => { resolve(null); });
         }
 
     }
 
-    async editByID(id: number, data: EditStudentDTO): Promise<boolean> {
+    async editByID(id: number, data: EditStudentDTO): Promise<Student | null> {
         let student = await this.getByID(id);
 
         if (student == undefined) {
-            return new Promise(resolve => { resolve(false); });
+            return new Promise(resolve => { resolve(null); });
         }
 
         if (data.firstName != null) {
@@ -71,10 +71,10 @@ export class StudentService {
         }
 
         try {
-            this.student.save(student);
-            return new Promise(resolve => { resolve(true); });
+            let updatedStudent = this.student.save(student);
+            return new Promise(resolve => { resolve(updatedStudent); });
         } catch (error) {
-            return new Promise(resolve => { resolve(false); });
+            return new Promise(resolve => { resolve(null); });
         }
 
     }

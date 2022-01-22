@@ -34,7 +34,8 @@ export class AdministratorController {
             return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE); });
         }
 
-        if (!(await this.administratorService.add(data))) {
+        let dbadministrator = await this.administratorService.add(data);
+        if (dbadministrator == null) {
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
