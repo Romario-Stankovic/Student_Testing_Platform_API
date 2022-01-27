@@ -21,8 +21,8 @@ export class StudentController {
 
     }
 
-    @Put()
-    async putStudent(@Body() data: AddStudentDTO): Promise<APIResponse> {
+    @Post()
+    async postStudent(@Body() data: AddStudentDTO): Promise<APIResponse> {
 
         let student = await this.studentService.getByIndex(data.indexNumber);
         if (student != null) {
@@ -38,8 +38,8 @@ export class StudentController {
         return new Promise(resolve => { resolve(APIResponse.OK); });
     }
 
-    @Post()
-    async postStudent(@Query("id") id: number, @Body() data: EditStudentDTO): Promise<APIResponse> {
+    @Put()
+    async putStudent(@Query("id") id: number, @Body() data: EditStudentDTO): Promise<APIResponse> {
 
         let student = await this.studentService.getByID(id);
         if (student == null) {

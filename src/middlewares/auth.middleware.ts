@@ -71,6 +71,8 @@ export class AuthenticationMiddleware implements NestMiddleware {
             if (professor == null) {
                 throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
             }
+        }else{
+            throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
         }
 
         let currentTimestamp = new Date().getTime();

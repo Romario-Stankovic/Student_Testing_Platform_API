@@ -1,6 +1,4 @@
 import * as Validator from "class-validator";
-import { AddAnswerDTO } from "./answer.dto";
-
 
 export class AddQuestionDTO {
 

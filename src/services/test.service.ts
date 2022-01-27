@@ -1,9 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UseGuards } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { AddTestDTO } from "src/dtos/test.dto";
-import { Question } from "src/entities/question.entity";
 import { Test } from "src/entities/test.entity";
-import { LessThan, LessThanOrEqual, MoreThan, MoreThanOrEqual } from "typeorm";
+import { LessThanOrEqual, MoreThan, MoreThanOrEqual } from "typeorm";
 import { Repository } from "typeorm/repository/Repository";
 
 @Injectable()
@@ -49,6 +48,15 @@ export class TestService {
     }
 
     add(data: AddTestDTO) : Promise<Test | null>{
+
+        if(data.duration < 0){
+            return new Promise(resolve => {resolve(null)});
+        }
+
+        if(data.questionCount < 0){
+            return new Promise(resolve => {resolve(null)});
+        }
+
         let newTest = new Test();
         newTest.professorId = data.professorId;
         newTest.testName = data.testName;
@@ -56,6 +64,7 @@ export class TestService {
         newTest.questionCount = data.questionCount;
         newTest.startAt = data.startAt;
         newTest.endAt = data.endAt;
+
 
         try {
             let test = this.repository.save(newTest);

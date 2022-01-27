@@ -1,4 +1,4 @@
-import { Body, Controller, HttpException, HttpStatus, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Post, Req } from "@nestjs/common";
 import { APIResponse } from "src/misc/api.response";
 import { IdentityAdministratorDTO, LoginAdministratorDTO } from "src/dtos/administrator.dto";
 import { AdministratorService } from "src/services/administrator.service";
@@ -177,20 +177,18 @@ export class AuthController {
             if(administrator == null){
                 return new Promise(resolve => { resolve(APIResponse.USER_DOES_NOT_EXIST)});
             }
-        }
-
-        if(refreshTokenData.role == "professor"){
+        }else if(refreshTokenData.role == "professor"){
             let professor = await this.professorService.getByID(refreshTokenData.id);
             if(professor == null){
                 return new Promise(resolve => { resolve(APIResponse.USER_DOES_NOT_EXIST)});
             }
-        }
-
-        if(refreshTokenData.role == "student"){
+        }else if(refreshTokenData.role == "student"){
             let student = await this.studentService.getByID(refreshTokenData.id);
             if(student == null){
                 return new Promise(resolve => { resolve(APIResponse.USER_DOES_NOT_EXIST)});
             }
+        }else{
+            return new Promise(resolve => {resolve(APIResponse.USER_DOES_NOT_EXIST)});
         }
 
         let newToken = this.generateToken(refreshTokenData.id, refreshTokenData.identity, refreshTokenData.role, refreshTokenData.ip, refreshTokenData.userAgent, "access");

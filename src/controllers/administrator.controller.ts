@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { APIResponse } from "src/misc/api.response";
 import { AddAdministratorDTO } from "src/dtos/administrator.dto";
 import { Administrator } from "src/entities/administrator.entity";
@@ -26,8 +26,8 @@ export class AdministratorController {
 
     @UseGuards(RoleGuard)
     @AllowedRoles("administrator")
-    @Put()
-    async putAdmin(@Body() data: AddAdministratorDTO): Promise<Administrator | APIResponse> {
+    @Post()
+    async postAdmin(@Body() data: AddAdministratorDTO): Promise<Administrator | APIResponse> {
 
         let administrator = await this.administratorService.getByUsername(data.username);
         if (administrator != null) {

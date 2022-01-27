@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { APIResponse } from "src/misc/api.response";
 import { AddProfessorDTO } from "src/dtos/professor.dto";
 import { Professor } from "src/entities/professor.entity";
@@ -28,8 +28,8 @@ export class ProfessorController {
 
     @UseGuards(RoleGuard)
     @AllowedRoles("administrator")
-    @Put()
-    async putProfessor(@Body() data: AddProfessorDTO): Promise<Professor | APIResponse> {
+    @Post()
+    async postProfessor(@Body() data: AddProfessorDTO): Promise<Professor | APIResponse> {
 
         let professor = await this.professorService.getByUsername(data.username);
 
