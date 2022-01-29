@@ -47,7 +47,7 @@ export class TestService {
 
     }
 
-    add(data: AddTestDTO) : Promise<Test | null>{
+    async add(data: AddTestDTO) : Promise<Test | null>{
 
         if(data.duration < 0){
             return new Promise(resolve => {resolve(null)});
@@ -67,7 +67,7 @@ export class TestService {
 
 
         try {
-            let test = this.repository.save(newTest);
+            let test = await this.repository.save(newTest);
             return new Promise(resolve => {resolve(test)});
         }catch (error){
             return new Promise(resolve => {resolve(null)});

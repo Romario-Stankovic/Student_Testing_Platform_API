@@ -25,6 +25,9 @@ import { TokenService } from './services/token.service';
 import { TestController } from './controllers/test.controller';
 import { TestService } from './services/test.service';
 import { AnswerService } from './services/answer.service';
+import { WorkService } from './services/work.service';
+import { WorkController } from './controllers/work.controller';
+import { WorkAnswerService } from './services/workAnswer.service';
 
 @Module({
     imports: [
@@ -66,7 +69,8 @@ import { AnswerService } from './services/answer.service';
         ProfessorController,
         QuestionController,
         StudentController,
-        TestController
+        TestController,
+        WorkController
     ],
     providers: [
         AdministratorService,
@@ -75,7 +79,9 @@ import { AnswerService } from './services/answer.service';
         QuestionService,
         StudentService,
         TestService,
-        TokenService
+        TokenService,
+        WorkService,
+        WorkAnswerService
     ]
 })
 export class AppModule implements NestModule {

@@ -23,14 +23,25 @@ export class QuestionService {
 
     }
 
-    add(data : AddQuestionDTO) : Promise<Question | null>{
+    async getByTestID(id : number) : Promise<Question[] | null> {
+        let questions = await this.repository.find({where: {testId : id}});
+
+        if(questions.length == 0){
+            return new Promise(resolve => {resolve(null)});
+        }
+
+        return new Promise(resolve => {resolve(questions)});
+
+    }
+
+    async add(data : AddQuestionDTO) : Promise<Question | null>{
         let newQuestion = new Question();
         newQuestion.testId = data.testId;
         newQuestion.questionText = data.questionText;
         newQuestion.imagePath = data.imagePath;
 
         try {
-            let question = this.repository.save(newQuestion);
+            let question = await this.repository.save(newQuestion);
             return new Promise(resolve => {resolve(question)});
         }catch (error){
             return new Promise(resolve => {resolve(null)});

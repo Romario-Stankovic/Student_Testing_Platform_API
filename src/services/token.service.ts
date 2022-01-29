@@ -10,7 +10,7 @@ export class TokenService {
         private readonly repository: Repository<Token>
     ) { }
 
-    add(userId: number, userRole: "administrator" | "professor" | "student", token: string, expiresAt: Date): Promise<Token | null> {
+    async add(userId: number, userRole: "administrator" | "professor" | "student", token: string, expiresAt: Date): Promise<Token | null> {
         let newToken = new Token();
         newToken.userId = userId;
         newToken.userRole = userRole;
@@ -18,14 +18,14 @@ export class TokenService {
         newToken.expiresAt = expiresAt;
 
         try {
-            let token = this.repository.save(newToken);
+            let token = await this.repository.save(newToken);
             return new Promise(resolve => { resolve(token); });
         } catch (error) {
             return new Promise(resolve => { resolve(null); });
         }
     }
 
-    async getToken(tokenString: string): Promise<Token | null> {
+    async getByToken(tokenString: string): Promise<Token | null> {
         let token = await this.repository.findOne({ where: { token: tokenString } });
 
         if (token == undefined) {

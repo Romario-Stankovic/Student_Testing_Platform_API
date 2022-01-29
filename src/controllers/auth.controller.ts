@@ -136,7 +136,7 @@ export class AuthController {
 
     @Post("token/refresh")
     async tokenRefresh(@Req() request: Request, @Body() data: RefreshTokenDTO): Promise<LoginResponse | APIResponse> {
-        let refreshToken: Token = await this.tokenService.getToken(data.refreshToken);
+        let refreshToken: Token = await this.tokenService.getByToken(data.refreshToken);
 
         if (refreshToken == null) {
             return new Promise(resolve => { resolve(APIResponse.TOKEN_NOT_FOUND)});

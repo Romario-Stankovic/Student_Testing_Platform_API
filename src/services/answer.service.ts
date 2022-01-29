@@ -11,7 +11,7 @@ export class AnswerService {
         private readonly repository: Repository<Answer>
     ){}
 
-    add(data: AddAnswerDTO) : Promise<Answer | null>{
+    async add(data: AddAnswerDTO) : Promise<Answer | null>{
         let newAnswer = new Answer();
         newAnswer.questionId = data.questionId;
         newAnswer.answerText = data.answerText;
@@ -19,11 +19,22 @@ export class AnswerService {
         newAnswer.isCorrect = data.isCorrect;
 
         try {
-            let answer = this.repository.save(newAnswer);
+            let answer = await this.repository.save(newAnswer);
             return new Promise(resolve => {resolve(answer)});
         }catch (error){
             return new Promise(resolve => {resolve(null)});
         }
 
     }
+
+    async getAllForQuestion(questionId: number) : Promise<Answer[] | null>{
+        let answers = await this.repository.find({where:{questionId: questionId}});
+        if(answers.length == 0){
+            return new Promise(resolve => {resolve(null)});
+        }
+
+        return new Promise(resolve => {resolve(answers)});
+
+    }
+
 }

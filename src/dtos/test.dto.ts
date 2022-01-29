@@ -2,7 +2,8 @@ import * as Validator from "class-validator";
 
 export class AddTestDTO {
 
-    @Validator.IsNumberString()
+    @Validator.IsNumber()
+    @Validator.IsNotEmpty()
     professorId: number;
 
     @Validator.IsNotEmpty()
@@ -11,10 +12,10 @@ export class AddTestDTO {
     testName: string;
 
     @Validator.IsNotEmpty()
-    @Validator.IsNumberString()
+    @Validator.IsNumber()
     duration : number;
 
-    @Validator.IsNumberString()
+    @Validator.IsNumber()
     @Validator.IsNotEmpty()
     questionCount : number;
 

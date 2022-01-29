@@ -33,7 +33,7 @@ export class AdministratorService {
         return new Promise(resolve => { resolve(administrator); });
     }
 
-    add(data: AddAdministratorDTO): Promise<Administrator | null> {
+    async add(data: AddAdministratorDTO): Promise<Administrator | null> {
 
         let passwordHash = crypto.createHash("sha512");
         passwordHash.update(data.password);
@@ -46,7 +46,7 @@ export class AdministratorService {
         newAdmin.passwordHash = passwordHashString;
 
         try {
-            let admin = this.repository.save(newAdmin);
+            let admin = await this.repository.save(newAdmin);
             return new Promise(resolve => { resolve(admin); });
         } catch (error) {
             return new Promise(resolve => { resolve(null); });

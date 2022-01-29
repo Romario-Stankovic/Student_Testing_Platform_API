@@ -34,7 +34,7 @@ export class StudentService {
         return new Promise(resolve => { resolve(student); });
     }
 
-    add(data: AddStudentDTO): Promise<Student | null> {
+    async add(data: AddStudentDTO): Promise<Student | null> {
 
         let newStudent = new Student();
         newStudent.firstName = data.firstName;
@@ -43,7 +43,7 @@ export class StudentService {
         newStudent.imagePath = null;
 
         try {
-            let student = this.repository.save(newStudent);
+            let student = await this.repository.save(newStudent);
             return new Promise(resolve => { resolve(student); });
         } catch (error) {
             return new Promise(resolve => { resolve(null); });
