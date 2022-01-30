@@ -1,6 +1,5 @@
 import { Injectable, UseGuards } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { AddTestDTO } from "src/dtos/test.dto";
 import { Test } from "src/entities/test.entity";
 import { LessThanOrEqual, MoreThan, MoreThanOrEqual } from "typeorm";
 import { Repository } from "typeorm/repository/Repository";
@@ -24,7 +23,7 @@ export class TestService {
 
     }
 
-    async getAllActive(): Promise<Test[] | null> {
+    async getActive(): Promise<Test[] | null> {
         let current = new Date();
         let tests = await this.repository.find({where: {startAt: LessThanOrEqual(current), endAt: MoreThan(current)}});
 
@@ -47,24 +46,23 @@ export class TestService {
 
     }
 
-    async add(data: AddTestDTO) : Promise<Test | null>{
+    async add(professorId : number, testName : string, duration : number, questionCount : number, startAt: Date, endAt : Date) : Promise<Test | null>{
 
-        if(data.duration < 0){
+        if(duration < 0){
             return new Promise(resolve => {resolve(null)});
         }
 
-        if(data.questionCount < 0){
+        if(questionCount < 0){
             return new Promise(resolve => {resolve(null)});
         }
 
         let newTest = new Test();
-        newTest.professorId = data.professorId;
-        newTest.testName = data.testName;
-        newTest.duration = data.duration;
-        newTest.questionCount = data.questionCount;
-        newTest.startAt = data.startAt;
-        newTest.endAt = data.endAt;
-
+        newTest.professorId = professorId;
+        newTest.testName = testName;
+        newTest.duration = duration;
+        newTest.questionCount = questionCount;
+        newTest.startAt = startAt;
+        newTest.endAt = endAt;
 
         try {
             let test = await this.repository.save(newTest);

@@ -18,7 +18,6 @@ import { AdministratorController } from './controllers/administrator.controller'
 import { AdministratorService } from './services/administrator.service';
 import { AuthController } from './controllers/auth.controller';
 import { AuthenticationMiddleware } from './middlewares/auth.middleware';
-import { QuestionController } from './controllers/question.controller';
 import { QuestionService } from './services/question.service';
 import { Token } from './entities/token.entity';
 import { TokenService } from './services/token.service';
@@ -67,7 +66,6 @@ import { WorkAnswerService } from './services/workAnswer.service';
         AppController,
         AuthController,
         ProfessorController,
-        QuestionController,
         StudentController,
         TestController,
         WorkController

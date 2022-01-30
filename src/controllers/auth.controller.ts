@@ -37,15 +37,7 @@ export class AuthController {
             expiringDate = this.getDatePlus(0, 0, 0, 14);
         }
 
-        let tokenData = new JSONWebToken(
-            id,
-            identity,
-            role,
-            expiringDate,
-            ip,
-            userAgent,
-            type
-        );
+        let tokenData = new JSONWebToken(id, identity, role, expiringDate, ip, userAgent, type);
 
         let token: string = jwt.sign(tokenData.toPlainObject(), JWTSecret);
         return [token, new Date(expiringDate)];

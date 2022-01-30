@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { StartWorkDTO } from "src/dtos/work.dto";
 import { Work } from "src/entities/work.entity";
 import { Repository } from "typeorm";
 
@@ -11,10 +10,10 @@ export class WorkService {
         private readonly repository : Repository<Work>
     ){}
 
-    async add(data : StartWorkDTO) : Promise<Work | null>{
+    async add(studentId: number, testId: number) : Promise<Work | null>{
         let newWork = new Work();
-        newWork.testId = data.testId;
-        newWork.studentId = data.studentId;
+        newWork.testId = testId;
+        newWork.studentId = studentId;
         newWork.startedAt = new Date();
 
         try {
@@ -38,7 +37,7 @@ export class WorkService {
 
     }
 
-    async endWork(id : number) : Promise<Work | null> {
+    async endWork(id : number, points : number) : Promise<Work | null> {
         let work = await this.getByID(id);
 
         if(work == null){
@@ -46,6 +45,7 @@ export class WorkService {
         }
 
         work.endedAt = new Date();
+        work.points = points;
 
         let dbwork = this.repository.save(work);
 

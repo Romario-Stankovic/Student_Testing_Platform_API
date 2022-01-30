@@ -29,7 +29,7 @@ export class StudentController {
             return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE); });
         }
 
-        let dbstudent = await this.studentService.add(data);
+        let dbstudent = await this.studentService.add(data.firstName, data.lastName, data.indexNumber, null);
 
         if (dbstudent == null) {
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });

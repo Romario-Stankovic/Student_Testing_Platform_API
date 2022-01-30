@@ -1,22 +1,6 @@
 import * as Validator from "class-validator";
 
-export class AddWorkAnswerDTO {
-    workId : number;
-    answerId : number;
-    duration : number;
-    isChecked : boolean;
-
-    constructor(workId : number, answerId : number, duration : number, isChecked : boolean){
-        this.workId = workId;
-        this.answerId = answerId;
-        this.duration = duration;
-        this.isChecked = isChecked;
-    }
-
-}
-
-export class WorkQuestionDTO {
-
+export class WorkQuestion {
     questionText : string;
     imagePath : string;
     multichoice : boolean;

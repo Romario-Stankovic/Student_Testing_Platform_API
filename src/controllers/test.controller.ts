@@ -26,7 +26,7 @@ export class TestController {
 
     @Get("active")
     async getAvailableTests() : Promise<Test[] | APIResponse> {
-        let tests = await this.testService.getAllActive();
+        let tests = await this.testService.getActive();
 
         if(tests == null){
             return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
@@ -52,7 +52,7 @@ export class TestController {
     @AllowedRoles("administrator","professor")
     @Post()
     async postTest(@Body() data : AddTestDTO) : Promise<Test | APIResponse> {
-        let test = await this.testService.add(data);
+        let test = await this.testService.add(data.professorId, data.testName, data.duration, data.questionCount, data.startAt, data.endAt);
         if(test == null){
             return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
         }

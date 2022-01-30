@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { AddAdministratorDTO } from "src/dtos/administrator.dto";
 import { Administrator } from "src/entities/administrator.entity";
 import * as crypto from "crypto";
 import { Repository } from "typeorm/repository/Repository";
@@ -33,17 +32,17 @@ export class AdministratorService {
         return new Promise(resolve => { resolve(administrator); });
     }
 
-    async add(data: AddAdministratorDTO): Promise<Administrator | null> {
+    async add(firstName: string, lastName: string, username: string, password: string): Promise<Administrator | null> {
 
-        let passwordHash = crypto.createHash("sha512");
-        passwordHash.update(data.password);
-        let passwordHashString = passwordHash.digest("hex").toUpperCase();
+        let hash = crypto.createHash("sha512");
+        hash.update(password);
+        let hashedPassword = hash.digest("hex").toUpperCase();
 
         let newAdmin: Administrator = new Administrator();
-        newAdmin.firstName = data.firstName;
-        newAdmin.lastName = data.lastName;
-        newAdmin.username = data.username;
-        newAdmin.passwordHash = passwordHashString;
+        newAdmin.firstName = firstName;
+        newAdmin.lastName = lastName;
+        newAdmin.username = username;
+        newAdmin.passwordHash = hashedPassword;
 
         try {
             let admin = await this.repository.save(newAdmin);

@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { AddAnswerDTO } from "src/dtos/answer.dto";
 import { Answer } from "src/entities/answer.entity";
 import { Repository } from "typeorm";
 
@@ -11,12 +10,12 @@ export class AnswerService {
         private readonly repository: Repository<Answer>
     ){}
 
-    async add(data: AddAnswerDTO) : Promise<Answer | null>{
+    async add(questionId : number, answerText : string, imagePath : string, isCorrect : boolean) : Promise<Answer | null>{
         let newAnswer = new Answer();
-        newAnswer.questionId = data.questionId;
-        newAnswer.answerText = data.answerText;
-        newAnswer.imagePath = data.imagePath;
-        newAnswer.isCorrect = data.isCorrect;
+        newAnswer.questionId = questionId;
+        newAnswer.answerText = answerText;
+        newAnswer.imagePath = imagePath;
+        newAnswer.isCorrect = isCorrect;
 
         try {
             let answer = await this.repository.save(newAnswer);
@@ -27,7 +26,7 @@ export class AnswerService {
 
     }
 
-    async getAllForQuestion(questionId: number) : Promise<Answer[] | null>{
+    async getByQuestionId(questionId: number) : Promise<Answer[] | null>{
         let answers = await this.repository.find({where:{questionId: questionId}});
         if(answers.length == 0){
             return new Promise(resolve => {resolve(null)});

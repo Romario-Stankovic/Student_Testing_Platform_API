@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AddStudentDTO, EditStudentDTO } from 'src/dtos/student.dto';
+import { EditStudentDTO } from 'src/dtos/student.dto';
 import { Student } from 'src/entities/student.entity';
 import { Repository } from 'typeorm/repository/Repository';
 
@@ -34,13 +34,13 @@ export class StudentService {
         return new Promise(resolve => { resolve(student); });
     }
 
-    async add(data: AddStudentDTO): Promise<Student | null> {
+    async add(firstName : string, lastName : string, indexNumber : string, imagePath : string): Promise<Student | null> {
 
         let newStudent = new Student();
-        newStudent.firstName = data.firstName;
-        newStudent.lastName = data.lastName;
-        newStudent.indexNumber = data.indexNumber;
-        newStudent.imagePath = null;
+        newStudent.firstName = firstName;
+        newStudent.lastName = lastName;
+        newStudent.indexNumber = indexNumber;
+        newStudent.imagePath = imagePath;
 
         try {
             let student = await this.repository.save(newStudent);

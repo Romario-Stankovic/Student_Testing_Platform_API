@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { AddWorkAnswerDTO, WorkQuestionDTO } from "src/dtos/workAnswer.dto";
+import { WorkQuestion } from "src/dtos/workAnswer.dto";
 import { WorkAnswer } from "src/entities/workAnswer.entity";
 import { Repository } from "typeorm";
 
@@ -11,12 +11,13 @@ export class WorkAnswerService {
         private readonly repository : Repository<WorkAnswer>
     ){}
 
-    async add(data : AddWorkAnswerDTO) : Promise<WorkAnswer | null>{
+    async add(workId : number, answerId: number, duration:number, isChecked : boolean) : Promise<WorkAnswer | null>{
         let newWorkAnswer = new WorkAnswer();
-        newWorkAnswer.answerId = data.answerId;
-        newWorkAnswer.duration = data.duration;
-        newWorkAnswer.isChecked = data.isChecked;
-        newWorkAnswer.workId = data.workId;
+
+        newWorkAnswer.workId = workId;
+        newWorkAnswer.answerId = answerId;
+        newWorkAnswer.duration = duration;
+        newWorkAnswer.isChecked = isChecked;
 
         try {
             let workAnswer = await this.repository.save(newWorkAnswer);
@@ -27,7 +28,7 @@ export class WorkAnswerService {
 
     }
 
-    async getWorkQuestion(workId : number, questionId : number) : Promise<WorkQuestionDTO | null>{
+    async getWorkQuestion(workId : number, questionId : number) : Promise<WorkQuestion | null>{
 
         let workAnswers = await this.repository.createQueryBuilder("workAnswer")
         .innerJoinAndSelect("workAnswer.answer", "answer")
@@ -60,13 +61,44 @@ export class WorkAnswerService {
             }
         }
 
-        let question = new WorkQuestionDTO(workAnswers[0].questionText, workAnswers[0].questionImagePath, (correctAnswers > 1 ? true : false), workAnswers[0].duration, answers);
+        let question = new WorkQuestion(workAnswers[0].questionText, workAnswers[0].questionImagePath, (correctAnswers > 1 ? true : false), workAnswers[0].duration, answers);
 
         return new Promise(resolve => {resolve(question)});
 
     }
 
-    async updateAnswer(workId : number, answerId : number, isChecked : boolean, duration : number) : Promise<WorkAnswer | null>{
+    async getWorkQuestionIDs (workId: number) : Promise<number[] | null> {
+        let workAnswers = await this.repository.createQueryBuilder("workAnswer")
+        .innerJoinAndSelect("workAnswer.answer", "answer")
+        .where("workAnswer.workId = :workId", {workId})
+        .groupBy("answer.questionId")
+        .select("answer.questionId", "questionId")
+        .getRawMany();
+        
+        let IDs : number[] =[];
+        for(let workAnswer of workAnswers){
+            IDs.push(workAnswer.questionId);
+        }
+
+        if(IDs.length == 0){
+            return new Promise(resolve => {resolve(null)});
+        }
+
+        return new Promise(resolve => {resolve(IDs)});
+    }
+
+    async getByQuestionId (workId : number, questionId : number) : Promise<WorkAnswer[] | null>{
+        let workAnswers = await this.repository.createQueryBuilder("workAnswer")
+        .innerJoin("workAnswer.answer", "answer")
+        .where("workAnswer.workId = :workId", {workId})
+        .andWhere("answer.questionId = :questionId", {questionId})
+        .getMany();
+
+        return new Promise(resolve => {resolve(workAnswers)});
+
+    }
+
+    async updateWorkAnswer(workId : number, answerId : number, isChecked : boolean, duration : number) : Promise<WorkAnswer | null>{
         let dbworkAnswer = await this.repository.findOne({where:{answerId: answerId, workId : workId}});
         if(dbworkAnswer == null){
             return new Promise(resolve => {resolve(null)});
