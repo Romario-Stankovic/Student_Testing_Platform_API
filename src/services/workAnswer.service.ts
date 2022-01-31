@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { WorkQuestion } from "src/dtos/workAnswer.dto";
+import { WorkQuestion, WorkQuestionAnswer } from "src/dtos/workAnswer.dto";
 import { WorkAnswer } from "src/entities/workAnswer.entity";
 import { Repository } from "typeorm";
 
@@ -42,6 +42,7 @@ export class WorkAnswerService {
         .addSelect("workAnswer.isChecked", "isChecked")
         .addSelect("answer.isCorrect", "isCorrect")
 
+        .addSelect("question.questionId", "questionId")
         .addSelect("question.questionText", "questionText")
         .addSelect("question.imagePath", "questionImagePath")
         .addSelect("workAnswer.duration", "duration")
@@ -51,50 +52,42 @@ export class WorkAnswerService {
             return new Promise(resolve => {resolve(null)});
         }
 
-        let answers : {answerId: number, answerText : string, imagePath : string, isChecked : boolean}[] = [];
+        let answers : WorkQuestionAnswer[] = [];
         let correctAnswers = 0;
 
         for(let answer of workAnswers){
-            answers.push({answerId: answer.answerId, answerText: answer.answerText, imagePath: answer.answerImagePath, isChecked: (answer.isChecked == 1 ? true : false)});
+            answers.push(new WorkQuestionAnswer(answer.answerId, answer.answerText, answer.answerImagePath, (answer.isChecked == 1 ? true : false)));
             if(answer.isCorrect == 1){
                 correctAnswers += 1;
             }
         }
 
-        let question = new WorkQuestion(workAnswers[0].questionText, workAnswers[0].questionImagePath, (correctAnswers > 1 ? true : false), workAnswers[0].duration, answers);
+        let question = new WorkQuestion(workAnswers[0].questionId, workAnswers[0].questionText, workAnswers[0].questionImagePath, (correctAnswers > 1 ? true : false), workAnswers[0].duration, answers);
 
         return new Promise(resolve => {resolve(question)});
 
     }
 
-    async getWorkQuestionIDs (workId: number) : Promise<number[] | null> {
-        let workAnswers = await this.repository.createQueryBuilder("workAnswer")
+    async getWorkQuestions (workId: number) : Promise<WorkQuestion[] | null>{
+        let workQuestionIds = await this.repository.createQueryBuilder("workAnswer")
         .innerJoinAndSelect("workAnswer.answer", "answer")
         .where("workAnswer.workId = :workId", {workId})
         .groupBy("answer.questionId")
         .select("answer.questionId", "questionId")
         .getRawMany();
-        
-        let IDs : number[] =[];
-        for(let workAnswer of workAnswers){
-            IDs.push(workAnswer.questionId);
+
+        let workQuestions : WorkQuestion[] = [];
+
+        for(let workQuestionId of workQuestionIds){
+            let question = await this.getWorkQuestion(workId, workQuestionId.questionId);
+            workQuestions.push(question);
         }
 
-        if(IDs.length == 0){
+        if(workQuestions.length == 0){
             return new Promise(resolve => {resolve(null)});
         }
 
-        return new Promise(resolve => {resolve(IDs)});
-    }
-
-    async getByQuestionId (workId : number, questionId : number) : Promise<WorkAnswer[] | null>{
-        let workAnswers = await this.repository.createQueryBuilder("workAnswer")
-        .innerJoin("workAnswer.answer", "answer")
-        .where("workAnswer.workId = :workId", {workId})
-        .andWhere("answer.questionId = :questionId", {questionId})
-        .getMany();
-
-        return new Promise(resolve => {resolve(workAnswers)});
+        return new Promise(resolve => {resolve(workQuestions)});
 
     }
 

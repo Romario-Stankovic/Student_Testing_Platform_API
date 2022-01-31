@@ -21,9 +21,9 @@ export class WorkDTO {
     testName : string;
     startedAt: Date;
     endsAt: Date;
-    questions : {id:number}[] = [];
+    questions : number[] = [];
 
-    constructor(workId : number, testName : string, startedAt: Date, endsAt : Date, questions : {id:number}[]){
+    constructor(workId : number, testName : string, startedAt: Date, endsAt : Date, questions : number[]){
         this.workId = workId;
         this.testName = testName;
         this.startedAt = startedAt;
@@ -31,4 +31,11 @@ export class WorkDTO {
         this.questions = questions;
     }
 
+}
+
+export class FinishedWorkDTO {
+    workId : number;
+    testName : string;
+    points : number;
+    questions : number[] = [];
 }

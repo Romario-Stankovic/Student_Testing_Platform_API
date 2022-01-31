@@ -1,23 +1,35 @@
 import * as Validator from "class-validator";
 
 export class WorkQuestion {
+    questionId : number;
     questionText : string;
     imagePath : string;
     multichoice : boolean;
     duration : number;
-    answers : {
-        answerId : number
-        answerText : string;
-        imagePath : string;
-        isChecked : boolean;
-    }[]
+    answers : WorkQuestionAnswer[];
 
-    constructor (questionText : string, imagePath : string, multichoice : boolean, duration: number, answers : {answerId: number, answerText : string, imagePath : string, isChecked : boolean}[]){
+    constructor (questionId : number, questionText : string, imagePath : string, multichoice : boolean, duration: number, answers : WorkQuestionAnswer[]){
+        this.questionId = questionId;
         this.questionText = questionText;
         this.imagePath = imagePath;
         this.multichoice = multichoice;
         this.duration = duration;
         this.answers = answers;
+    }
+
+}
+
+export class WorkQuestionAnswer {
+    answerId : number;
+    answerText : string;
+    imagePath : string;
+    isChecked : boolean;
+
+    constructor(answerId : number, answerText : string, imagePath : string, isChecked : boolean){
+        this.answerId = answerId;
+        this.answerText = answerText;
+        this.imagePath = imagePath;
+        this.isChecked = isChecked;
     }
 
 }

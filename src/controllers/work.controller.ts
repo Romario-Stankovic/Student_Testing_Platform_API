@@ -11,6 +11,7 @@ import { TestService } from "src/services/test.service";
 import { WorkService } from "src/services/work.service";
 import { WorkAnswerService } from "src/services/workAnswer.service";
 import { Work } from "src/entities/work.entity";
+import { resolve } from "path/posix";
 
 @Controller("api/work/")
 export class WorkController {
@@ -35,7 +36,7 @@ export class WorkController {
     @AllowedRoles("administrator", "student")
     @Post("start")
     async startWork(@Body() data : StartWorkDTO) : Promise<WorkDTO | APIResponse>{
-        
+
         let dbwork = await this.workService.add(data.studentId, data.testId);
         
         if(dbwork == null){
@@ -50,21 +51,21 @@ export class WorkController {
             return new Promise(resolve => {resolve(APIResponse.TEST_QUESTION_SHORTAGE)});
         }
 
-        let workQuestions :{id: number}[] = [];
+        let workQuestions : number[] = [];
 
         for(let i = test.questionCount; i>0; i--){
             let availableQuestionCount = questions.length;
             let randomIndex = Math.floor((Math.random() * availableQuestionCount));
 
-            workQuestions.push( {id: questions.splice(randomIndex, 1)[0].questionId} );
+            workQuestions.push( questions.splice(randomIndex, 1)[0].questionId );
         }
 
         let workEndsAt = new Date(dbwork.startedAt.getTime() + test.duration * 1000);
 
         let work = new WorkDTO(dbwork.workId, test.testName, dbwork.startedAt, workEndsAt, workQuestions);
 
-        for(let workQuestion of workQuestions){
-            let answers = await this.answerService.getByQuestionId(workQuestion.id);
+        for(let workQuestionID of workQuestions){
+            let answers = await this.answerService.getByQuestionId(workQuestionID);
             if(answers == null){
                 continue;
             }
@@ -89,17 +90,17 @@ export class WorkController {
             return new Promise(resolve => {resolve(APIResponse.WORK_ENDED)})
         }
 
-        let questionIds = await this.workAnswerService.getWorkQuestionIDs(dbwork.workId);
+        let workQuestions = await this.workAnswerService.getWorkQuestions(dbwork.workId);
 
         let result = 0;
 
-        for (let id of questionIds) {
+        for (let question of workQuestions) {
             let correct = 0;
             let incorrect = 0;
             let totalCorrect = 0;
 
-            let answers = await this.answerService.getByQuestionId(id);
-            let workAnswers = await this.workAnswerService.getByQuestionId(dbwork.workId, id);
+            let answers = await this.answerService.getByQuestionId(question.questionId);
+            let workAnswers = question.answers;
 
             for (let answer of answers) {
                 totalCorrect += (answer.isCorrect ? 1 : 0);
@@ -127,7 +128,7 @@ export class WorkController {
             }
         }
 
-        result = (result / questionIds.length) * 100;
+        result = (result / workQuestions.length) * 100;
         
         dbwork = await this.workService.endWork(dbwork.workId, result);
 
@@ -142,10 +143,6 @@ export class WorkController {
         
         if(work == null){
             return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
-        }
-
-        if(work.endedAt != null){
-            return new Promise(resolve => {resolve(APIResponse.WORK_ENDED)});
         }
 
         let workQuestion = await this.workAnswerService.getWorkQuestion(workId, questionId);
@@ -178,6 +175,18 @@ export class WorkController {
         }
 
         return new Promise(resolve => {resolve(APIResponse.OK)})
+
+    }
+
+    @Get("question/all")
+    async getWorkQuestions(@Query("id") workId : number) : Promise <WorkQuestion[] | APIResponse>{
+        let questions = await this.workAnswerService.getWorkQuestions(workId);
+
+        if(questions == null){
+            return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
+        }
+
+        return new Promise(resolve => {resolve(questions)});
 
     }
 
