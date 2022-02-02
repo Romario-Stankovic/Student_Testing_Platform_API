@@ -36,6 +36,16 @@ export class WorkDTO {
 export class FinishedWorkDTO {
     workId : number;
     testName : string;
+    startedAt : Date;
+    endedAt : Date;
     points : number;
-    questions : number[] = [];
+
+    constructor(workId : number, testName : string, startedAt : Date, endedAt : Date, points : number){
+        this.workId = workId;
+        this.testName = testName;
+        this.startedAt = startedAt;
+        this.endedAt = endedAt;
+        this.points = points;
+    }
+
 }

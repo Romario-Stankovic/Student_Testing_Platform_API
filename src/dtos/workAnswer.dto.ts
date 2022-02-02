@@ -24,12 +24,14 @@ export class WorkQuestionAnswer {
     answerText : string;
     imagePath : string;
     isChecked : boolean;
+    isCorrect : boolean;
 
-    constructor(answerId : number, answerText : string, imagePath : string, isChecked : boolean){
+    constructor(answerId : number, answerText : string, imagePath : string, isChecked : boolean, isCorrect : boolean){
         this.answerId = answerId;
         this.answerText = answerText;
         this.imagePath = imagePath;
         this.isChecked = isChecked;
+        this.isCorrect = isCorrect;
     }
 
 }

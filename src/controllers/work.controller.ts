@@ -90,8 +90,7 @@ export class WorkController {
             return new Promise(resolve => {resolve(APIResponse.WORK_ENDED)})
         }
 
-        let workQuestions = await this.workAnswerService.getWorkQuestions(dbwork.workId);
-
+        let workQuestions = await this.workAnswerService.getWorkQuestions(dbwork.workId, true);
         let result = 0;
 
         for (let question of workQuestions) {
@@ -99,32 +98,22 @@ export class WorkController {
             let incorrect = 0;
             let totalCorrect = 0;
 
-            let answers = await this.answerService.getByQuestionId(question.questionId);
-            let workAnswers = question.answers;
+            let answers = question.answers;
 
             for (let answer of answers) {
                 totalCorrect += (answer.isCorrect ? 1 : 0);
-                for (let workAnswer of workAnswers) {
-                    if (workAnswer.answerId != answer.answerId) {
-                        continue;
-                    }
 
-                    if (workAnswer.isChecked && !answer.isCorrect) {
-                        incorrect++;
-                    }else if(workAnswer.isChecked && answer.isCorrect){
-                        correct++;
-                    }
-
-                    break;
-
+                if (answer.isChecked && !answer.isCorrect) {
+                    incorrect++;
+                } else if (answer.isChecked && answer.isCorrect) {
+                    correct++;
                 }
-
             }
 
             if (incorrect >= 1) {
                 result += 0;
             } else {
-                result += (correct/totalCorrect);
+                result += (correct / totalCorrect);
             }
         }
 

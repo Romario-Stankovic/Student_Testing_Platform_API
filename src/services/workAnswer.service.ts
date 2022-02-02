@@ -28,7 +28,7 @@ export class WorkAnswerService {
 
     }
 
-    async getWorkQuestion(workId : number, questionId : number) : Promise<WorkQuestion | null>{
+    async getWorkQuestion(workId : number, questionId : number, showIsCorrect = false) : Promise<WorkQuestion | null>{
 
         let workAnswers = await this.repository.createQueryBuilder("workAnswer")
         .innerJoinAndSelect("workAnswer.answer", "answer")
@@ -56,7 +56,7 @@ export class WorkAnswerService {
         let correctAnswers = 0;
 
         for(let answer of workAnswers){
-            answers.push(new WorkQuestionAnswer(answer.answerId, answer.answerText, answer.answerImagePath, (answer.isChecked == 1 ? true : false)));
+            answers.push(new WorkQuestionAnswer(answer.answerId, answer.answerText, answer.answerImagePath, (answer.isChecked == 1 ? true : false), showIsCorrect ? (answer.isCorrect == 1 ? true : false) : null ));
             if(answer.isCorrect == 1){
                 correctAnswers += 1;
             }
@@ -68,7 +68,7 @@ export class WorkAnswerService {
 
     }
 
-    async getWorkQuestions (workId: number) : Promise<WorkQuestion[] | null>{
+    async getWorkQuestions (workId: number, showIsCorrect = false) : Promise<WorkQuestion[] | null>{
         let workQuestionIds = await this.repository.createQueryBuilder("workAnswer")
         .innerJoinAndSelect("workAnswer.answer", "answer")
         .where("workAnswer.workId = :workId", {workId})
@@ -79,7 +79,7 @@ export class WorkAnswerService {
         let workQuestions : WorkQuestion[] = [];
 
         for(let workQuestionId of workQuestionIds){
-            let question = await this.getWorkQuestion(workId, workQuestionId.questionId);
+            let question = await this.getWorkQuestion(workId, workQuestionId.questionId, showIsCorrect);
             workQuestions.push(question);
         }
 
