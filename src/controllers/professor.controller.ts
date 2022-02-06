@@ -4,7 +4,7 @@ import { AddProfessorDTO } from "src/dtos/professor.dto";
 import { Professor } from "src/entities/professor.entity";
 import { ProfessorService } from "src/services/professor.service";
 import { RoleGuard } from "src/guards/role.guard";
-import { AllowedRoles } from "src/misc/allow.role.decorator";
+import { AllowToRoles } from "src/misc/allow.role.decorator";
 
 @Controller("api/professor/")
 
@@ -14,7 +14,7 @@ export class ProfessorController {
     ) { }
 
     @UseGuards(RoleGuard)
-    @AllowedRoles("administrator")
+    @AllowToRoles("administrator")
     @Get()
     async getProfessorByID(@Query("id") id: number): Promise<Professor | APIResponse> {
         let professor = await this.professorService.getByID(id);
@@ -27,7 +27,7 @@ export class ProfessorController {
     }
 
     @UseGuards(RoleGuard)
-    @AllowedRoles("administrator")
+    @AllowToRoles("administrator")
     @Post()
     async postProfessor(@Body() data: AddProfessorDTO): Promise<Professor | APIResponse> {
 

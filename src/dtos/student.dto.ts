@@ -18,7 +18,7 @@ export class AddStudentDTO {
     indexNumber: string;
 }
 
-export class EditStudentDTO {
+export class UpdateStudentDTO {
 
     @Validator.IsOptional()
     @Validator.IsNotEmpty()

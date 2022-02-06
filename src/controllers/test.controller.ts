@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Post, Put, Query, UseGuards } from "@nestjs/common";
-import { AddTestDTO } from "src/dtos/test.dto";
+import { Body, Controller, Get, Patch, Post, Put, Query, UseGuards } from "@nestjs/common";
+import { AddTestDTO, UpdateTestDTO } from "src/dtos/test.dto";
 import { Test } from "src/entities/test.entity";
 import { RoleGuard } from "src/guards/role.guard";
-import { AllowedRoles } from "src/misc/allow.role.decorator";
+import { AllowToRoles } from "src/misc/allow.role.decorator";
 import { APIResponse } from "src/misc/api.response";
 import { TestService } from "src/services/test.service";
 
@@ -49,7 +49,7 @@ export class TestController {
     }
 
     @UseGuards(RoleGuard)
-    @AllowedRoles("administrator","professor")
+    @AllowToRoles("administrator","professor")
     @Post()
     async postTest(@Body() data : AddTestDTO) : Promise<Test | APIResponse> {
         let test = await this.testService.add(data.professorId, data.testName, data.duration, data.questionCount, data.startAt, data.endAt);
@@ -58,6 +58,20 @@ export class TestController {
         }
 
         return new Promise(resolve => {resolve(test)});
+    }
+
+    @UseGuards(RoleGuard)
+    @AllowToRoles("administrator", "professor")
+    @Patch()
+    async patchTest(@Query("id") id : number, @Body() data : UpdateTestDTO) : Promise<APIResponse> {
+
+        let test = await this.testService.update(id, data.professorId, data.testName, data.duration, data.questionCount, data.startAt, data.endAt);
+
+        if(test == null){
+            return new Promise(resolve => {resolve(APIResponse.SAVE_FAILED)});
+        }
+        return new Promise(resolve => {resolve(APIResponse.OK)});
+
     }
 
 }

@@ -3,7 +3,7 @@ import { APIResponse } from "src/misc/api.response";
 import { AddAdministratorDTO } from "src/dtos/administrator.dto";
 import { Administrator } from "src/entities/administrator.entity";
 import { AdministratorService } from "src/services/administrator.service";
-import { AllowedRoles } from "src/misc/allow.role.decorator";
+import { AllowToRoles } from "src/misc/allow.role.decorator";
 import { RoleGuard } from "src/guards/role.guard";
 
 @Controller("api/admin/")
@@ -13,7 +13,7 @@ export class AdministratorController {
     ) { }
 
     @UseGuards(RoleGuard)
-    @AllowedRoles("administrator")
+    @AllowToRoles("administrator")
     @Get()
     async getAdminByID(@Query("id") id: number): Promise<Administrator | APIResponse> {
         let administrator = await this.administratorService.getByID(id);
@@ -25,7 +25,7 @@ export class AdministratorController {
     }
 
     @UseGuards(RoleGuard)
-    @AllowedRoles("administrator")
+    @AllowToRoles("administrator")
     @Post()
     async postAdmin(@Body() data: AddAdministratorDTO): Promise<Administrator | APIResponse> {
 

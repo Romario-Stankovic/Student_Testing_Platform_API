@@ -73,4 +73,36 @@ export class TestService {
 
     }
 
+    async update(id : number, professorId : number, testName : string, duration : number, questionCount : number, startAt: Date, endAt : Date) : Promise<Test | null>{
+        
+        let test = await this.getById(id);
+
+        if(test == undefined){
+            return new Promise(resolve => {resolve(null)});
+        }
+
+        if(duration < 0){
+            return new Promise(resolve => {resolve(null)});
+        }
+
+        if(questionCount < 0){
+            return new Promise(resolve => {resolve(null)});
+        }
+
+        test.professorId = professorId;
+        test.testName = testName;
+        test.duration = duration;
+        test.questionCount = questionCount;
+        test.startAt = startAt;
+        test.endAt = endAt;
+
+        try {
+            let updateTest = this.repository.save(test);
+            return new Promise(resolve => {resolve(updateTest)});
+        }catch(error){
+            return new Promise(resolve => {resolve(null)});
+        }
+
+    }
+
 }

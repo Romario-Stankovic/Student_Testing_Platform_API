@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { WorkQuestion } from "src/dtos/workAnswer.dto";
-import { EndWorkDTO, StartWorkDTO, WorkDTO } from "src/dtos/work.dto";
+import { EndWorkDTO, FinishedWork, StartWorkDTO, StartedWork } from "src/dtos/work.dto";
 import { PatchWorkAnswerDTO } from "src/dtos/workAnswer.dto";
 import { RoleGuard } from "src/guards/role.guard";
-import { AllowedRoles } from "src/misc/allow.role.decorator";
+import { AllowToRoles } from "src/misc/allow.role.decorator";
 import { APIResponse } from "src/misc/api.response";
 import { AnswerService } from "src/services/answer.service";
 import { QuestionService } from "src/services/question.service";
@@ -11,7 +11,6 @@ import { TestService } from "src/services/test.service";
 import { WorkService } from "src/services/work.service";
 import { WorkAnswerService } from "src/services/workAnswer.service";
 import { Work } from "src/entities/work.entity";
-import { resolve } from "path/posix";
 
 @Controller("api/work/")
 export class WorkController {
@@ -32,10 +31,19 @@ export class WorkController {
         return new Promise(resolve => {resolve(work)});
     }
 
+    @Get("finished")
+    async getFinishedWork(@Query("studentId") id : number) : Promise<FinishedWork[] | APIResponse> {
+        let works = await this.workService.getFinishedByStudentID(id);
+        if(works == null){
+            return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
+        }
+        return new Promise(resolve => {resolve(works)});
+    }
+
     @UseGuards(RoleGuard)
-    @AllowedRoles("administrator", "student")
+    @AllowToRoles("administrator", "student")
     @Post("start")
-    async startWork(@Body() data : StartWorkDTO) : Promise<WorkDTO | APIResponse>{
+    async startWork(@Body() data : StartWorkDTO) : Promise<StartedWork | APIResponse>{
 
         let dbwork = await this.workService.add(data.studentId, data.testId);
         
@@ -62,7 +70,7 @@ export class WorkController {
 
         let workEndsAt = new Date(dbwork.startedAt.getTime() + test.duration * 1000);
 
-        let work = new WorkDTO(dbwork.workId, test.testName, dbwork.startedAt, workEndsAt, workQuestions);
+        let work = new StartedWork(dbwork.workId, test.testName, dbwork.startedAt, workEndsAt, workQuestions);
 
         for(let workQuestionID of workQuestions){
             let answers = await this.answerService.getByQuestionId(workQuestionID);
@@ -79,7 +87,7 @@ export class WorkController {
     }
 
     @Post("finish")
-    async endWork(@Body() data : EndWorkDTO) : Promise<APIResponse | any>{
+    async endWork(@Body() data : EndWorkDTO) : Promise<Work | APIResponse>{
         let dbwork = await this.workService.getByID(data.workId);
 
         if(dbwork == null){
@@ -169,7 +177,7 @@ export class WorkController {
 
     @Get("question/all")
     async getWorkQuestions(@Query("id") workId : number) : Promise <WorkQuestion[] | APIResponse>{
-        let questions = await this.workAnswerService.getWorkQuestions(workId);
+        let questions = await this.workAnswerService.getWorkQuestions(workId, true);
 
         if(questions == null){
             return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});

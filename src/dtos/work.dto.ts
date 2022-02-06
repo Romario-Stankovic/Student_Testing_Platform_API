@@ -16,7 +16,7 @@ export class EndWorkDTO {
     workId : number;
 }
 
-export class WorkDTO {
+export class StartedWork {
     workId : number;
     testName : string;
     startedAt: Date;
@@ -33,7 +33,7 @@ export class WorkDTO {
 
 }
 
-export class FinishedWorkDTO {
+export class FinishedWork {
     workId : number;
     testName : string;
     startedAt : Date;

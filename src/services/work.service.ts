@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { FinishedWork } from "src/dtos/work.dto";
 import { Work } from "src/entities/work.entity";
 import { Repository } from "typeorm";
 
@@ -35,6 +36,17 @@ export class WorkService {
 
         return new Promise(resolve => { resolve(work); });
 
+    }
+
+    async getFinishedByStudentID(id : number) : Promise<FinishedWork[] | null>{
+        let dbworks = await this.repository.find({where: {studentId : id}, relations: ["test"]});
+        let works : FinishedWork[] = [];
+
+        for(let work of dbworks){
+            works.push(new FinishedWork(work.workId, work.test.testName, work.startedAt, work.endedAt, work.points));
+        }
+
+        return new Promise(resolve => {resolve(works)});
     }
 
     async endWork(id : number, points : number) : Promise<Work | null> {

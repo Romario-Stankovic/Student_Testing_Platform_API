@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post, Put, Query, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Get, Patch, Post, Put, Query, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { APIResponse } from "src/misc/api.response";
-import { AddStudentDTO, EditStudentDTO } from "src/dtos/student.dto";
+import { AddStudentDTO, UpdateStudentDTO } from "src/dtos/student.dto";
 import { Student } from "src/entities/student.entity";
 import { StudentService } from "src/services/student.service";
 
@@ -22,7 +22,7 @@ export class StudentController {
     }
 
     @Post()
-    async postStudent(@Body() data: AddStudentDTO): Promise<APIResponse> {
+    async postStudent(@Body() data: AddStudentDTO): Promise<Student | APIResponse> {
 
         let student = await this.studentService.getByIndex(data.indexNumber);
         if (student != null) {
@@ -35,23 +35,18 @@ export class StudentController {
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
-        return new Promise(resolve => { resolve(APIResponse.OK); });
+        return new Promise(resolve => { resolve(dbstudent); });
     }
 
-    @Put()
-    async putStudent(@Query("id") id: number, @Body() data: EditStudentDTO): Promise<APIResponse> {
+    @Patch()
+    async patchStudent(@Query("id") id: number, @Body() data: UpdateStudentDTO): Promise<APIResponse> {
 
-        let student = await this.studentService.getByID(id);
-        if (student == null) {
-            return new Promise(resolve => { resolve(APIResponse.NULL_ENTRY); });
-        }
-
-        student = await this.studentService.getByIndex(data.indexNumber);
+        let student = await this.studentService.getByIndex(data.indexNumber);
         if (student != null && student.studentId != id) {
             return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE); });
         }
 
-        let dbstudent = await this.studentService.editByID(id, data);
+        let dbstudent = await this.studentService.update(id, data.firstName, data.lastName, data.indexNumber);
 
         if (dbstudent == null) {
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
