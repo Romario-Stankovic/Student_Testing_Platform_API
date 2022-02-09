@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { WorkQuestion } from "src/dtos/workAnswer.dto";
-import { EndWorkDTO, FinishedWork, StartWorkDTO, StartedWork } from "src/dtos/work.dto";
+import { EndWorkDTO, FinishedWork, StartWorkDTO, StartedWork, WorkStudent } from "src/dtos/work.dto";
 import { PatchWorkAnswerDTO } from "src/dtos/workAnswer.dto";
 import { RoleGuard } from "src/guards/role.guard";
 import { AllowToRoles } from "src/misc/allow.role.decorator";
@@ -184,6 +184,18 @@ export class WorkController {
         }
 
         return new Promise(resolve => {resolve(questions)});
+
+    }
+
+    @Get("test")
+    async getWorkStudents(@Query("testId") testId : number) : Promise<WorkStudent[] | APIResponse> {
+        let students = await this.workService.getByTestId(testId);
+
+        if(students == null){
+            return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
+        }
+
+        return new Promise(resolve => {resolve(students)});
 
     }
 

@@ -49,3 +49,17 @@ export class FinishedWork {
     }
 
 }
+
+export class WorkStudent {
+    workId : number;
+    studentIndexNumber : string;
+    testName : string;
+    points : number;
+
+    constructor(workId : number, studentIndexNumber : string, testName : string, points : number){
+        this.workId = workId;
+        this.studentIndexNumber = studentIndexNumber;
+        this.testName = testName;
+        this.points = points;
+    }
+}

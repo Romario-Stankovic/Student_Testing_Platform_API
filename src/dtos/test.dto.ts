@@ -54,3 +54,9 @@ export class UpdateTestDTO {
     @Validator.IsNotEmpty()
     endAt: Date;
 }
+
+export class DeleteTestDTO {
+    @Validator.IsNumber()
+    @Validator.IsNotEmpty()
+    testId : number;
+}

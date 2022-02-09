@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Patch, Post, Put, Query, UseGuards } from "@nestjs/common";
-import { AddTestDTO, UpdateTestDTO } from "src/dtos/test.dto";
+import { Body, Controller, Delete, Get, Patch, Post, Put, Query, UseGuards } from "@nestjs/common";
+import { AddTestDTO, DeleteTestDTO, UpdateTestDTO } from "src/dtos/test.dto";
 import { Test } from "src/entities/test.entity";
 import { RoleGuard } from "src/guards/role.guard";
 import { AllowToRoles } from "src/misc/allow.role.decorator";
@@ -72,6 +72,20 @@ export class TestController {
         }
         return new Promise(resolve => {resolve(APIResponse.OK)});
 
+    }
+
+    @UseGuards(RoleGuard)
+    @AllowToRoles("administrator", "professor")
+    @Delete()
+    async deleteTest(@Body() data : DeleteTestDTO) : Promise<APIResponse>{
+        
+        let test = await this.testService.delete(data.testId);
+        
+        if(test == null){
+            return new Promise(resolve => {resolve(APIResponse.DELETE_FAILED)});
+        }
+
+        return new Promise(resolve => {resolve(APIResponse.OK)});
     }
 
 }

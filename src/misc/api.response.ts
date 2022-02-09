@@ -12,6 +12,7 @@ export class APIResponse {
     static readonly OK = new APIResponse("OK!", 0); // All went fine
     /* 1000 - Service */
     static readonly SAVE_FAILED = new APIResponse("Service Error", 1001); // Saving to the database failed
+    static readonly DELETE_FAILED = new APIResponse("Service Error", 1002); // Deleting the entry failed
     /* 2000 - Controller */
     static readonly NULL_ENTRY = new APIResponse("Controller Error", 2001); // While searching the database, the specific query failed to find a entry
     static readonly VALIDATION_FAILED = new APIResponse("Controller Error", 2002); // Failed to validate the data received

@@ -105,4 +105,20 @@ export class TestService {
 
     }
 
+    async delete(id : number) : Promise<Test | null>{
+        let test = await this.getById(id);
+        if(test == undefined){
+            return new Promise(resolve => {resolve(null)});
+        }
+
+        let deletedTest = await this.repository.remove(test);
+
+        if(deletedTest == undefined){
+            return new Promise(resolve => {resolve(null)});
+        }
+
+        return new Promise(resolve => {resolve(deletedTest)});
+
+    }
+
 }
