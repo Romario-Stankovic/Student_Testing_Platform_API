@@ -63,7 +63,7 @@ export class StudentService {
         student.indexNumber = indexNumber;
 
         try {
-            let updatedStudent = this.repository.save(student);
+            let updatedStudent = await this.repository.save(student);
             return new Promise(resolve => { resolve(updatedStudent); });
         } catch (error) {
             return new Promise(resolve => { resolve(null); });

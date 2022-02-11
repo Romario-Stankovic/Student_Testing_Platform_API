@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Patch, Post, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpException, HttpStatus, Patch, Post, Query, UseGuards } from "@nestjs/common";
 import { WorkQuestion } from "src/dtos/workAnswer.dto";
-import { EndWorkDTO, FinishedWork, StartWorkDTO, StartedWork, WorkStudent } from "src/dtos/work.dto";
+import { EndWorkDTO, StartWorkDTO, StartedWork } from "src/dtos/work.dto";
 import { PatchWorkAnswerDTO } from "src/dtos/workAnswer.dto";
 import { RoleGuard } from "src/guards/role.guard";
 import { AllowToRoles } from "src/misc/allow.role.decorator";
@@ -23,21 +23,54 @@ export class WorkController {
     ){}
 
     @Get()
-    async getWork(@Query("id") id : number) : Promise<Work | APIResponse> {
-        let work = await this.workService.getByID(id);
+    async getWork(@Query("by") by : string, @Query("id") id : number) : Promise<Work | Work[] | APIResponse> {
+        let work;
+
+        if(by == "default"){
+            work = await this.workService.getByID(id);
+        }else if(by == "test"){
+            work = await this.workService.getByTestID(id);
+        }else if(by == "student"){
+            work = await this.workService.getFinishedByStudentID(id);
+        }else{
+            throw new HttpException("Bad Request", HttpStatus.BAD_REQUEST);
+        }
+        
         if(work == null){
             return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
         }
+
         return new Promise(resolve => {resolve(work)});
     }
 
-    @Get("finished")
-    async getFinishedWork(@Query("studentId") id : number) : Promise<FinishedWork[] | APIResponse> {
-        let works = await this.workService.getFinishedByStudentID(id);
-        if(works == null){
+    @Get("question")
+    async getWorkQuestion(@Query("workId") workId : number, @Query("questionId") questionId : number): Promise<WorkQuestion | APIResponse> {
+        
+        let work = await this.workService.getByID(workId);
+        
+        if(work == null){
             return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
         }
-        return new Promise(resolve => {resolve(works)});
+
+        let workQuestion = await this.workAnswerService.getWorkQuestion(workId, questionId);
+
+        if(workQuestion == null){
+            return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
+        }
+
+        return new Promise(resolve => {resolve(workQuestion)});
+    }
+
+    @Get("questions")
+    async getWorkQuestions(@Query("id") workId : number) : Promise <WorkQuestion[] | APIResponse>{
+        let questions = await this.workAnswerService.getWorkQuestions(workId, true);
+
+        if(questions == null){
+            return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
+        }
+
+        return new Promise(resolve => {resolve(questions)});
+
     }
 
     @UseGuards(RoleGuard)
@@ -133,24 +166,6 @@ export class WorkController {
 
     }
 
-    @Get("question")
-    async getWorkQuestion(@Query("workId") workId : number, @Query("questionId") questionId : number): Promise<WorkQuestion | APIResponse> {
-        
-        let work = await this.workService.getByID(workId);
-        
-        if(work == null){
-            return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
-        }
-
-        let workQuestion = await this.workAnswerService.getWorkQuestion(workId, questionId);
-
-        if(workQuestion == null){
-            return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
-        }
-
-        return new Promise(resolve => {resolve(workQuestion)});
-    }
-
     @Patch("question")
     async patchWorkQuestion(@Body() data : PatchWorkAnswerDTO) : Promise<APIResponse>{
 
@@ -172,30 +187,6 @@ export class WorkController {
         }
 
         return new Promise(resolve => {resolve(APIResponse.OK)})
-
-    }
-
-    @Get("question/all")
-    async getWorkQuestions(@Query("id") workId : number) : Promise <WorkQuestion[] | APIResponse>{
-        let questions = await this.workAnswerService.getWorkQuestions(workId, true);
-
-        if(questions == null){
-            return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
-        }
-
-        return new Promise(resolve => {resolve(questions)});
-
-    }
-
-    @Get("test")
-    async getWorkStudents(@Query("testId") testId : number) : Promise<WorkStudent[] | APIResponse> {
-        let students = await this.workService.getByTestId(testId);
-
-        if(students == null){
-            return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
-        }
-
-        return new Promise(resolve => {resolve(students)});
 
     }
 

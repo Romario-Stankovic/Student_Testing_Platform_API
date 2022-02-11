@@ -60,3 +60,48 @@ export class DeleteTestDTO {
     @Validator.IsNotEmpty()
     testId : number;
 }
+
+class ModifyTestQuestion {
+    @Validator.IsNumber()
+    questionId : number | null;
+
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    questionText : string;
+
+    @Validator.IsString()
+    imagePath : string | null;
+
+    @Validator.IsBoolean()
+    @Validator.IsNotEmpty()
+    toDelete : boolean;
+
+    @Validator.ValidateNested()
+    answers : ModifyTestAnswer[];
+
+}
+
+class ModifyTestAnswer {
+    @Validator.IsNumber()
+    answerId: number | null;
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    answerText: string;
+    @Validator.IsString()
+    imagePath: string | null;
+    @Validator.IsBoolean()
+    @Validator.IsNotEmpty()
+    isCorrect: boolean;
+    @Validator.IsBoolean()
+    @Validator.IsNotEmpty()
+    toDelete: boolean;
+}
+
+export class ModifyTestQuestionsDTO {
+    @Validator.IsNotEmpty()
+    @Validator.IsNumber()
+    testId : number;
+
+    @Validator.ValidateNested()
+    questions : ModifyTestQuestion[];
+}

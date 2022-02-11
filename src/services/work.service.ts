@@ -38,12 +38,11 @@ export class WorkService {
 
     }
 
-    async getFinishedByStudentID(id : number) : Promise<FinishedWork[] | null>{
-        let dbworks = await this.repository.find({where: {studentId : id}, relations: ["test"]});
-        let works : FinishedWork[] = [];
+    async getFinishedByStudentID(id : number) : Promise<Work[] | null>{
+        let works = await this.repository.find({where: {studentId : id}, relations: ["test"]});
 
-        for(let work of dbworks){
-            works.push(new FinishedWork(work.workId, work.test.testName, work.startedAt, work.endedAt, work.points));
+        if(works.length == 0){
+            return null;
         }
 
         return new Promise(resolve => {resolve(works)});
@@ -69,20 +68,14 @@ export class WorkService {
 
     }
 
-    async getByTestId(testId : number) : Promise<WorkStudent[] | null> {
-        let works = await this.repository.find({where: {testId : testId}, relations:["student", "test"]});
+    async getByTestID(testId : number) : Promise<Work[] | null> {
+        let works = await this.repository.find({where: {testId : testId}, relations:["student"]});
 
         if(works.length == 0){
             return new Promise(resolve => {resolve(null)});
         }
 
-        let students : WorkStudent[] = [];
-
-        for(let work of works){
-            students.push(new WorkStudent(work.workId, work.student.indexNumber, work.test.testName, work.points));
-        }
-
-        return new Promise(resolve => {resolve(students)});
+        return new Promise(resolve => {resolve(works)});
 
     }
 

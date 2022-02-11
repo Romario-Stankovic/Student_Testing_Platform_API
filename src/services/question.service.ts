@@ -48,4 +48,36 @@ export class QuestionService {
 
     }
 
+    async update(id:number, questionText: string, imagePath: string): Promise<Question | null> {
+        let question = await this.getByID(id);
+
+        if (question == null){
+            return new Promise(resolve => {resolve(null)});
+        }
+
+        question.questionText = questionText;
+        question.imagePath = imagePath;
+        try {
+            let updatedQuestion = await this.repository.save(question);
+            return new Promise(resolve => {resolve(updatedQuestion)});
+        }catch (error){
+            return new Promise(resolve => {resolve(null)});
+        }
+    }
+
+    async delete(id: number) : Promise<Question | null>{
+        let question = await this.getByID(id);
+        if(question == null){
+            return new Promise(resolve => {resolve(null)});
+        }
+
+        try {
+            let deletedQuestion = await this.repository.remove(question);
+            return new Promise(resolve => {resolve(deletedQuestion)});
+        }catch(error){
+            return new Promise(resolve => {resolve(null)});
+        }
+
+    }
+
 }

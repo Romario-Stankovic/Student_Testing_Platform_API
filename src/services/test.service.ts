@@ -23,6 +23,18 @@ export class TestService {
 
     }
 
+    
+    async getByProfessorId(id : number) : Promise<Test[] | null> {
+        let tests = await this.repository.find({where: {professorId: id}});
+        
+        if(tests.length == 0){
+            return new Promise(resolve => {resolve(null)});
+        }
+        
+        return new Promise(resolve => resolve(tests));
+        
+    }
+
     async getActive(): Promise<Test[] | null> {
         let current = new Date();
         let tests = await this.repository.find({where: {startAt: LessThanOrEqual(current), endAt: MoreThan(current)}});
@@ -34,18 +46,6 @@ export class TestService {
         return new Promise(resolve => {resolve(tests)});
 
     }
-
-    async getByProfessorId(id : number) : Promise<Test[] | null> {
-        let tests = await this.repository.find({where: {professorId: id}});
-
-        if(tests.length == 0){
-            return new Promise(resolve => {resolve(null)});
-        }
-
-        return new Promise(resolve => resolve(tests));
-
-    }
-
     async add(professorId : number, testName : string, duration : number, questionCount : number, startAt: Date, endAt : Date) : Promise<Test | null>{
 
         if(duration < 0){
@@ -111,13 +111,12 @@ export class TestService {
             return new Promise(resolve => {resolve(null)});
         }
 
-        let deletedTest = await this.repository.remove(test);
-
-        if(deletedTest == undefined){
+        try {
+            let deletedTest = await this.repository.remove(test);
+            return new Promise(resolve => {resolve(deletedTest)});
+        }catch(error){
             return new Promise(resolve => {resolve(null)});
         }
-
-        return new Promise(resolve => {resolve(deletedTest)});
 
     }
 
