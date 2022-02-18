@@ -29,30 +29,42 @@ export class AddTestDTO {
 }
 
 export class UpdateTestDTO {
+
+    @Validator.IsOptional()
     @Validator.IsNumber()
     @Validator.IsNotEmpty()
-    professorId: number;
+    testId : number | null;
 
+    @Validator.IsOptional()
+    @Validator.IsNumber()
+    @Validator.IsNotEmpty()
+    professorId: number | null;
+
+    @Validator.IsOptional()
     @Validator.IsNotEmpty()
     @Validator.IsString()
     @Validator.Length(1, 100)
-    testName: string;
+    testName: string | null;
 
+    @Validator.IsOptional()
     @Validator.IsNotEmpty()
     @Validator.IsNumber()
-    duration : number;
+    duration : number | null;
 
+    @Validator.IsOptional()
     @Validator.IsNumber()
     @Validator.IsNotEmpty()
-    questionCount : number;
+    questionCount : number | null;
 
+    @Validator.IsOptional()
     @Validator.IsDateString()
     @Validator.IsNotEmpty()
-    startAt: Date;
+    startAt: Date | null;
 
+    @Validator.IsOptional()
     @Validator.IsDateString()
     @Validator.IsNotEmpty()
-    endAt: Date;
+    endAt: Date | null;
 }
 
 export class DeleteTestDTO {
@@ -62,13 +74,17 @@ export class DeleteTestDTO {
 }
 
 class ModifyTestQuestion {
+    
+    @Validator.IsOptional()
     @Validator.IsNumber()
+    @Validator.IsNotEmpty()
     questionId : number | null;
 
     @Validator.IsString()
     @Validator.IsNotEmpty()
     questionText : string;
 
+    @Validator.IsOptional()
     @Validator.IsString()
     imagePath : string | null;
 
@@ -82,12 +98,19 @@ class ModifyTestQuestion {
 }
 
 class ModifyTestAnswer {
+
+    @Validator.IsOptional()
     @Validator.IsNumber()
+    @Validator.IsNotEmpty()
     answerId: number | null;
+
     @Validator.IsString()
     @Validator.IsNotEmpty()
     answerText: string;
+
+    @Validator.IsOptional()
     @Validator.IsString()
+    @Validator.IsNotEmpty()
     imagePath: string | null;
     @Validator.IsBoolean()
     @Validator.IsNotEmpty()

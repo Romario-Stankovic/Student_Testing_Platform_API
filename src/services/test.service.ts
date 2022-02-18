@@ -11,7 +11,7 @@ export class TestService {
         private readonly repository: Repository<Test>
     ) { }
 
-    async getById(id: number): Promise<Test | null> {
+    async getByID(id: number): Promise<Test | null> {
 
         let test = await this.repository.findOne(id);
 
@@ -75,7 +75,7 @@ export class TestService {
 
     async update(id : number, professorId : number, testName : string, duration : number, questionCount : number, startAt: Date, endAt : Date) : Promise<Test | null>{
         
-        let test = await this.getById(id);
+        let test = await this.getByID(id);
 
         if(test == undefined){
             return new Promise(resolve => {resolve(null)});
@@ -89,12 +89,12 @@ export class TestService {
             return new Promise(resolve => {resolve(null)});
         }
 
-        test.professorId = professorId;
-        test.testName = testName;
-        test.duration = duration;
-        test.questionCount = questionCount;
-        test.startAt = startAt;
-        test.endAt = endAt;
+        test.professorId = professorId != null ? professorId : test.professorId;
+        test.testName = testName != null ? testName : test.testName;
+        test.duration = duration != null ? duration : test.duration;
+        test.questionCount = questionCount != null ? questionCount : test.questionCount;
+        test.startAt = startAt != null ? startAt : test.startAt;
+        test.endAt = endAt != null ? endAt : test.endAt;
 
         try {
             let updateTest = this.repository.save(test);
@@ -106,7 +106,7 @@ export class TestService {
     }
 
     async delete(id : number) : Promise<Test | null>{
-        let test = await this.getById(id);
+        let test = await this.getByID(id);
         if(test == undefined){
             return new Promise(resolve => {resolve(null)});
         }

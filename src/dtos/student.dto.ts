@@ -20,6 +20,10 @@ export class AddStudentDTO {
 
 export class UpdateStudentDTO {
 
+    @Validator.IsNumber()
+    @Validator.IsNotEmpty()
+    studentId : number;
+
     @Validator.IsOptional()
     @Validator.IsNotEmpty()
     @Validator.IsString()
@@ -62,4 +66,10 @@ export class IdentityStudentDTO {
         this.indexNumber = indexNumber;
         this.imagePath = imagePath;
     }
+}
+
+export class DeleteStudentDTO {
+    @Validator.IsNotEmpty()
+    @Validator.IsNumber()
+    studentId : number;
 }

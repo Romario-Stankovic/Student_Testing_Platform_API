@@ -47,3 +47,39 @@ export class IdentityAdministratorDTO {
         this.username = username;
     }
 }
+
+export class DeleteAdminDTO {
+    @Validator.IsNotEmpty()
+    @Validator.IsNumber()
+    administratorId : number;
+}
+
+export class UpdateAdminDTO {
+    @Validator.IsNumber()
+    @Validator.IsNotEmpty()
+    administratorId : number;
+
+    @Validator.IsOptional()
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    @Validator.Length(1, 50)
+    firstName : string | null;
+
+    @Validator.IsOptional()
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    @Validator.Length(1, 50)
+    lastName : string | null;
+
+    @Validator.IsOptional()
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    @Validator.Length(1, 50)
+    username : string | null;
+
+    @Validator.IsOptional()
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    @Validator.Length(8)
+    password : string | null;
+}

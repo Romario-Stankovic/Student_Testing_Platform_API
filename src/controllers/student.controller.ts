@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Patch, Post, Put, Query, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Patch, Post, Put, Query, UploadedFile, UseInterceptors } from "@nestjs/common";
 import { APIResponse } from "src/misc/api.response";
-import { AddStudentDTO, UpdateStudentDTO } from "src/dtos/student.dto";
+import { AddStudentDTO, DeleteStudentDTO, UpdateStudentDTO } from "src/dtos/student.dto";
 import { Student } from "src/entities/student.entity";
 import { StudentService } from "src/services/student.service";
 
@@ -11,8 +11,18 @@ export class StudentController {
     ) { }
 
     @Get()
-    async getStudentWithIndex(@Query("index") index: string): Promise<Student | APIResponse> {
-        let student = await this.studentService.getByIndex(index);
+    async getStudent(@Query("by") by : string, @Query("id") id: number): Promise<Student | Student[] | APIResponse> {
+        
+        let student;
+
+        if(by == "default"){
+            student = await this.studentService.getByID(id);
+        }else if(by == "all"){
+            student = await this.studentService.getAll();
+        }else{
+            throw new HttpException("Bad Request", HttpStatus.BAD_REQUEST);
+        }
+        
         if (student == null) {
             return new Promise(resolve => { resolve(APIResponse.NULL_ENTRY); });
         }
@@ -39,20 +49,33 @@ export class StudentController {
     }
 
     @Patch()
-    async patchStudent(@Query("id") id: number, @Body() data: UpdateStudentDTO): Promise<APIResponse> {
+    async patchStudent(@Body() data: UpdateStudentDTO): Promise<APIResponse> {
 
         let student = await this.studentService.getByIndex(data.indexNumber);
-        if (student != null && student.studentId != id) {
+        if (student != null && student.studentId != data.studentId) {
             return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE); });
         }
 
-        let dbstudent = await this.studentService.update(id, data.firstName, data.lastName, data.indexNumber);
+        let dbstudent = await this.studentService.update(data.studentId, data.firstName, data.lastName, data.indexNumber);
 
         if (dbstudent == null) {
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
         return new Promise(resolve => { resolve(APIResponse.OK); });
+
+    }
+
+    @Delete()
+    async deleteStudent(@Body() data : DeleteStudentDTO) : Promise<APIResponse> {
+
+        let student = await this.studentService.delete(data.studentId);
+
+        if(student == null){
+            return new Promise(resolve => {resolve(APIResponse.DELETE_FAILED)});
+        }
+
+        return new Promise(resolve => {resolve(APIResponse.OK)});
 
     }
 

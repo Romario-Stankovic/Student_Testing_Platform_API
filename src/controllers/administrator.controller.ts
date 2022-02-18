@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post, Put, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Patch, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { APIResponse } from "src/misc/api.response";
-import { AddAdministratorDTO } from "src/dtos/administrator.dto";
+import { AddAdministratorDTO, DeleteAdminDTO, UpdateAdminDTO } from "src/dtos/administrator.dto";
 import { Administrator } from "src/entities/administrator.entity";
 import { AdministratorService } from "src/services/administrator.service";
 import { AllowToRoles } from "src/misc/allow.role.decorator";
@@ -15,8 +15,18 @@ export class AdministratorController {
     @UseGuards(RoleGuard)
     @AllowToRoles("administrator")
     @Get()
-    async getAdminByID(@Query("id") id: number): Promise<Administrator | APIResponse> {
-        let administrator = await this.administratorService.getByID(id);
+    async getAdmin(@Query("by") by : string, @Query("id") id: number): Promise<Administrator | Administrator[] | APIResponse> {
+
+        let administrator;
+
+        if(by == "default"){
+            administrator = await this.administratorService.getByID(id);
+        }else if(by == "all"){
+            administrator = await this.administratorService.getAll();
+        }else{
+            throw new HttpException("Bad Request", HttpStatus.BAD_REQUEST);
+        }
+        
         if (administrator == null) {
             return new Promise(resolve => { resolve(APIResponse.NULL_ENTRY); });
         }
@@ -39,7 +49,37 @@ export class AdministratorController {
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
-        return new Promise(resolve => { resolve(APIResponse.OK); });
+        return new Promise(resolve => { resolve(dbadministrator); });
+    }
+
+    @Patch()
+    async patchAdmin(@Body() data : UpdateAdminDTO) : Promise<APIResponse> {
+        let admin = await this.administratorService.getByUsername(data.username);
+        if(admin != null && admin.administratorId != data.administratorId){
+            return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE); });
+        }
+
+        let dbadmin = await this.administratorService.update(data.administratorId, data.firstName, data.lastName, data.username, data.password);
+
+        if(dbadmin == null){
+            return new Promise(resolve => {resolve(APIResponse.SAVE_FAILED)});
+        }
+
+        return new Promise(resolve => {resolve(APIResponse.OK)});
+
+    }
+
+    @Delete()
+    async deleteAdmin(@Body() data : DeleteAdminDTO) : Promise<APIResponse> {
+
+        let admin = await this.administratorService.delete(data.administratorId);
+
+        if(admin == null){
+            return new Promise(resolve => {resolve(APIResponse.DELETE_FAILED)});
+        }
+
+        return new Promise(resolve => {resolve(APIResponse.OK)});
+
     }
 
 }

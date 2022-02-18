@@ -23,7 +23,7 @@ export class TestController {
         let test;
         
         if(by == "default"){
-            test = await this.testService.getById(id);
+            test = await this.testService.getByID(id);
         }else if(by == "professor"){
             test = await this.testService.getByProfessorId(id);
         }else{
@@ -76,9 +76,9 @@ export class TestController {
     @UseGuards(RoleGuard)
     @AllowToRoles("administrator", "professor")
     @Patch()
-    async patchTest(@Query("id") id : number, @Body() data : UpdateTestDTO) : Promise<APIResponse> {
+    async patchTest(@Body() data : UpdateTestDTO) : Promise<APIResponse> {
 
-        let test = await this.testService.update(id, data.professorId, data.testName, data.duration, data.questionCount, data.startAt, data.endAt);
+        let test = await this.testService.update(data.testId, data.professorId, data.testName, data.duration, data.questionCount, data.startAt, data.endAt);
 
         if(test == null){
             return new Promise(resolve => {resolve(APIResponse.SAVE_FAILED)});
@@ -92,7 +92,7 @@ export class TestController {
     @Patch("questions")
     async patchQuestions(@Body() data : ModifyTestQuestionsDTO) : Promise<APIResponse>{
 
-        let test = await this.testService.getById(data.testId);
+        let test = await this.testService.getByID(data.testId);
 
         if(test == null){
             return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});

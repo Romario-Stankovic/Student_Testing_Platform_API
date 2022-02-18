@@ -51,3 +51,39 @@ export class IdentityProfessorDTO {
     }
 
 }
+
+export class DeleteProfessorDTO {
+    @Validator.IsNotEmpty()
+    @Validator.IsNumber()
+    professorId : number;
+}
+
+export class UpdateProfessorDTO {
+    @Validator.IsNumber()
+    @Validator.IsNotEmpty()
+    professorId : number;
+
+    @Validator.IsOptional()
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    @Validator.Length(1, 50)
+    firstName : string | null;
+
+    @Validator.IsOptional()
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    @Validator.Length(1, 50)
+    lastName : string | null;
+
+    @Validator.IsOptional()
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    @Validator.Length(1, 50)
+    username : string | null;
+
+    @Validator.IsOptional()
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    @Validator.Length(8)
+    password : string | null;
+}

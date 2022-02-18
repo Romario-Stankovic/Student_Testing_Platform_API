@@ -84,7 +84,7 @@ export class WorkController {
             return new Promise(resolve => {resolve(APIResponse.SAVE_FAILED)});
         }
 
-        let test = await this.testService.getById(data.testId);
+        let test = await this.testService.getByID(data.testId);
 
         let questions = await this.questionService.getByTestID(test.testId);
 
