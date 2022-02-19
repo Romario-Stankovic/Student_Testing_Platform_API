@@ -31,4 +31,4 @@ A Rest API developed using NestJS.
 - [Professor Controller](docs/Professor_Controller.md)
 - [Student Controller](docs/Student_Controller.md)
 - [Test Controller](docs/Test_Controller.md)
-- [Work Controller](docs/Student_Controller.md)
+- [Work Controller](docs/Work_Controller.md)
