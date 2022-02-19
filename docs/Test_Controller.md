@@ -2,10 +2,7 @@
 
 ## **Requests**
 
-<br>
-
 ### **Get single or multiple tests**
-<br>
 
 ```GET: /api/test?by=[default | professor]&id=[number]```
 
@@ -58,14 +55,9 @@ Response Codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | There are no tests matching this query |
 
-<br>
-
 ---
 
-<br>
-
 ### **Get active tests**
-<br>
 
 ```GET: /api/test/active```
 
@@ -103,14 +95,9 @@ Response Codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | There are no active tests |
 
-<br>
-
 ---
 
-<br>
-
 ### **Get test questions**
-<br>
 
 ```GET: /api/test/questions?id=[number]```
 
@@ -155,14 +142,9 @@ Response Codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | There are no questions for this tests |
 
-<br>
-
 ---
 
-<br>
-
 ### **Add test**
-<br>
 
 ```POST: /api/test```
 
@@ -210,14 +192,9 @@ Response Codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 1001 | Service Error | Saving to the database failed |
 
-<br>
-
 ---
 
-<br>
-
 ### **Update test**
-<br>
 
 ``` PATCH: /api/test```
 
@@ -255,14 +232,9 @@ Response Codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 1001 | Service Error | Saving to the database failed |
 
-<br>
-
 ---
 
-<br>
-
 ### **Modify test questions**
-<br>
 
 ```POST /api/test/questions/```
 
@@ -308,14 +280,9 @@ Response Codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | Test does not exist |
 
-<br>
-
 ---
 
-<br>
-
 ### **Delete test**
-<br>
 
 ```DELETE: /api/test```
 

@@ -2,10 +2,7 @@
 
 ## **Requests:**
 
-<br>
-
 ### **Get single or multiple administrators**
-<br>
 
 ```GET: /api/admin?by=[default | all]&id=[number]```
 
@@ -57,14 +54,9 @@ Response codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | There are no administrators matching this query |
 
-<br>
-
 ---
 
-<br>
-
 ### **Add administrator**
-<br>
 
 ```POST: /api/admin```
 
@@ -109,14 +101,9 @@ Response Codes:
 | 1001 | Service Error | Saving to the database failed |
 | 2002 | Controller Error | Username is already taken |
 
-<br>
-
 ---
 
-<br>
-
 ### **Update administrator**
-<br>
 
 ``` PATCH: /api/admin ```
 
@@ -153,14 +140,9 @@ Response Codes:
 | 1001 | Service Error | Saving to the database failed |
 | 2002 | Controller Error | Username is already taken |
 
-<br>
-
 ---
 
-<br>
-
 ### **Delete administrator**
-<br>
 
 ``` DELETE: /api/admin ```
 

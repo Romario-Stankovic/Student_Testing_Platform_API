@@ -2,10 +2,7 @@
 
 ## **Requests**
 
-<br>
-
 ### **Get single or multiple works**
-<br>
 
 ```GET: /api/work?by=[default | test | student]&id=[number]```
 
@@ -105,14 +102,9 @@ Response Codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | There are no works matching this query |
 
-<br>
-
 ---
 
-<br>
-
 ### **Get single work question**
-<br>
 
 ```GET: /api/work/question?workId=[number]&questionId=[number]```
 
@@ -161,14 +153,9 @@ Response Codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | There are no work questions matching this query |
 
-<br>
-
 ---
 
-<br>
-
 ### **Get finished work questions**
-<br>
 
 ```GET: /api/work/questions?id=[number]```
 
@@ -213,14 +200,9 @@ Response Codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | There are no work questions matching this query |
 
-<br>
-
 ---
 
-<br>
-
 ### **Start work**
-<br>
 
 ```POST /api/work/start```
 
@@ -267,14 +249,9 @@ Response Codes:
 | 1001 | Service Error | Saving to the database failed |
 | 3001 | Application Error | There are not enough questions for the work to start |
 
-<br>
-
 ---
 
-<br>
-
 ### **Finish work**
-<br>
 
 ```POST /api/work/finish```
 
@@ -316,14 +293,9 @@ Response Codes:
 | 2001 | Controller Warning | Work does not exist |
 | 3002 | Application Error | The work has already ended |
 
-<br>
-
 ---
 
-<br>
-
 ### **Update work answers**
-<br>
 
 ```PATCH /api/work/question```
 

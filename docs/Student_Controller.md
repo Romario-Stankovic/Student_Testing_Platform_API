@@ -2,10 +2,7 @@
 
 ## **Requests:**
 
-<br>
-
 ### **Get single or multiple students**
-<br>
 
 ```GET: /api/student?by=[default | all]&id=[number]```
 
@@ -57,14 +54,9 @@ Response codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | There are no students matching this query |
 
-<br>
-
 ---
 
-<br>
-
 ### **Add student**
-<br>
 
 ```POST: /api/student```
 
@@ -108,14 +100,9 @@ Response Codes:
 | 1001 | Service Error | Saving to the database failed |
 | 2002 | Controller Error | Index Number is already taken |
 
-<br>
-
 ---
 
-<br>
-
 ### **Update student**
-<br>
 
 ``` PATCH: /api/student ```
 
@@ -151,14 +138,9 @@ Response Codes:
 | 1001 | Service Error | Saving to the database failed |
 | 2002 | Controller Error | Index Number is already taken |
 
-<br>
-
 ---
 
-<br>
-
 ### **Delete student**
-<br>
 
 ``` DELETE: /api/student ```
 

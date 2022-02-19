@@ -2,10 +2,7 @@
 
 ## **Requests:**
 
-<br>
-
 ### **Get single or multiple professors**
-<br>
 
 ```GET: /api/professor?by=[default | all]&id=[number]```
 
@@ -59,14 +56,9 @@ Response codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | There are no professors matching this query |
 
-<br>
-
 ---
 
-<br>
-
 ### **Add professor**
-<br>
 
 ```POST: /api/professor```
 
@@ -112,14 +104,9 @@ Response Codes:
 | 1001 | Service Error | Saving to the database failed |
 | 2002 | Controller Error | Username is already taken |
 
-<br>
-
 ---
 
-<br>
-
 ### **Update professor**
-<br>
 
 ``` PATCH: /api/professor ```
 
@@ -156,14 +143,9 @@ Response Codes:
 | 1001 | Service Error | Saving to the database failed |
 | 2002 | Controller Error | Username is already taken |
 
-<br>
-
 ---
 
-<br>
-
 ### **Delete professor**
-<br>
 
 ``` DELETE: /api/professor ```
 
