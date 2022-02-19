@@ -18,6 +18,8 @@ export class TestController {
         private answerService : AnswerService
     ){}
 
+    @UseGuards(RoleGuard)
+    @AllowToRoles("administrator", "professor")
     @Get()
     async getTest(@Query("by") by : string, @Query("id") id : number): Promise<Test | Test[] | APIResponse>{
         let test;
@@ -38,6 +40,8 @@ export class TestController {
 
     }
 
+    @UseGuards(RoleGuard)
+    @AllowToRoles("administrator", "student")
     @Get("active")
     async getActiveTests() : Promise<Test[] | APIResponse> {
         let tests = await this.testService.getActive();
@@ -50,6 +54,8 @@ export class TestController {
 
     }
 
+    @UseGuards(RoleGuard)
+    @AllowToRoles("administrator", "professor")
     @Get("questions")
     async getTestQuestions(@Query("id") id : number) : Promise<Question[] | APIResponse>{
         let questions = await this.questionService.getByTestID(id);
@@ -67,7 +73,7 @@ export class TestController {
     async postTest(@Body() data : AddTestDTO) : Promise<Test | APIResponse> {
         let test = await this.testService.add(data.professorId, data.testName, data.duration, data.questionCount, data.startAt, data.endAt);
         if(test == null){
-            return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
+            return new Promise(resolve => {resolve(APIResponse.SAVE_FAILED)});
         }
 
         return new Promise(resolve => {resolve(test)});
@@ -101,7 +107,7 @@ export class TestController {
         for (let question of data.questions) {
             let dbquestion : Question;
 
-            if (question.toDelete && question.questionId != null) {
+            if (question.toDelete != null && question.toDelete && question.questionId != null) {
                 dbquestion = await this.questionService.delete(question.questionId);
                 continue;
             }
@@ -113,12 +119,12 @@ export class TestController {
             }
             
             if(dbquestion == null){
-                return new Promise(resolve => {resolve(APIResponse.SAVE_FAILED)});
+                continue;
             }
 
             for(let answer of question.answers){
                 let dbanswer : Answer;
-                if(answer.toDelete && answer.answerId != null) {
+                if(answer.toDelete != null && answer.toDelete && answer.answerId != null) {
                     dbanswer = await this.answerService.delete(answer.answerId);
                     continue;
                 }
@@ -130,7 +136,7 @@ export class TestController {
                 }
 
                 if(dbanswer == null){
-                    return new Promise(resolve => {resolve(APIResponse.SAVE_FAILED)});
+                    continue;
                 }
 
             }

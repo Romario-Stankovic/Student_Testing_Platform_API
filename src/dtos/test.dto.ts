@@ -30,10 +30,9 @@ export class AddTestDTO {
 
 export class UpdateTestDTO {
 
-    @Validator.IsOptional()
     @Validator.IsNumber()
     @Validator.IsNotEmpty()
-    testId : number | null;
+    testId : number;
 
     @Validator.IsOptional()
     @Validator.IsNumber()
@@ -80,17 +79,19 @@ class ModifyTestQuestion {
     @Validator.IsNotEmpty()
     questionId : number | null;
 
+    @Validator.IsOptional()
     @Validator.IsString()
     @Validator.IsNotEmpty()
-    questionText : string;
+    questionText : string | null;
 
     @Validator.IsOptional()
     @Validator.IsString()
     imagePath : string | null;
 
+    @Validator.IsOptional()
     @Validator.IsBoolean()
     @Validator.IsNotEmpty()
-    toDelete : boolean;
+    toDelete : boolean | null;
 
     @Validator.ValidateNested()
     answers : ModifyTestAnswer[];
@@ -104,20 +105,25 @@ class ModifyTestAnswer {
     @Validator.IsNotEmpty()
     answerId: number | null;
 
+    @Validator.IsOptional()
     @Validator.IsString()
     @Validator.IsNotEmpty()
-    answerText: string;
+    answerText: string | null;
 
     @Validator.IsOptional()
     @Validator.IsString()
     @Validator.IsNotEmpty()
     imagePath: string | null;
+
+    @Validator.IsOptional()
     @Validator.IsBoolean()
     @Validator.IsNotEmpty()
-    isCorrect: boolean;
+    isCorrect: boolean | null;
+
+    @Validator.IsOptional()
     @Validator.IsBoolean()
     @Validator.IsNotEmpty()
-    toDelete: boolean;
+    toDelete: boolean | null;
 }
 
 export class ModifyTestQuestionsDTO {

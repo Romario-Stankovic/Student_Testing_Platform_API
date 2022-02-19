@@ -56,6 +56,8 @@ export class ProfessorController {
 
     }
 
+    @UseGuards(RoleGuard)
+    @AllowToRoles("administrator")
     @Patch()
     async patchProfessor(@Body() data : UpdateProfessorDTO) : Promise<APIResponse> {
         let professor = await this.professorService.getByUsername(data.username);
@@ -74,6 +76,8 @@ export class ProfessorController {
 
     }
 
+    @UseGuards(RoleGuard)
+    @AllowToRoles("administrator")
     @Delete()
     async deleteProfessor(@Body() data : DeleteProfessorDTO) : Promise<APIResponse>{
 

@@ -27,14 +27,14 @@ export class Work {
     points: number;
 
     @ManyToOne(() => Student, (student) => student.works, {
-        onDelete: "RESTRICT",
+        onDelete: "CASCADE",
         onUpdate: "RESTRICT",
     })
     @JoinColumn([{ name: "student_id", referencedColumnName: "studentId" }])
     student: Student;
 
     @ManyToOne(() => Test, (test) => test.works, {
-        onDelete: "RESTRICT",
+        onDelete: "CASCADE",
         onUpdate: "RESTRICT",
     })
     @JoinColumn([{ name: "test_id", referencedColumnName: "testId" }])

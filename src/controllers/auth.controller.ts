@@ -1,16 +1,16 @@
 import { Body, Controller, Post, Req } from "@nestjs/common";
 import { APIResponse } from "src/misc/api.response";
-import { IdentityAdministratorDTO, LoginAdministratorDTO } from "src/dtos/administrator.dto";
+import { AdministratorIdentity, LoginAdministratorDTO } from "src/dtos/administrator.dto";
 import { AdministratorService } from "src/services/administrator.service";
 import * as crypto from "crypto";
 import * as jwt from "jsonwebtoken";
 import { Request } from "express";
 import { JWTSecret } from "src/configs/config";
 import { JSONWebToken, LoginResponse, RefreshTokenDTO } from "src/dtos/auth.dto";
-import { IdentityProfessorDTO, LoginProfessorDTO } from "src/dtos/professor.dto";
+import { ProfessorIdentity, LoginProfessorDTO } from "src/dtos/professor.dto";
 import { ProfessorService } from "src/services/professor.service";
 import { StudentService } from "src/services/student.service";
-import { IdentityStudentDTO, LoginStudentDTO } from "src/dtos/student.dto";
+import { StudentIdentity, LoginStudentDTO } from "src/dtos/student.dto";
 import { TokenService } from "src/services/token.service";
 import { Token } from "src/entities/token.entity";
 
@@ -62,7 +62,7 @@ export class AuthController {
         }
 
         if (!this.checkPassword(administrator.passwordHash, data.password)) {
-            return new Promise(resolve => { resolve(APIResponse.PASSWORD_MISSMATCH); });
+            return new Promise(resolve => { resolve(APIResponse.PASSWORD_MISMATCH); });
         }
 
         let token = this.generateToken(administrator.administratorId, administrator.username, "administrator", request.ip.toString(), request.headers["user-agent"], "access");
@@ -87,7 +87,7 @@ export class AuthController {
         }
 
         if (!this.checkPassword(professor.passwordHash, data.password)) {
-            return new Promise(resolve => { resolve(APIResponse.PASSWORD_MISSMATCH); });
+            return new Promise(resolve => { resolve(APIResponse.PASSWORD_MISMATCH); });
         }
 
         let token = this.generateToken(professor.professorId, professor.username, "professor", request.ip.toString(), request.headers["user-agent"], "access");
@@ -198,24 +198,39 @@ export class AuthController {
     }
 
     @Post("token/identity")
-    async getTokenHolderIdentity(@Req() request : Request) : Promise<IdentityStudentDTO | IdentityAdministratorDTO | IdentityProfessorDTO>{
+    async getTokenHolderIdentity(@Req() request : Request) : Promise<StudentIdentity | AdministratorIdentity | ProfessorIdentity | APIResponse>{
         let token = request.token;
         if(token.role == "administrator"){
             let admin = await this.administratorService.getByID(token.id);
+            
+            if(admin == null){
+                return new Promise(resolve => {resolve(APIResponse.USER_DOES_NOT_EXIST)});
+            }
+
             return new Promise(resolve => {resolve(
-                new IdentityAdministratorDTO(token.id, token.role,admin.firstName, admin.lastName, admin.username)
+                new AdministratorIdentity(token.id, token.role,admin.firstName, admin.lastName, admin.username)
             )});
         }
         else if(token.role == "professor"){
             let professor = await this.professorService.getByID(token.id);
+
+            if(professor == null){
+                return new Promise(resolve => {resolve(APIResponse.USER_DOES_NOT_EXIST)});
+            }
+
             return new Promise(resolve => {resolve(
-                new IdentityProfessorDTO(token.id, token.role,professor.firstName, professor.lastName, professor.username, professor.imagePath)
+                new ProfessorIdentity(token.id, token.role,professor.firstName, professor.lastName, professor.username, professor.imagePath)
             )});
         }
         else if(token.role == "student"){
             let student = await this.studentService.getByID(token.id);
+
+            if(student == null){
+                return new Promise(resolve => {resolve(APIResponse.USER_DOES_NOT_EXIST)});
+            }
+
             return new Promise(resolve => {resolve(
-                new IdentityStudentDTO(token.id, token.role,student.firstName, student.lastName, student.indexNumber, student.imagePath)
+                new StudentIdentity(token.id, token.role,student.firstName, student.lastName, student.indexNumber, student.imagePath)
             )});
         }
     }

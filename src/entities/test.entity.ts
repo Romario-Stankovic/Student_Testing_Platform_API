@@ -9,8 +9,8 @@ export class Test {
     @PrimaryGeneratedColumn({ name: "test_id", type: "int" })
     testId: number;
 
-    @Column({ name: "professor_id", type: "int", nullable: true })
-    professorId: number | null;
+    @Column({ name: "professor_id", type: "int"})
+    professorId: number;
 
     @Column({ name: "test_name", type: "varchar", length: 100 })
     testName: string;
@@ -31,7 +31,7 @@ export class Test {
     questions: Question[];
 
     @ManyToOne(() => Professor, (professor) => professor.tests, {
-        onDelete: "RESTRICT",
+        onDelete: "CASCADE",
         onUpdate: "RESTRICT",
     })
     @JoinColumn([{ name: "professor_id", referencedColumnName: "professorId" }])

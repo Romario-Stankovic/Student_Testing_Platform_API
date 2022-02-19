@@ -50,7 +50,7 @@ export class LoginStudentDTO {
     indexNumber: string;
 }
 
-export class IdentityStudentDTO {
+export class StudentIdentity {
     id: number;
     role: string;
     firstName : string;

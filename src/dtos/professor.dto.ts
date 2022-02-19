@@ -33,7 +33,7 @@ export class LoginProfessorDTO {
     password: string;
 }
 
-export class IdentityProfessorDTO {
+export class ProfessorIdentity {
     id:number;
     role:string;
     firstName : string;

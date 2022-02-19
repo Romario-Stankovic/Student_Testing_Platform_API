@@ -35,6 +35,11 @@ export class QuestionService {
 
     async add(testId : number, questionText : string, imagePath : string) : Promise<Question | null>{
         let newQuestion = new Question();
+
+        if(testId == null || questionText == null){
+            return new Promise(resolve => {resolve(null)});
+        }
+
         newQuestion.testId = testId;
         newQuestion.questionText = questionText;
         newQuestion.imagePath = imagePath;
@@ -55,7 +60,7 @@ export class QuestionService {
             return new Promise(resolve => {resolve(null)});
         }
 
-        question.questionText = questionText;
+        question.questionText = questionText != null ? questionText : question.questionText;
         question.imagePath = imagePath;
         try {
             let updatedQuestion = await this.repository.save(question);

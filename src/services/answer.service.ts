@@ -32,6 +32,11 @@ export class AnswerService {
 
     async add(questionId : number, answerText : string, imagePath : string, isCorrect : boolean) : Promise<Answer | null>{
         let newAnswer = new Answer();
+
+        if(questionId == null || answerText == null || isCorrect == null){
+            return new Promise(resolve => {resolve(null)});
+        }
+
         newAnswer.questionId = questionId;
         newAnswer.answerText = answerText;
         newAnswer.imagePath = imagePath;
@@ -53,9 +58,9 @@ export class AnswerService {
             return new Promise(resolve => {resolve(null)});
         }
 
-        answer.answerText = answerText;
+        answer.answerText = answerText != null ? answerText : answer.answerText;
+        answer.isCorrect = isCorrect != null ? isCorrect : answer.isCorrect;
         answer.imagePath = imagePath;
-        answer.isCorrect = isCorrect;
 
         try {
             let updatedAnswer = await this.repository.save(answer);

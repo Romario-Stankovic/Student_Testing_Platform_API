@@ -11,23 +11,6 @@ export class WorkAnswerService {
         private readonly repository : Repository<WorkAnswer>
     ){}
 
-    async add(workId : number, answerId: number, duration:number, isChecked : boolean) : Promise<WorkAnswer | null>{
-        let newWorkAnswer = new WorkAnswer();
-
-        newWorkAnswer.workId = workId;
-        newWorkAnswer.answerId = answerId;
-        newWorkAnswer.duration = duration;
-        newWorkAnswer.isChecked = isChecked;
-
-        try {
-            let workAnswer = await this.repository.save(newWorkAnswer);
-            return new Promise(resolve => {resolve(workAnswer)});
-        }catch(error){
-            return new Promise(resolve => {resolve(null)});
-        }
-
-    }
-
     async getWorkQuestion(workId : number, questionId : number, showIsCorrect = false) : Promise<WorkQuestion | null>{
 
         let workAnswers = await this.repository.createQueryBuilder("workAnswer")
@@ -88,6 +71,23 @@ export class WorkAnswerService {
         }
 
         return new Promise(resolve => {resolve(workQuestions)});
+
+    }
+
+    async add(workId : number, answerId: number, duration:number, isChecked : boolean) : Promise<WorkAnswer | null>{
+        let newWorkAnswer = new WorkAnswer();
+
+        newWorkAnswer.workId = workId;
+        newWorkAnswer.answerId = answerId;
+        newWorkAnswer.duration = duration;
+        newWorkAnswer.isChecked = isChecked;
+
+        try {
+            let workAnswer = await this.repository.save(newWorkAnswer);
+            return new Promise(resolve => {resolve(workAnswer)});
+        }catch(error){
+            return new Promise(resolve => {resolve(null)});
+        }
 
     }
 

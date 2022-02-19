@@ -22,14 +22,14 @@ export class WorkAnswer {
     isChecked: boolean;
 
     @ManyToOne(() => Answer, (answer) => answer.workAnswers, {
-        onDelete: "RESTRICT",
+        onDelete: "CASCADE",
         onUpdate: "RESTRICT",
     })
     @JoinColumn([{ name: "answer_id", referencedColumnName: "answerId" }])
     answer: Answer;
 
     @ManyToOne(() => Work, (work) => work.workAnswers, {
-        onDelete: "RESTRICT",
+        onDelete: "CASCADE",
         onUpdate: "RESTRICT",
     })
     @JoinColumn([{ name: "work_id", referencedColumnName: "workId" }])

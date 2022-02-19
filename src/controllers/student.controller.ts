@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Patch, Post, Put, Query, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Patch, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { APIResponse } from "src/misc/api.response";
 import { AddStudentDTO, DeleteStudentDTO, UpdateStudentDTO } from "src/dtos/student.dto";
 import { Student } from "src/entities/student.entity";
 import { StudentService } from "src/services/student.service";
+import { AllowToRoles } from "src/misc/allow.role.decorator";
+import { RoleGuard } from "src/guards/role.guard";
 
 @Controller("api/student/")
 export class StudentController {
@@ -10,6 +12,8 @@ export class StudentController {
         private studentService: StudentService
     ) { }
 
+    @UseGuards(RoleGuard)
+    @AllowToRoles("administrator")
     @Get()
     async getStudent(@Query("by") by : string, @Query("id") id: number): Promise<Student | Student[] | APIResponse> {
         
@@ -31,6 +35,8 @@ export class StudentController {
 
     }
 
+    @UseGuards(RoleGuard)
+    @AllowToRoles("administrator")
     @Post()
     async postStudent(@Body() data: AddStudentDTO): Promise<Student | APIResponse> {
 
@@ -48,6 +54,8 @@ export class StudentController {
         return new Promise(resolve => { resolve(dbstudent); });
     }
 
+    @UseGuards(RoleGuard)
+    @AllowToRoles("administrator")
     @Patch()
     async patchStudent(@Body() data: UpdateStudentDTO): Promise<APIResponse> {
 
@@ -66,6 +74,8 @@ export class StudentController {
 
     }
 
+    @UseGuards(RoleGuard)
+    @AllowToRoles("administrator")
     @Delete()
     async deleteStudent(@Body() data : DeleteStudentDTO) : Promise<APIResponse> {
 

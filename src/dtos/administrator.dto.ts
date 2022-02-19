@@ -32,7 +32,7 @@ export class LoginAdministratorDTO {
     password: string;
 }
 
-export class IdentityAdministratorDTO {
+export class AdministratorIdentity {
     id:number;
     role:string;
     firstName : string;

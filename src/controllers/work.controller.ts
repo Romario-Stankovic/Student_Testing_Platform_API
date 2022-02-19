@@ -43,6 +43,8 @@ export class WorkController {
         return new Promise(resolve => {resolve(work)});
     }
 
+    @UseGuards(RoleGuard)
+    @AllowToRoles("administrator", "student")
     @Get("question")
     async getWorkQuestion(@Query("workId") workId : number, @Query("questionId") questionId : number): Promise<WorkQuestion | APIResponse> {
         
@@ -62,8 +64,8 @@ export class WorkController {
     }
 
     @Get("questions")
-    async getWorkQuestions(@Query("id") workId : number) : Promise <WorkQuestion[] | APIResponse>{
-        let questions = await this.workAnswerService.getWorkQuestions(workId, true);
+    async getWorkQuestions(@Query("id") id : number) : Promise <WorkQuestion[] | APIResponse>{
+        let questions = await this.workAnswerService.getWorkQuestions(id, true);
 
         if(questions == null){
             return new Promise(resolve => {resolve(APIResponse.NULL_ENTRY)});
@@ -166,6 +168,8 @@ export class WorkController {
 
     }
 
+    @UseGuards(RoleGuard)
+    @AllowToRoles("administrator", "student")
     @Patch("question")
     async patchWorkQuestion(@Body() data : PatchWorkAnswerDTO) : Promise<APIResponse>{
 

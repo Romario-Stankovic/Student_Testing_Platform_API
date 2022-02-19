@@ -52,6 +52,8 @@ export class AdministratorController {
         return new Promise(resolve => { resolve(dbadministrator); });
     }
 
+    @UseGuards(RoleGuard)
+    @AllowToRoles("administrator")
     @Patch()
     async patchAdmin(@Body() data : UpdateAdminDTO) : Promise<APIResponse> {
         let admin = await this.administratorService.getByUsername(data.username);
@@ -69,6 +71,8 @@ export class AdministratorController {
 
     }
 
+    @UseGuards(RoleGuard)
+    @AllowToRoles("administrator")
     @Delete()
     async deleteAdmin(@Body() data : DeleteAdminDTO) : Promise<APIResponse> {
 

@@ -21,7 +21,7 @@ export class Token {
     @Column({ name: "created_at", type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
     createdAt: Date;
 
-    @Column({ name: "is_valid", type: "tinyint", nullable: true, width: 1, default: () => "'1'", })
-    isValid: boolean | null;
+    @Column({ name: "is_valid", type: "tinyint", width: 1, default: () => "'1'", })
+    isValid: boolean;
 
 }

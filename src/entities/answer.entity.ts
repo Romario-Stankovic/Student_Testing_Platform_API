@@ -21,7 +21,7 @@ export class Answer {
     isCorrect: boolean;
 
     @ManyToOne(() => Question, (question) => question.answers, {
-        onDelete: "RESTRICT",
+        onDelete: "CASCADE",
         onUpdate: "RESTRICT",
     })
     @JoinColumn([{ name: "question_id", referencedColumnName: "questionId" }])

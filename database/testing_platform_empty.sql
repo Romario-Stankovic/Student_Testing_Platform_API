@@ -54,7 +54,7 @@ CREATE TABLE `answer` (
   `is_correct` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`answer_id`),
   KEY `fk_answer_question_id` (`question_id`),
-  CONSTRAINT `fk_answer_question_id` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`)
+  CONSTRAINT `fk_answer_question_id` FOREIGN KEY (`question_id`) REFERENCES `question` (`question_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -101,7 +101,7 @@ CREATE TABLE `question` (
   `image_path` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`question_id`),
   KEY `fk_question_test_id` (`test_id`),
-  CONSTRAINT `fk_question_test_id` FOREIGN KEY (`test_id`) REFERENCES `test` (`test_id`)
+  CONSTRAINT `fk_question_test_id` FOREIGN KEY (`test_id`) REFERENCES `test` (`test_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -142,7 +142,7 @@ DROP TABLE IF EXISTS `test`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test` (
   `test_id` int(11) NOT NULL AUTO_INCREMENT,
-  `professor_id` int(11) DEFAULT NULL,
+  `professor_id` int(11) NOT NULL,
   `test_name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `duration` int(11) NOT NULL DEFAULT 0,
   `question_count` int(11) NOT NULL DEFAULT 0,
@@ -150,7 +150,7 @@ CREATE TABLE `test` (
   `end_at` datetime DEFAULT NULL,
   PRIMARY KEY (`test_id`),
   KEY `fk_test_professor_id` (`professor_id`),
-  CONSTRAINT `fk_test_professor_id` FOREIGN KEY (`professor_id`) REFERENCES `professor` (`professor_id`)
+  CONSTRAINT `fk_test_professor_id` FOREIGN KEY (`professor_id`) REFERENCES `professor` (`professor_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -201,8 +201,8 @@ CREATE TABLE `work` (
   UNIQUE KEY `uq_work_student_id_test_id` (`student_id`,`test_id`),
   KEY `fk_work_test_id` (`test_id`),
   KEY `fk_work_student_id` (`student_id`),
-  CONSTRAINT `fk_work_student_id` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`),
-  CONSTRAINT `fk_work_test_id` FOREIGN KEY (`test_id`) REFERENCES `test` (`test_id`)
+  CONSTRAINT `fk_work_student_id` FOREIGN KEY (`student_id`) REFERENCES `student` (`student_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_work_test_id` FOREIGN KEY (`test_id`) REFERENCES `test` (`test_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -227,8 +227,8 @@ CREATE TABLE `work_answer` (
   PRIMARY KEY (`work_answer_id`),
   KEY `fk_work_answer_answer_id` (`answer_id`),
   KEY `fk_work_answer_work_id` (`work_id`),
-  CONSTRAINT `fk_work_answer_answer_id` FOREIGN KEY (`answer_id`) REFERENCES `answer` (`answer_id`),
-  CONSTRAINT `fk_work_answer_work_id` FOREIGN KEY (`work_id`) REFERENCES `work` (`work_id`)
+  CONSTRAINT `fk_work_answer_answer_id` FOREIGN KEY (`answer_id`) REFERENCES `answer` (`answer_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_work_answer_work_id` FOREIGN KEY (`work_id`) REFERENCES `work` (`work_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -246,4 +246,4 @@ CREATE TABLE `work_answer` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-01-19 13:52:33
+-- Dump completed on 2022-02-19 15:04:15
