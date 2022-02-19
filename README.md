@@ -16,7 +16,9 @@ A Rest API developed using NestJS.
 2. Clone the repository on your local machine
 3. Host the MySQL database provided on your local machine
 4. Open a terminal in the directory of the project
-5. Execute the following commands:
+5. Go to src/configs/config.ts and change the username and password to the one used to access the database or
+6. Add a new user to manage the database with the credentials: (usename: app, password: app)
+7. Execute the following commands:
 ```
 > npm install
 > npm run start
