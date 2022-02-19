@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Patch, Post, Put, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Patch, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
 import { APIResponse } from "src/misc/api.response";
 import { AddAdministratorDTO, DeleteAdminDTO, UpdateAdminDTO } from "src/dtos/administrator.dto";
 import { Administrator } from "src/entities/administrator.entity";
 import { AdministratorService } from "src/services/administrator.service";
 import { AllowToRoles } from "src/misc/allow.role.decorator";
 import { RoleGuard } from "src/guards/role.guard";
+import { Request } from "express";
 
 @Controller("api/admin/")
 export class AdministratorController {
@@ -74,11 +75,17 @@ export class AdministratorController {
     @UseGuards(RoleGuard)
     @AllowToRoles("administrator")
     @Delete()
-    async deleteAdmin(@Body() data : DeleteAdminDTO) : Promise<APIResponse> {
+    async deleteAdmin(@Body() data : DeleteAdminDTO, @Req() req : Request) : Promise<APIResponse> {
+        
+        let admin = await this.administratorService.getByID(data.administratorId);
 
-        let admin = await this.administratorService.delete(data.administratorId);
+        if(admin.administratorId == req.token.id){
+            return new Promise(resolve => {resolve(APIResponse.DELETE_FAILED)});
+        }
 
-        if(admin == null){
+        let dbadmin = await this.administratorService.delete(data.administratorId);
+
+        if(dbadmin == null){
             return new Promise(resolve => {resolve(APIResponse.DELETE_FAILED)});
         }
 
