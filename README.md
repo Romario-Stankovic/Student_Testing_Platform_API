@@ -2,16 +2,13 @@
 
 A Rest API developed using NestJS.
 
-<br>
-
 # Technologies used
-
+<p>
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width=25 height=25 alt="TypeScript">
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width=25 height=25 alt="Node.js">
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-plain.svg" width=25 height=25 alt="NestJs">
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" width=25 height=25 alt="MySQL">
-
-<br>
+</p>
 
 # Quick Start
 
