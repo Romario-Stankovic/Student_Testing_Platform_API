@@ -20,7 +20,7 @@ export class TokenService {
         return new Promise(resolve => { resolve(token); });
 
     }
-    
+
     async add(userId: number, userRole: "administrator" | "professor" | "student", token: string, expiresAt: Date): Promise<Token | null> {
         let newToken = new Token();
         newToken.userId = userId;
@@ -37,35 +37,40 @@ export class TokenService {
     }
 
 
-    async invalidateToken(tokenString: string): Promise<boolean> {
+    async invalidateToken(tokenString: string): Promise<Token | null> {
         let token = await this.repository.findOne({ where: { token: tokenString } });
 
         if (token == undefined) {
-            return new Promise(resolve => { resolve(false); });
+            return new Promise(resolve => { resolve(null); });
         }
         token.isValid = false;
 
         try {
-            await this.repository.save(token);
-            return new Promise(resolve => { resolve(true); });
+            let invalidatedToken = await this.repository.save(token);
+            return new Promise(resolve => { resolve(invalidatedToken); });
         } catch {
-            return new Promise(resolve => { resolve(false); });
+            return new Promise(resolve => { resolve(null); });
         }
 
     }
 
-    async invalidateAllTokensFor(id: number, role: "administrator" | "professor" | "student"): Promise<boolean> {
+    async invalidateByUserID(id: number, role: "administrator" | "professor" | "student"): Promise<Token[] | null> {
         let tokens = await this.repository.find({ where: { userId: id, userRole: role } });
 
         if (tokens.length == 0) {
-            return new Promise(resolve => { resolve(false); });
+            return new Promise(resolve => { resolve(null); });
         }
 
         for (let token of tokens) {
-            this.invalidateToken(token.token);
+            token.isValid = false;
         }
 
-        return new Promise(resolve => { resolve(true); });
+        try {
+            let invalidatedTokens = await this.repository.save(tokens);
+            return new Promise(resolve => { resolve(invalidatedTokens); });
+        } catch (error) {
+            return new Promise(resolve => { resolve(null); });
+        }
 
     }
 

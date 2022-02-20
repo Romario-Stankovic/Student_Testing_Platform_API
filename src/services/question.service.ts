@@ -22,22 +22,22 @@ export class QuestionService {
 
     }
 
-    async getByTestID(id : number) : Promise<Question[] | null> {
-        let questions = await this.repository.find({where: {testId : id}, relations: ["answers"]});
+    async getByTestID(id: number): Promise<Question[] | null> {
+        let questions = await this.repository.find({ where: { testId: id }, relations: ["answers"] });
 
-        if(questions.length == 0){
-            return new Promise(resolve => {resolve(null)});
+        if (questions.length == 0) {
+            return new Promise(resolve => { resolve(null); });
         }
 
-        return new Promise(resolve => {resolve(questions)});
+        return new Promise(resolve => { resolve(questions); });
 
     }
 
-    async add(testId : number, questionText : string, imagePath : string) : Promise<Question | null>{
+    async add(testId: number, questionText: string, imagePath: string): Promise<Question | null> {
         let newQuestion = new Question();
 
-        if(testId == null || questionText == null){
-            return new Promise(resolve => {resolve(null)});
+        if (testId == null || questionText == null) {
+            return new Promise(resolve => { resolve(null); });
         }
 
         newQuestion.testId = testId;
@@ -46,41 +46,41 @@ export class QuestionService {
 
         try {
             let question = await this.repository.save(newQuestion);
-            return new Promise(resolve => {resolve(question)});
-        }catch (error){
-            return new Promise(resolve => {resolve(null)});
+            return new Promise(resolve => { resolve(question); });
+        } catch (error) {
+            return new Promise(resolve => { resolve(null); });
         }
 
     }
 
-    async update(id:number, questionText: string, imagePath: string): Promise<Question | null> {
+    async update(id: number, questionText: string, imagePath: string): Promise<Question | null> {
         let question = await this.getByID(id);
 
-        if (question == null){
-            return new Promise(resolve => {resolve(null)});
+        if (question == null) {
+            return new Promise(resolve => { resolve(null); });
         }
 
         question.questionText = questionText != null ? questionText : question.questionText;
-        question.imagePath = imagePath;
+        question.imagePath = imagePath != null ? imagePath : question.imagePath;
         try {
             let updatedQuestion = await this.repository.save(question);
-            return new Promise(resolve => {resolve(updatedQuestion)});
-        }catch (error){
-            return new Promise(resolve => {resolve(null)});
+            return new Promise(resolve => { resolve(updatedQuestion); });
+        } catch (error) {
+            return new Promise(resolve => { resolve(null); });
         }
     }
 
-    async delete(id: number) : Promise<Question | null>{
+    async delete(id: number): Promise<Question | null> {
         let question = await this.getByID(id);
-        if(question == null){
-            return new Promise(resolve => {resolve(null)});
+        if (question == null) {
+            return new Promise(resolve => { resolve(null); });
         }
 
         try {
             let deletedQuestion = await this.repository.remove(question);
-            return new Promise(resolve => {resolve(deletedQuestion)});
-        }catch(error){
-            return new Promise(resolve => {resolve(null)});
+            return new Promise(resolve => { resolve(deletedQuestion); });
+        } catch (error) {
+            return new Promise(resolve => { resolve(null); });
         }
 
     }

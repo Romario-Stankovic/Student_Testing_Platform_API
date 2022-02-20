@@ -1,6 +1,6 @@
 import * as Validator from "class-validator";
 
-export class AddProfessorDTO {
+export class PostProfessorDTO {
 
     @Validator.IsNotEmpty()
     @Validator.IsString()
@@ -23,6 +23,42 @@ export class AddProfessorDTO {
     password: string;
 }
 
+export class PatchProfessorDTO {
+    @Validator.IsNumber()
+    @Validator.IsNotEmpty()
+    professorId: number;
+
+    @Validator.IsOptional()
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    @Validator.Length(1, 50)
+    firstName: string | null;
+
+    @Validator.IsOptional()
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    @Validator.Length(1, 50)
+    lastName: string | null;
+
+    @Validator.IsOptional()
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    @Validator.Length(1, 50)
+    username: string | null;
+
+    @Validator.IsOptional()
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    @Validator.Length(8)
+    password: string | null;
+}
+
+export class DeleteProfessorDTO {
+    @Validator.IsNotEmpty()
+    @Validator.IsNumber()
+    professorId: number;
+}
+
 export class LoginProfessorDTO {
     @Validator.IsNotEmpty()
     @Validator.IsString()
@@ -34,14 +70,14 @@ export class LoginProfessorDTO {
 }
 
 export class ProfessorIdentity {
-    id:number;
-    role:string;
-    firstName : string;
-    lastName : string;
-    username : string;
-    imagePath : string | null;
+    id: number;
+    role: string;
+    firstName: string;
+    lastName: string;
+    username: string;
+    imagePath: string | null;
 
-    constructor(id:number, role:string, firstName : string, lastName : string, username : string, imagePath : string | null){
+    constructor(id: number, role: string, firstName: string, lastName: string, username: string, imagePath: string | null) {
         this.id = id;
         this.role = role;
         this.firstName = firstName;
@@ -50,40 +86,4 @@ export class ProfessorIdentity {
         this.imagePath = imagePath;
     }
 
-}
-
-export class DeleteProfessorDTO {
-    @Validator.IsNotEmpty()
-    @Validator.IsNumber()
-    professorId : number;
-}
-
-export class UpdateProfessorDTO {
-    @Validator.IsNumber()
-    @Validator.IsNotEmpty()
-    professorId : number;
-
-    @Validator.IsOptional()
-    @Validator.IsString()
-    @Validator.IsNotEmpty()
-    @Validator.Length(1, 50)
-    firstName : string | null;
-
-    @Validator.IsOptional()
-    @Validator.IsString()
-    @Validator.IsNotEmpty()
-    @Validator.Length(1, 50)
-    lastName : string | null;
-
-    @Validator.IsOptional()
-    @Validator.IsString()
-    @Validator.IsNotEmpty()
-    @Validator.Length(1, 50)
-    username : string | null;
-
-    @Validator.IsOptional()
-    @Validator.IsString()
-    @Validator.IsNotEmpty()
-    @Validator.Length(8)
-    password : string | null;
 }

@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Patch, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { APIResponse } from "src/misc/api.response";
-import { AddProfessorDTO, DeleteProfessorDTO, UpdateProfessorDTO } from "src/dtos/professor.dto";
+import { PostProfessorDTO, DeleteProfessorDTO, PatchProfessorDTO } from "src/dtos/professor.dto";
 import { Professor } from "src/entities/professor.entity";
 import { ProfessorService } from "src/services/professor.service";
 import { RoleGuard } from "src/guards/role.guard";
@@ -16,14 +16,14 @@ export class ProfessorController {
     @UseGuards(RoleGuard)
     @AllowToRoles("administrator")
     @Get()
-    async getProfessor(@Query("by") by : string, @Query("id") id: number): Promise<Professor | Professor[] | APIResponse> {
-        let professor;
+    async getProfessor(@Query("by") by: string, @Query("id") id: number): Promise<Professor | Professor[] | APIResponse> {
+        let professor: Professor | Professor[];
 
-        if(by == "default"){
+        if (by == "default") {
             professor = await this.professorService.getByID(id);
-        }else if(by == "all"){
+        } else if (by == "all") {
             professor = await this.professorService.getAll();
-        }else {
+        } else {
             throw new HttpException("Bad Request", HttpStatus.BAD_REQUEST);
         }
 
@@ -38,7 +38,7 @@ export class ProfessorController {
     @UseGuards(RoleGuard)
     @AllowToRoles("administrator")
     @Post()
-    async postProfessor(@Body() data: AddProfessorDTO): Promise<Professor | APIResponse> {
+    async postProfessor(@Body() data: PostProfessorDTO): Promise<Professor | APIResponse> {
 
         let professor = await this.professorService.getByUsername(data.username);
 
@@ -46,48 +46,48 @@ export class ProfessorController {
             return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE); });
         }
 
-        let dbprofessor = await this.professorService.add(data.firstName, data.lastName, data.username, data.password, null);
+        let postedProfessor = await this.professorService.add(data.firstName, data.lastName, data.username, data.password, null);
 
-        if (dbprofessor == null) {
+        if (postedProfessor == null) {
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
-        return new Promise(resolve => { resolve(dbprofessor)});
+        return new Promise(resolve => { resolve(postedProfessor); });
 
     }
 
     @UseGuards(RoleGuard)
     @AllowToRoles("administrator")
     @Patch()
-    async patchProfessor(@Body() data : UpdateProfessorDTO) : Promise<APIResponse> {
+    async patchProfessor(@Body() data: PatchProfessorDTO): Promise<APIResponse> {
         let professor = await this.professorService.getByUsername(data.username);
 
-        if(professor != null && professor.professorId != data.professorId){
-            return new Promise(resolve => {resolve(APIResponse.DUPLICATE_UNIQUE_VALUE)});
+        if (professor != null && professor.professorId != data.professorId) {
+            return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE); });
         }
 
-        let dbprofessor = await this.professorService.update(data.professorId, data.firstName, data.lastName, data.username, data.password);
+        let patchedProfessor = await this.professorService.update(data.professorId, data.firstName, data.lastName, data.username, data.password, null);
 
-        if(dbprofessor == null){
-            return new Promise(resolve => {resolve(APIResponse.SAVE_FAILED)});
+        if (patchedProfessor == null) {
+            return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
-        return new Promise(resolve => {resolve(APIResponse.OK)});
+        return new Promise(resolve => { resolve(APIResponse.OK); });
 
     }
 
     @UseGuards(RoleGuard)
     @AllowToRoles("administrator")
     @Delete()
-    async deleteProfessor(@Body() data : DeleteProfessorDTO) : Promise<APIResponse>{
+    async deleteProfessor(@Body() data: DeleteProfessorDTO): Promise<APIResponse> {
 
-        let professor = await this.professorService.delete(data.professorId);
+        let deletedProfessor = await this.professorService.delete(data.professorId);
 
-        if(professor == null){
-            return new Promise(resolve => {resolve(APIResponse.DELETE_FAILED)});
+        if (deletedProfessor == null) {
+            return new Promise(resolve => { resolve(APIResponse.DELETE_FAILED); });
         }
 
-        return new Promise(resolve => {resolve(APIResponse.OK)});
+        return new Promise(resolve => { resolve(APIResponse.OK); });
 
     }
 

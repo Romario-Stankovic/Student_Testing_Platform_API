@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Patch, Post, Put, Query, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Patch, Post, Query, Req, UseGuards } from "@nestjs/common";
 import { APIResponse } from "src/misc/api.response";
-import { AddAdministratorDTO, DeleteAdminDTO, UpdateAdminDTO } from "src/dtos/administrator.dto";
+import { PostAdminDTO, DeleteAdminDTO, PatchAdminDTO } from "src/dtos/administrator.dto";
 import { Administrator } from "src/entities/administrator.entity";
 import { AdministratorService } from "src/services/administrator.service";
 import { AllowToRoles } from "src/misc/allow.role.decorator";
@@ -16,80 +16,81 @@ export class AdministratorController {
     @UseGuards(RoleGuard)
     @AllowToRoles("administrator")
     @Get()
-    async getAdmin(@Query("by") by : string, @Query("id") id: number): Promise<Administrator | Administrator[] | APIResponse> {
+    async getAdmin(@Query("by") by: string, @Query("id") id: number): Promise<Administrator | Administrator[] | APIResponse> {
 
-        let administrator;
+        let admin: Administrator | Administrator[];
 
-        if(by == "default"){
-            administrator = await this.administratorService.getByID(id);
-        }else if(by == "all"){
-            administrator = await this.administratorService.getAll();
-        }else{
+        if (by == "default") {
+            admin = await this.administratorService.getByID(id);
+        } else if (by == "all") {
+            admin = await this.administratorService.getAll();
+        } else {
             throw new HttpException("Bad Request", HttpStatus.BAD_REQUEST);
         }
-        
-        if (administrator == null) {
+
+        if (admin == null) {
             return new Promise(resolve => { resolve(APIResponse.NULL_ENTRY); });
         }
 
-        return new Promise(resolve => { resolve(administrator); });
+        return new Promise(resolve => { resolve(admin); });
     }
 
     @UseGuards(RoleGuard)
     @AllowToRoles("administrator")
     @Post()
-    async postAdmin(@Body() data: AddAdministratorDTO): Promise<Administrator | APIResponse> {
+    async postAdmin(@Body() data: PostAdminDTO): Promise<Administrator | APIResponse> {
 
-        let administrator = await this.administratorService.getByUsername(data.username);
-        if (administrator != null) {
+        let admin = await this.administratorService.getByUsername(data.username);
+        if (admin != null) {
             return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE); });
         }
 
-        let dbadministrator = await this.administratorService.add(data.firstName, data.lastName, data.username, data.password);
-        if (dbadministrator == null) {
+        let postedAdmin = await this.administratorService.add(data.firstName, data.lastName, data.username, data.password);
+        if (postedAdmin == null) {
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
-        return new Promise(resolve => { resolve(dbadministrator); });
+        return new Promise(resolve => { resolve(postedAdmin); });
     }
 
     @UseGuards(RoleGuard)
     @AllowToRoles("administrator")
     @Patch()
-    async patchAdmin(@Body() data : UpdateAdminDTO) : Promise<APIResponse> {
+    async patchAdmin(@Body() data: PatchAdminDTO): Promise<APIResponse> {
         let admin = await this.administratorService.getByUsername(data.username);
-        if(admin != null && admin.administratorId != data.administratorId){
+
+        if (admin != null && admin.administratorId != data.administratorId) {
             return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE); });
         }
 
-        let dbadmin = await this.administratorService.update(data.administratorId, data.firstName, data.lastName, data.username, data.password);
+        let patchedAdmin = await this.administratorService.update(data.administratorId, data.firstName, data.lastName, data.username, data.password);
 
-        if(dbadmin == null){
-            return new Promise(resolve => {resolve(APIResponse.SAVE_FAILED)});
+        if (patchedAdmin == null) {
+            return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
-        return new Promise(resolve => {resolve(APIResponse.OK)});
+        return new Promise(resolve => { resolve(APIResponse.OK); });
 
     }
 
     @UseGuards(RoleGuard)
     @AllowToRoles("administrator")
     @Delete()
-    async deleteAdmin(@Body() data : DeleteAdminDTO, @Req() req : Request) : Promise<APIResponse> {
-        
+    async deleteAdmin(@Body() data: DeleteAdminDTO, @Req() req: Request): Promise<APIResponse> {
+
         let admin = await this.administratorService.getByID(data.administratorId);
 
-        if(admin.administratorId == req.token.id){
-            return new Promise(resolve => {resolve(APIResponse.DELETE_FAILED)});
+        if (admin.administratorId == req.token.id) {
+            return new Promise(resolve => { resolve(APIResponse.DELETE_FAILED); });
         }
 
-        let dbadmin = await this.administratorService.delete(data.administratorId);
+        let deletedAdmin = await this.administratorService.delete(data.administratorId);
 
-        if(dbadmin == null){
-            return new Promise(resolve => {resolve(APIResponse.DELETE_FAILED)});
+        if (deletedAdmin == null) {
+            return new Promise(resolve => { resolve(APIResponse.DELETE_FAILED); });
         }
 
-        return new Promise(resolve => {resolve(APIResponse.OK)});
+        return new Promise(resolve => { resolve(APIResponse.OK); });
 
     }
 

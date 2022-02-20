@@ -1,6 +1,6 @@
 import * as Validator from "class-validator";
 
-export class AddTestDTO {
+export class PostTestDTO {
 
     @Validator.IsNumber()
     @Validator.IsNotEmpty()
@@ -13,11 +13,11 @@ export class AddTestDTO {
 
     @Validator.IsNotEmpty()
     @Validator.IsNumber()
-    duration : number;
+    duration: number;
 
     @Validator.IsNumber()
     @Validator.IsNotEmpty()
-    questionCount : number;
+    questionCount: number;
 
     @Validator.IsDateString()
     @Validator.IsNotEmpty()
@@ -28,11 +28,11 @@ export class AddTestDTO {
     endAt: Date;
 }
 
-export class UpdateTestDTO {
+export class PatchTestDTO {
 
     @Validator.IsNumber()
     @Validator.IsNotEmpty()
-    testId : number;
+    testId: number;
 
     @Validator.IsOptional()
     @Validator.IsNumber()
@@ -48,12 +48,12 @@ export class UpdateTestDTO {
     @Validator.IsOptional()
     @Validator.IsNotEmpty()
     @Validator.IsNumber()
-    duration : number | null;
+    duration: number | null;
 
     @Validator.IsOptional()
     @Validator.IsNumber()
     @Validator.IsNotEmpty()
-    questionCount : number | null;
+    questionCount: number | null;
 
     @Validator.IsOptional()
     @Validator.IsDateString()
@@ -69,32 +69,32 @@ export class UpdateTestDTO {
 export class DeleteTestDTO {
     @Validator.IsNumber()
     @Validator.IsNotEmpty()
-    testId : number;
+    testId: number;
 }
 
 class ModifyTestQuestion {
-    
+
     @Validator.IsOptional()
     @Validator.IsNumber()
     @Validator.IsNotEmpty()
-    questionId : number | null;
+    questionId: number | null;
 
     @Validator.IsOptional()
     @Validator.IsString()
     @Validator.IsNotEmpty()
-    questionText : string | null;
+    questionText: string | null;
 
     @Validator.IsOptional()
     @Validator.IsString()
-    imagePath : string | null;
+    imagePath: string | null;
 
     @Validator.IsOptional()
     @Validator.IsBoolean()
     @Validator.IsNotEmpty()
-    toDelete : boolean | null;
+    toDelete: boolean | null;
 
     @Validator.ValidateNested()
-    answers : ModifyTestAnswer[];
+    answers: ModifyTestAnswer[];
 
 }
 
@@ -129,8 +129,8 @@ class ModifyTestAnswer {
 export class ModifyTestQuestionsDTO {
     @Validator.IsNotEmpty()
     @Validator.IsNumber()
-    testId : number;
+    testId: number;
 
     @Validator.ValidateNested()
-    questions : ModifyTestQuestion[];
+    questions: ModifyTestQuestion[];
 }

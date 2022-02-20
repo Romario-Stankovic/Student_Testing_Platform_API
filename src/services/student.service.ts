@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UpdateStudentDTO } from 'src/dtos/student.dto';
 import { Student } from 'src/entities/student.entity';
 import { Repository } from 'typeorm/repository/Repository';
 
@@ -34,10 +33,10 @@ export class StudentService {
         return new Promise(resolve => { resolve(student); });
     }
 
-    async getAll() : Promise<Student[] | null> {
+    async getAll(): Promise<Student[] | null> {
         let students = await this.repository.find();
 
-        if(students.length == 0){
+        if (students.length == 0) {
             return new Promise(resolve => { resolve(null); });
         }
 
@@ -45,7 +44,7 @@ export class StudentService {
 
     }
 
-    async add(firstName : string, lastName : string, indexNumber : string, imagePath : string): Promise<Student | null> {
+    async add(firstName: string, lastName: string, indexNumber: string, imagePath: string): Promise<Student | null> {
 
         let newStudent = new Student();
         newStudent.firstName = firstName;
@@ -62,7 +61,7 @@ export class StudentService {
 
     }
 
-    async update(id: number, firstName : string, lastName : string, indexNumber : string): Promise<Student | null> {
+    async update(id: number, firstName: string, lastName: string, indexNumber: string, imagePath: string): Promise<Student | null> {
         let student = await this.getByID(id);
 
         if (student == null) {
@@ -72,6 +71,7 @@ export class StudentService {
         student.firstName = firstName != null ? firstName : student.firstName;
         student.lastName = lastName != null ? lastName : student.lastName;
         student.indexNumber = indexNumber != null ? indexNumber : student.indexNumber;
+        student.imagePath = imagePath != null ? imagePath : student.imagePath;
 
         try {
             let updatedStudent = await this.repository.save(student);
@@ -82,18 +82,18 @@ export class StudentService {
 
     }
 
-    async delete(studentId : number) : Promise<Student | null> {
-        let student = await this.getByID(studentId);
+    async delete(id: number): Promise<Student | null> {
+        let student = await this.getByID(id);
 
-        if(student == null) {
-            return new Promise(resolve => {resolve(null)});
+        if (student == null) {
+            return new Promise(resolve => { resolve(null); });
         }
 
         try {
             let deletedStudent = await this.repository.remove(student);
-            return new Promise(resolve => {resolve(deletedStudent)});
-        }catch(error){
-            return new Promise(resolve => {resolve(null)});
+            return new Promise(resolve => { resolve(deletedStudent); });
+        } catch (error) {
+            return new Promise(resolve => { resolve(null); });
         }
 
     }

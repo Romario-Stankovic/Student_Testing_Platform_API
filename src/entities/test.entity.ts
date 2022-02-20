@@ -9,7 +9,7 @@ export class Test {
     @PrimaryGeneratedColumn({ name: "test_id", type: "int" })
     testId: number;
 
-    @Column({ name: "professor_id", type: "int"})
+    @Column({ name: "professor_id", type: "int" })
     professorId: number;
 
     @Column({ name: "test_name", type: "varchar", length: 100 })

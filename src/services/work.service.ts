@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { FinishedWork, WorkStudent } from "src/dtos/work.dto";
 import { Work } from "src/entities/work.entity";
 import { Repository } from "typeorm";
 
@@ -8,10 +7,10 @@ import { Repository } from "typeorm";
 export class WorkService {
     constructor(
         @InjectRepository(Work)
-        private readonly repository : Repository<Work>
-    ){}
+        private readonly repository: Repository<Work>
+    ) { }
 
-    
+
     async getByID(id: number): Promise<Work | null> {
 
         let work = await this.repository.findOne(id);
@@ -24,28 +23,28 @@ export class WorkService {
 
     }
 
-    async getByTestID(testId : number) : Promise<Work[] | null> {
-        let works = await this.repository.find({where: {testId : testId}, relations:["student"]});
+    async getByTestID(testId: number): Promise<Work[] | null> {
+        let works = await this.repository.find({ where: { testId: testId }, relations: ["student"] });
 
-        if(works.length == 0){
-            return new Promise(resolve => {resolve(null)});
+        if (works.length == 0) {
+            return new Promise(resolve => { resolve(null); });
         }
 
-        return new Promise(resolve => {resolve(works)});
+        return new Promise(resolve => { resolve(works); });
 
     }
 
-    async getFinishedByStudentID(id : number) : Promise<Work[] | null>{
-        let works = await this.repository.find({where: {studentId : id}, relations: ["test"]});
+    async getFinishedByStudentID(id: number): Promise<Work[] | null> {
+        let works = await this.repository.find({ where: { studentId: id }, relations: ["test"] });
 
-        if(works.length == 0){
+        if (works.length == 0) {
             return null;
         }
 
-        return new Promise(resolve => {resolve(works)});
+        return new Promise(resolve => { resolve(works); });
     }
 
-    async add(studentId: number, testId: number) : Promise<Work | null>{
+    async add(studentId: number, testId: number): Promise<Work | null> {
         let newWork = new Work();
         newWork.testId = testId;
         newWork.studentId = studentId;
@@ -53,32 +52,29 @@ export class WorkService {
 
         try {
             let work = await this.repository.save(newWork);
-            return new Promise(resolve => {resolve(work)});
-        }catch (error) {
-            return new Promise(resolve => {resolve(null)});
+            return new Promise(resolve => { resolve(work); });
+        } catch (error) {
+            return new Promise(resolve => { resolve(null); });
         }
 
     }
 
-
-    async endWork(id : number, points : number) : Promise<Work | null> {
+    async end(id: number, points: number): Promise<Work | null> {
         let work = await this.getByID(id);
 
-        if(work == null){
-            return new Promise(resolve => {resolve(null)});
+        if (work == null) {
+            return new Promise(resolve => { resolve(null); });
         }
 
         work.endedAt = new Date();
         work.points = points;
 
-        let dbwork = this.repository.save(work);
-
-        if(dbwork == null){
-            return new Promise(resolve => {resolve(null)});
+        try {
+            let endedWork = this.repository.save(work);
+            return new Promise(resolve => { resolve(endedWork); });
+        } catch (error) {
+            return new Promise(resolve => { resolve(null); });
         }
-
-        return new Promise(resolve => {resolve(dbwork)});
-
     }
 
 }

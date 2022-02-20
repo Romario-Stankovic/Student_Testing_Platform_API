@@ -1,6 +1,6 @@
 import * as Validator from "class-validator";
 
-export class AddStudentDTO {
+export class PostStudentDTO {
 
     @Validator.IsNotEmpty()
     @Validator.IsString()
@@ -18,11 +18,11 @@ export class AddStudentDTO {
     indexNumber: string;
 }
 
-export class UpdateStudentDTO {
+export class PatchStudentDTO {
 
     @Validator.IsNumber()
     @Validator.IsNotEmpty()
-    studentId : number;
+    studentId: number;
 
     @Validator.IsOptional()
     @Validator.IsNotEmpty()
@@ -43,6 +43,12 @@ export class UpdateStudentDTO {
     indexNumber: string | null;
 }
 
+export class DeleteStudentDTO {
+    @Validator.IsNotEmpty()
+    @Validator.IsNumber()
+    studentId: number;
+}
+
 export class LoginStudentDTO {
     @Validator.IsNotEmpty()
     @Validator.IsString()
@@ -53,12 +59,12 @@ export class LoginStudentDTO {
 export class StudentIdentity {
     id: number;
     role: string;
-    firstName : string;
-    lastName : string;
-    indexNumber : string;
-    imagePath : string | null;
+    firstName: string;
+    lastName: string;
+    indexNumber: string;
+    imagePath: string | null;
 
-    constructor(id:number, role: string, firstName : string, lastName : string, indexNumber : string, imagePath : string | null){
+    constructor(id: number, role: string, firstName: string, lastName: string, indexNumber: string, imagePath: string | null) {
         this.id = id;
         this.role = role;
         this.firstName = firstName;
@@ -66,10 +72,4 @@ export class StudentIdentity {
         this.indexNumber = indexNumber;
         this.imagePath = imagePath;
     }
-}
-
-export class DeleteStudentDTO {
-    @Validator.IsNotEmpty()
-    @Validator.IsNumber()
-    studentId : number;
 }

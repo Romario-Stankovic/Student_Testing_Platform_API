@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Patch, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { APIResponse } from "src/misc/api.response";
-import { AddStudentDTO, DeleteStudentDTO, UpdateStudentDTO } from "src/dtos/student.dto";
+import { PostStudentDTO, DeleteStudentDTO, PatchStudentDTO } from "src/dtos/student.dto";
 import { Student } from "src/entities/student.entity";
 import { StudentService } from "src/services/student.service";
 import { AllowToRoles } from "src/misc/allow.role.decorator";
@@ -15,18 +15,18 @@ export class StudentController {
     @UseGuards(RoleGuard)
     @AllowToRoles("administrator")
     @Get()
-    async getStudent(@Query("by") by : string, @Query("id") id: number): Promise<Student | Student[] | APIResponse> {
-        
-        let student;
+    async getStudent(@Query("by") by: string, @Query("id") id: number): Promise<Student | Student[] | APIResponse> {
 
-        if(by == "default"){
+        let student: Student | Student[];
+
+        if (by == "default") {
             student = await this.studentService.getByID(id);
-        }else if(by == "all"){
+        } else if (by == "all") {
             student = await this.studentService.getAll();
-        }else{
+        } else {
             throw new HttpException("Bad Request", HttpStatus.BAD_REQUEST);
         }
-        
+
         if (student == null) {
             return new Promise(resolve => { resolve(APIResponse.NULL_ENTRY); });
         }
@@ -38,35 +38,36 @@ export class StudentController {
     @UseGuards(RoleGuard)
     @AllowToRoles("administrator")
     @Post()
-    async postStudent(@Body() data: AddStudentDTO): Promise<Student | APIResponse> {
+    async postStudent(@Body() data: PostStudentDTO): Promise<Student | APIResponse> {
 
         let student = await this.studentService.getByIndex(data.indexNumber);
+
         if (student != null) {
             return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE); });
         }
 
-        let dbstudent = await this.studentService.add(data.firstName, data.lastName, data.indexNumber, null);
+        let postedStudent = await this.studentService.add(data.firstName, data.lastName, data.indexNumber, null);
 
-        if (dbstudent == null) {
+        if (postedStudent == null) {
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
-        return new Promise(resolve => { resolve(dbstudent); });
+        return new Promise(resolve => { resolve(postedStudent); });
     }
 
     @UseGuards(RoleGuard)
     @AllowToRoles("administrator")
     @Patch()
-    async patchStudent(@Body() data: UpdateStudentDTO): Promise<APIResponse> {
+    async patchStudent(@Body() data: PatchStudentDTO): Promise<APIResponse> {
 
         let student = await this.studentService.getByIndex(data.indexNumber);
         if (student != null && student.studentId != data.studentId) {
             return new Promise(resolve => { resolve(APIResponse.DUPLICATE_UNIQUE_VALUE); });
         }
 
-        let dbstudent = await this.studentService.update(data.studentId, data.firstName, data.lastName, data.indexNumber);
+        let patchedStudent = await this.studentService.update(data.studentId, data.firstName, data.lastName, data.indexNumber, null);
 
-        if (dbstudent == null) {
+        if (patchedStudent == null) {
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
@@ -77,15 +78,15 @@ export class StudentController {
     @UseGuards(RoleGuard)
     @AllowToRoles("administrator")
     @Delete()
-    async deleteStudent(@Body() data : DeleteStudentDTO) : Promise<APIResponse> {
+    async deleteStudent(@Body() data: DeleteStudentDTO): Promise<APIResponse> {
 
-        let student = await this.studentService.delete(data.studentId);
+        let deletedStudent = await this.studentService.delete(data.studentId);
 
-        if(student == null){
-            return new Promise(resolve => {resolve(APIResponse.DELETE_FAILED)});
+        if (deletedStudent == null) {
+            return new Promise(resolve => { resolve(APIResponse.DELETE_FAILED); });
         }
 
-        return new Promise(resolve => {resolve(APIResponse.OK)});
+        return new Promise(resolve => { resolve(APIResponse.OK); });
 
     }
 

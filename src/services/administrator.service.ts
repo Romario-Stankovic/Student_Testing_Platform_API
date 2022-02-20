@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Administrator } from "src/entities/administrator.entity";
-import * as crypto from "crypto";
 import { Repository } from "typeorm/repository/Repository";
+import { generateHash } from "src/misc/hashing";
 
 @Injectable()
 export class AdministratorService {
@@ -32,24 +32,23 @@ export class AdministratorService {
         return new Promise(resolve => { resolve(administrator); });
     }
 
-    async getAll() : Promise<Administrator[] | null>{
+    async getAll(): Promise<Administrator[] | null> {
         let administrators = await this.repository.find();
 
-        if(administrators.length == 0){
-            return new Promise(resolve => {resolve(null)});
+        if (administrators.length == 0) {
+            return new Promise(resolve => { resolve(null); });
         }
-        
-        return new Promise(resolve => {resolve(administrators)});
+
+        return new Promise(resolve => { resolve(administrators); });
 
     }
 
     async add(firstName: string, lastName: string, username: string, password: string): Promise<Administrator | null> {
 
-        let hash = crypto.createHash("sha512");
-        hash.update(password);
-        let hashedPassword = hash.digest("hex").toUpperCase();
-
         let newAdmin: Administrator = new Administrator();
+
+        let hashedPassword = generateHash(password);
+
         newAdmin.firstName = firstName;
         newAdmin.lastName = lastName;
         newAdmin.username = username;
@@ -64,46 +63,41 @@ export class AdministratorService {
 
     }
 
-    async update(id : number, firstName : string, lastName : string, username : string, password : string) : Promise<Administrator | null> {
-        
+    async update(id: number, firstName: string, lastName: string, username: string, password: string): Promise<Administrator | null> {
+
         let admin = await this.getByID(id);
 
-        if(admin == null) {
-            return new Promise(resolve => {resolve(null)});
+        if (admin == null) {
+            return new Promise(resolve => { resolve(null); });
         }
 
         admin.firstName = firstName != null ? firstName : admin.firstName;
         admin.lastName = lastName != null ? lastName : admin.lastName;
         admin.username = username != null ? username : admin.username;
-        if(password != null){
-            let hash = crypto.createHash("sha512");
-            hash.update(password);
-            let hashedPassword = hash.digest("hex").toUpperCase();
-            admin.passwordHash = hashedPassword;
-        }
+        admin.passwordHash = password != null ? generateHash(password) : admin.passwordHash;
 
         try {
             let updatedAdmin = await this.repository.save(admin);
-            return new Promise(resolve => {resolve(updatedAdmin)});
-        }catch(error){
-            return new Promise(resolve => {resolve(null)});
+            return new Promise(resolve => { resolve(updatedAdmin); });
+        } catch (error) {
+            return new Promise(resolve => { resolve(null); });
         }
 
     }
 
-    async delete(adminId : number) : Promise<Administrator | null> {
+    async delete(id: number): Promise<Administrator | null> {
 
-        let admin = await this.getByID(adminId);
+        let admin = await this.getByID(id);
 
-        if(admin == null) {
-            return new Promise(resolve => {resolve(null)});
+        if (admin == null) {
+            return new Promise(resolve => { resolve(null); });
         }
 
         try {
             let deletedAdmin = await this.repository.remove(admin);
-            return new Promise(resolve => {resolve(deletedAdmin)});
-        }catch (error) {
-            return new Promise(resolve => {resolve(null)});
+            return new Promise(resolve => { resolve(deletedAdmin); });
+        } catch (error) {
+            return new Promise(resolve => { resolve(null); });
         }
 
     }

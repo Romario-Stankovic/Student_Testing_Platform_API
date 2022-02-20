@@ -5,7 +5,7 @@ import { StorageConfiguration } from 'src/configs/config';
 
 import { Request } from 'express';
 
-@Controller("api/tests")
+@Controller("api/experimental")
 export class AppController {
 
     constructor(

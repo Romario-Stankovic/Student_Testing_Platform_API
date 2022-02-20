@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Professor } from "src/entities/professor.entity";
-import * as crypto from "crypto";
 import { Repository } from "typeorm/repository/Repository";
+import { generateHash } from "src/misc/hashing";
 
 @Injectable()
 export class ProfessorService {
@@ -31,21 +31,19 @@ export class ProfessorService {
         return new Promise(resolve => { resolve(professor); });
     }
 
-    async getAll() : Promise<Professor[] | null> {
+    async getAll(): Promise<Professor[] | null> {
         let professors = await this.repository.find();
-        
-        if(professors.length == 0){
+
+        if (professors.length == 0) {
             return new Promise(resolve => { resolve(null); });
         }
-        
+
         return new Promise(resolve => { resolve(professors); });
     }
 
-    async add(firstName : string, lastName : string, username : string, password : string, imagePath : string ): Promise<Professor | null> {
+    async add(firstName: string, lastName: string, username: string, password: string, imagePath: string): Promise<Professor | null> {
 
-        let hash = crypto.createHash("sha512");
-        hash.update(password);
-        let hashedPassword = hash.digest("hex").toUpperCase();
+        let hashedPassword = generateHash(password);
 
         let newProfessor: Professor = new Professor();
         newProfessor.firstName = firstName;
@@ -62,45 +60,40 @@ export class ProfessorService {
         }
     }
 
-    async update(id : number, firstName : string, lastName : string, username : string, password : string) : Promise<Professor | null> {
+    async update(id: number, firstName: string, lastName: string, username: string, password: string, imagePath: string): Promise<Professor | null> {
         let professor = await this.getByID(id);
 
-        if(professor == null){
-            return new Promise(resolve => {resolve(null)});
+        if (professor == null) {
+            return new Promise(resolve => { resolve(null); });
         }
 
         professor.firstName = firstName != null ? firstName : professor.firstName;
         professor.lastName = lastName != null ? lastName : professor.lastName;
-        professor.username != null ? username : professor.username;
-
-        if(password != null) {
-            let hash = crypto.createHash("sha512");
-            hash.update(password);
-            let hashedPassword = hash.digest("hex").toUpperCase();
-            professor.passwordHash = hashedPassword;
-        }
+        professor.username = username != null ? username : professor.username;
+        professor.passwordHash = password != null ? generateHash(password) : professor.passwordHash;
+        professor.imagePath = imagePath != null ? imagePath : professor.imagePath;
 
         try {
             let updatedProfessor = await this.repository.save(professor);
-            return new Promise(resolve => {resolve(updatedProfessor)});
-        }catch(error){
-            return new Promise(resolve => {resolve(null)});
+            return new Promise(resolve => { resolve(updatedProfessor); });
+        } catch (error) {
+            return new Promise(resolve => { resolve(null); });
         }
 
     }
 
-    async delete(professorId : number) : Promise<Professor | null>{
-        let professor = await this.getByID(professorId);
+    async delete(id: number): Promise<Professor | null> {
+        let professor = await this.getByID(id);
 
-        if(professor == null){
-            return new Promise(resolve => {resolve(null)});
+        if (professor == null) {
+            return new Promise(resolve => { resolve(null); });
         }
 
         try {
             let deletedProfessor = await this.repository.remove(professor);
-            return new Promise(resolve => {resolve(deletedProfessor)});
-        }catch(error){
-            return new Promise(resolve => {resolve(null)});
+            return new Promise(resolve => { resolve(deletedProfessor); });
+        } catch (error) {
+            return new Promise(resolve => { resolve(null); });
         }
 
     }

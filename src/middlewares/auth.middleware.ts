@@ -26,7 +26,7 @@ export class AuthenticationMiddleware implements NestMiddleware {
         }
 
         let token = request.headers.authorization;
-        const tokenParts = token.split(" ");
+        let tokenParts = token.split(" ");
 
         if (tokenParts.length != 2) {
             throw new HttpException("Bad token", HttpStatus.UNAUTHORIZED);
@@ -56,13 +56,8 @@ export class AuthenticationMiddleware implements NestMiddleware {
         }
 
         if (tokenData.role == "administrator") {
-            let administrator = await this.administratorService.getByID(tokenData.id);
-            if (administrator == null) {
-                throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
-            }
-        } else if (tokenData.role == "student") {
-            let student = await this.studentService.getByID(tokenData.id);
-            if (student == null) {
+            let admin = await this.administratorService.getByID(tokenData.id);
+            if (admin == null) {
                 throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
             }
         } else if (tokenData.role == "professor") {
@@ -70,13 +65,18 @@ export class AuthenticationMiddleware implements NestMiddleware {
             if (professor == null) {
                 throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
             }
-        }else{
+        } else if (tokenData.role == "student") {
+            let student = await this.studentService.getByID(tokenData.id);
+            if (student == null) {
+                throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
+            }
+        } else {
             throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
         }
 
-        let currentTimestamp = new Date().getTime();
+        let currentTime = new Date().getTime();
 
-        if (currentTimestamp >= tokenData.expDate) {
+        if (currentTime >= tokenData.expDate) {
             throw new HttpException("Token has expired", HttpStatus.UNAUTHORIZED);
         }
 

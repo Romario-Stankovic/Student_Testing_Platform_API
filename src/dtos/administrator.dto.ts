@@ -1,6 +1,6 @@
 import * as Validator from "class-validator";
 
-export class AddAdministratorDTO {
+export class PostAdminDTO {
     @Validator.IsNotEmpty()
     @Validator.IsString()
     @Validator.Length(1, 50)
@@ -22,7 +22,43 @@ export class AddAdministratorDTO {
     password: string;
 }
 
-export class LoginAdministratorDTO {
+export class PatchAdminDTO {
+    @Validator.IsNumber()
+    @Validator.IsNotEmpty()
+    administratorId: number;
+
+    @Validator.IsOptional()
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    @Validator.Length(1, 50)
+    firstName: string | null;
+
+    @Validator.IsOptional()
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    @Validator.Length(1, 50)
+    lastName: string | null;
+
+    @Validator.IsOptional()
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    @Validator.Length(1, 50)
+    username: string | null;
+
+    @Validator.IsOptional()
+    @Validator.IsString()
+    @Validator.IsNotEmpty()
+    @Validator.Length(8)
+    password: string | null;
+}
+
+export class DeleteAdminDTO {
+    @Validator.IsNotEmpty()
+    @Validator.IsNumber()
+    administratorId: number;
+}
+
+export class LoginAdminDTO {
     @Validator.IsNotEmpty()
     @Validator.IsString()
     username: string;
@@ -32,54 +68,18 @@ export class LoginAdministratorDTO {
     password: string;
 }
 
-export class AdministratorIdentity {
-    id:number;
-    role:string;
-    firstName : string;
-    lastName : string;
-    username : string;
+export class AdminIdentity {
+    id: number;
+    role: string;
+    firstName: string;
+    lastName: string;
+    username: string;
 
-    constructor(id:number, role:string,firstName : string, lastName : string, username : string){
+    constructor(id: number, role: string, firstName: string, lastName: string, username: string) {
         this.id = id;
         this.role = role;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
     }
-}
-
-export class DeleteAdminDTO {
-    @Validator.IsNotEmpty()
-    @Validator.IsNumber()
-    administratorId : number;
-}
-
-export class UpdateAdminDTO {
-    @Validator.IsNumber()
-    @Validator.IsNotEmpty()
-    administratorId : number;
-
-    @Validator.IsOptional()
-    @Validator.IsString()
-    @Validator.IsNotEmpty()
-    @Validator.Length(1, 50)
-    firstName : string | null;
-
-    @Validator.IsOptional()
-    @Validator.IsString()
-    @Validator.IsNotEmpty()
-    @Validator.Length(1, 50)
-    lastName : string | null;
-
-    @Validator.IsOptional()
-    @Validator.IsString()
-    @Validator.IsNotEmpty()
-    @Validator.Length(1, 50)
-    username : string | null;
-
-    @Validator.IsOptional()
-    @Validator.IsString()
-    @Validator.IsNotEmpty()
-    @Validator.Length(8)
-    password : string | null;
 }
