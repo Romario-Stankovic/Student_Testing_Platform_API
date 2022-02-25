@@ -5,6 +5,8 @@ import { StorageConfiguration } from 'src/configs/config';
 
 import { Request } from 'express';
 
+import { Express } from 'express';
+
 @Controller("api/experimental")
 export class AppController {
 
@@ -14,7 +16,7 @@ export class AppController {
 
     @Post("uploadPhoto")
     @UseInterceptors(FileInterceptor(
-        "image",
+        "file",
         {
             storage: diskStorage({
                 destination: StorageConfiguration.image.destination,
@@ -24,12 +26,12 @@ export class AppController {
                     let now = new Date();
 
                     let datePart = "";
-                    let radnomPart = "";
+                    let randomPart = "";
 
                     datePart += now.getFullYear().toString() + (now.getMonth() + 1).toString() + now.getDate().toString();
-                    radnomPart = new Array(10).fill(0).map(e => (Math.random() * 9).toFixed(0).toString()).join("");
+                    randomPart = new Array(10).fill(0).map(e => (Math.random() * 9).toFixed(0).toString()).join("");
 
-                    let fileName = datePart + "-" + radnomPart + "-" + normalizedName;
+                    let fileName = datePart + "-" + randomPart + "-" + normalizedName;
                     callback(null, fileName);
 
                 }
@@ -60,7 +62,7 @@ export class AppController {
 
     @Post("uploadPhoto2")
     @UseInterceptors(FileInterceptor("file"))
-    async uploadPhoto2(@UploadedFile() file: Express.Multer.File, @Body() body, @Req() req: Request) {
+    async uploadPhoto2(@UploadedFile() file: Express.Multer.File, @Req() req: Request) {
         console.log(req.headers);
         console.log(file);
     }
