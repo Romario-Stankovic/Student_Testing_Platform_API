@@ -34,6 +34,7 @@ Controller responses are higher level responses caused before or after a service
 |---|---|---|
 | 2001 | Controller Warning | There are no entries in the database |
 | 2002 | Controller Error | Insertion with a duplicate unique value |
+| 2003 | Controller Error | Failed to save uploaded asset |
 
 ---
 
@@ -74,4 +75,6 @@ These are default HTTP responses that can be received from the API
 | 401 | Unauthorized | The client is not authorized to the API |
 | 403 | Forbidden | The client does not have access to this resource |
 | 404 | Not Found | The server cannot find the requested resource |
+| 413 | Payload Too Large | The sent payload exceeds size limits |
+| 415 | Unsupported Media Type | The server does not accept this type of media |
 | 500 | Internal Server Error | The server did not fair well with this request |

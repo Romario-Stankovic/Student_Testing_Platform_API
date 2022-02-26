@@ -16,6 +16,7 @@ export class APIResponse {
     /* 2000 - Controller */
     static readonly NULL_ENTRY = new APIResponse("Controller Warning", 2001); // While searching the database, the specific query failed to find a entry
     static readonly DUPLICATE_UNIQUE_VALUE = new APIResponse("Controller Error", 2002); // Tried to insert into the database with a duplicate value that needs to be unique
+    static readonly ASSET_SAVE_FAILED = new APIResponse("Controller Error", 2003); // Failed to save uploaded asset
     /* 3000 - Application */
     static readonly TEST_QUESTION_SHORTAGE = new APIResponse("Application Error", 3001); // We need more question than there are in the database
     static readonly WORK_ENDED = new APIResponse("Application Error", 3002); // This work has already ended

@@ -1,4 +1,7 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Patch, Post, Query, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { diskStorage } from "multer";
+import { StorageConfiguration } from "src/configs/config";
 import { PostTestDTO, DeleteTestDTO, ModifyTestQuestionsDTO, PatchTestDTO } from "src/dtos/test.dto";
 import { Answer } from "src/entities/answer.entity";
 import { Question } from "src/entities/question.entity";
@@ -9,6 +12,9 @@ import { APIResponse } from "src/misc/api.response";
 import { AnswerService } from "src/services/answer.service";
 import { QuestionService } from "src/services/question.service";
 import { TestService } from "src/services/test.service";
+import * as path from "path";
+import * as fs from "fs";
+import { imageFilter } from "src/misc/filters";
 
 @Controller("api/test/")
 export class TestController {
@@ -161,6 +167,56 @@ export class TestController {
         }
 
         return new Promise(resolve => { resolve(APIResponse.OK); });
+    }
+
+    @UseGuards(RoleGuard)
+    @AllowToRoles("administrator", "professor")
+    @Post("question/image")
+    @UseInterceptors(FileInterceptor("image", {
+        storage: diskStorage({
+            destination: StorageConfiguration.mainDestination + "images/questions",
+            filename: (request, file, callback) => {
+                let ext = path.extname(file.originalname);
+                let name = "temp" + ext;
+                callback(null, name);
+            }
+        }),
+        fileFilter: imageFilter,
+        limits: {
+            files: 1,
+            fileSize: StorageConfiguration.images.maxSize
+        }
+    }))
+
+    async postQuestionImage(@UploadedFile() file: Express.Multer.File, @Query("id") id: number): Promise<APIResponse> {
+        let question = await this.questionService.getByID(id);
+
+        if (question == null) {
+            return new Promise(resolve => { resolve(APIResponse.NULL_ENTRY); });
+        }
+
+        if (file == undefined) {
+            return new Promise(resolve => { resolve(APIResponse.ASSET_SAVE_FAILED); });
+        }
+
+        let ext = path.extname(file.filename);
+        let filePath = file.destination + "/";
+        let oldName = file.filename;
+        let newName = question.testId + "_" + question.questionId + ext;
+        try {
+            fs.rename(filePath + oldName, filePath + newName, error => { if (error) { throw error; } });
+        } catch (error) {
+            return new Promise(resolve => { resolve(APIResponse.ASSET_SAVE_FAILED); });
+        }
+
+        let updatedQuestion = await this.questionService.update(question.questionId, null, newName);
+
+        if (updatedQuestion == null) {
+            return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
+        }
+
+        return new Promise(resolve => { resolve(APIResponse.OK); });
+
     }
 
 }

@@ -8,9 +8,8 @@ async function main() {
     const port = 4000;
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-    app.useStaticAssets(StorageConfiguration.image.destination, {
-        prefix: StorageConfiguration.image.urlPrefix,
-        maxAge: StorageConfiguration.image.maxAge,
+    app.useStaticAssets(StorageConfiguration.mainDestination, {
+        prefix: StorageConfiguration.urlPrefix,
         index: false
     });
 

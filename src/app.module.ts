@@ -1,7 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DatabaseConfiguration } from './configs/config';
-import { AppController } from './controllers/app.controller';
 import { Student } from './entities/student.entity';
 import { StudentService } from './services/student.service';
 import { Professor } from './entities/professor.entity';
@@ -27,6 +26,7 @@ import { AnswerService } from './services/answer.service';
 import { WorkService } from './services/work.service';
 import { WorkController } from './controllers/work.controller';
 import { WorkAnswerService } from './services/workAnswer.service';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
     imports: [
@@ -59,11 +59,11 @@ import { WorkAnswerService } from './services/workAnswer.service';
             Token,
             Work,
             WorkAnswer
-        ])
+        ]),
+        MulterModule.register({ dest: "./storage" })
     ],
     controllers: [
         AdministratorController,
-        AppController,
         AuthController,
         ProfessorController,
         StudentController,

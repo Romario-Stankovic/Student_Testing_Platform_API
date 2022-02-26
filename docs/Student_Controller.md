@@ -169,3 +169,33 @@ Response Codes:
 | 401 | Unauthorized | The user accessing this resource is not authorized |
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 1002 | Service Error | Deleting from the database failed |
+
+### **Upload student photo**
+
+```POST: /api/student/image?id=[number]```
+
+Body:
+
+Multipart/form-data: image=...
+
+Response:
+
+```
+{
+    "status": "OK!",
+    "statusCode": 0,
+    "message": null
+}
+```
+
+Response Codes:
+| Response code | Response status | Reason |
+|---|---|---|
+| 0 | OK! | Upload successful |
+| 401 | Unauthorized | The user accessing this resource is not authorized |
+| 403 | Forbidden | Wrong user is accessing this resource |
+| 413 | Payload Too Large | Image exceeds 3MB |
+| 415 | Unsupported Media Type | File is not an image |
+| 1001 | Service Error | Failed to update student entry |
+| 2001 | Controller Warning | Student does not exist |
+| 2003 | Controller Error | Failed to save image |
