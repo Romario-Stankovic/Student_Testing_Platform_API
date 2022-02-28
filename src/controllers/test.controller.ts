@@ -177,7 +177,8 @@ export class TestController {
             destination: StorageConfiguration.mainDestination + "images/questions",
             filename: (request, file, callback) => {
                 let ext = path.extname(file.originalname);
-                let name = "temp" + ext;
+                let randomPart = new Array(10).fill(0).map(e => (Math.random() * 9).toFixed(0).toString()).join("");
+                let name = "temp_" + randomPart + ext;
                 callback(null, name);
             }
         }),
@@ -227,7 +228,8 @@ export class TestController {
             destination: StorageConfiguration.mainDestination + "images/answers",
             filename: (request, file, callback) => {
                 let ext = path.extname(file.originalname);
-                let name = "temp" + ext;
+                let randomPart = new Array(10).fill(0).map(e => (Math.random() * 9).toFixed(0).toString()).join("");
+                let name = "temp_" + randomPart + ext;
                 callback(null, name);
             }
         }),

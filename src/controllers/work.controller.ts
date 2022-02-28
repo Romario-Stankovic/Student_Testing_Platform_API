@@ -119,55 +119,15 @@ export class WorkController {
             return new Promise(resolve => { resolve(APIResponse.SAVE_FAILED); });
         }
 
+        setTimeout(this.endWorkInternally.bind(this),test.duration * 1000 + 60000,work.workId)
+
         return new Promise(resolve => { resolve(startedWork); });
 
     }
 
     @Post("finish")
     async endWork(@Body() data: EndWorkDTO): Promise<Work | APIResponse> {
-        let work = await this.workService.getByID(data.workId);
-
-        if (work == null) {
-            return new Promise(resolve => { resolve(APIResponse.NULL_ENTRY); });
-        }
-
-        if (work.endedAt != null) {
-            return new Promise(resolve => { resolve(APIResponse.WORK_ENDED); });
-        }
-
-        let workQuestions = await this.workAnswerService.getWorkQuestions(work.workId, true);
-        let result = 0;
-
-        for (let question of workQuestions) {
-            let correct = 0;
-            let incorrect = 0;
-            let totalCorrect = 0;
-
-            let answers = question.answers;
-
-            for (let answer of answers) {
-                totalCorrect += (answer.isCorrect ? 1 : 0);
-
-                if (answer.isChecked && !answer.isCorrect) {
-                    incorrect++;
-                } else if (answer.isChecked && answer.isCorrect) {
-                    correct++;
-                }
-            }
-
-            if (incorrect >= 1) {
-                result += 0;
-            } else {
-                result += (correct / totalCorrect);
-            }
-        }
-
-        result = (result / workQuestions.length) * 100;
-
-        let finishedWork = await this.workService.end(data.workId, result);
-
-        return new Promise(resolve => { resolve(finishedWork); });
-
+        return await this.endWorkInternally(data.workId);
     }
 
     @UseGuards(RoleGuard)
@@ -199,6 +159,52 @@ export class WorkController {
 
         return new Promise(resolve => { resolve(APIResponse.OK); });
 
+    }
+
+    async endWorkInternally(workId: number) : Promise<Work | APIResponse> {
+
+        let work = await this.workService.getByID(workId);
+
+        if (work == null) {
+            return new Promise(resolve => { resolve(APIResponse.NULL_ENTRY); });
+        }
+
+        if (work.endedAt != null) {
+            return new Promise(resolve => { resolve(APIResponse.WORK_ENDED); });
+        }
+
+        let workQuestions = await this.workAnswerService.getWorkQuestions(work.workId, true);
+        let result = 0;
+
+        for (let question of workQuestions) {
+            let correct = 0;
+            let incorrect = 0;
+            let totalCorrect = 0;
+
+            let answers = question.answers;
+
+            for (let answer of answers) {
+                totalCorrect += (answer.isCorrect ? 1 : 0);
+
+                if (answer.isChecked && !answer.isCorrect) {
+                    incorrect++;
+                } else if (answer.isChecked && answer.isCorrect) {
+                    correct++;
+                }
+            }
+
+            if (incorrect > 0) {
+                result += 0;
+            } else {
+                result += (correct / totalCorrect);
+            }
+        }
+
+        result = (result / workQuestions.length) * 100;
+
+        let finishedWork = await this.workService.end(workId, result);
+
+        return new Promise(resolve => { resolve(finishedWork); });
     }
 
 }
