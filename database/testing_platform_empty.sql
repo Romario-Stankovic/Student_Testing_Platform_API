@@ -19,6 +19,10 @@
 -- Table structure for table `administrator`
 --
 
+DROP DATABASE IF EXISTS `student_testing_platform`;
+CREATE DATABASE `student_testing_platform`;
+USE `student_testing_platform`;
+
 DROP TABLE IF EXISTS `administrator`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
