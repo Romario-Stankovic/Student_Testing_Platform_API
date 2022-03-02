@@ -1,18 +1,40 @@
 version: "3"
 
 services:
+
+  init:
+    image: alpine
+    container_name: init
+    working_dir: /shared
+    command: sh -c "apk add git && rm -rf /shared/app && git clone https://github.com/Romario-Stankovic/Student_Testing_Platform_API /shared/app"
+    volumes:
+      - shared:/shared
+
   mysql:
     image: mysql:latest
+    container_name: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=student_testing_platform
     working_dir: /
+    depends_on:
+      - init
     ports:
       - "3306:3306"
-    command: bash -c "rm -rf /app && mkdir /app && git clone https://github.com/Romario-Stankovic/Student_Testing_Platform_API /app/backend/ && cd /app/backend && mysql -uroot -proot < ./database/testing_platform_empty.sql"
+    entrypoint: bash -c "echo -e 'hello'"
+    volumes:
+      - shared:/shared
 
   backend:
     image: node:16.14.0
+    container_name: backend
     working_dir: /
     depends_on:
+      - init
       - mysql
-    command: bash -c "rm -rf /app && mkdir /app && git clone https://github.com/Romario-Stankovic/Student_Testing_Platform_API /app/backend/ && cd /app/backend && npm i && npm run start"
+    command: bash -c "cd /shared/app && echo -e 'Installing node packages...' && npm i && npm run start"
+    volumes:
+      - shared:/shared
+
+volumes:
+  shared:
