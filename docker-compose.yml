@@ -31,6 +31,12 @@ services:
     image: node:16.14.0
     working_dir: /
     restart: always
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DATABASE=student_testing_platform
     depends_on:
       - init
       - mysql

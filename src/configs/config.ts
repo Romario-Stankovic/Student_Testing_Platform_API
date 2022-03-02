@@ -1,11 +1,3 @@
-export const DatabaseConfiguration = {
-    hostname: "mysql",
-    port: 3306,
-    username: "app",
-    password: "app",
-    database: "student_testing_platform"
-};
-
 export const JWTSecret: string = "this is a secret";
 
 export const StorageConfiguration = {

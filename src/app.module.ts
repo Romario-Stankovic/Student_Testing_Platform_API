@@ -1,6 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DatabaseConfiguration } from './configs/config';
 import { Student } from './entities/student.entity';
 import { StudentService } from './services/student.service';
 import { Professor } from './entities/professor.entity';
@@ -27,16 +26,18 @@ import { WorkService } from './services/work.service';
 import { WorkController } from './controllers/work.controller';
 import { WorkAnswerService } from './services/workAnswer.service';
 import { MulterModule } from '@nestjs/platform-express';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
     imports: [
+        ConfigModule.forRoot(),
         TypeOrmModule.forRoot({
             type: "mysql",
-            host: DatabaseConfiguration.hostname,
-            port: DatabaseConfiguration.port,
-            username: DatabaseConfiguration.username,
-            password: DatabaseConfiguration.password,
-            database: DatabaseConfiguration.database,
+            host: process.env.MYSQL_HOST || "localhost",
+            port: Number.parseInt(process.env.MYSQL_PORT) || 3306,
+            username: process.env.MYSQL_USER || "app",
+            password: process.env.MYSQL_PASSWORD || "app",
+            database: process.env.MYSQL_DATABASE || "student_testing_platform",
             entities: [
                 Administrator,
                 Answer,
