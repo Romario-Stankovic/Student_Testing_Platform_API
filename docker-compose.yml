@@ -14,6 +14,11 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=student_testing_platform
+      - MYSQL_ROOT_HOST=localhost
+      - MYSQL_USER=app
+      - MYSQL_PASSWORD=app
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
     working_dir: /
     depends_on:
       - init
@@ -25,10 +30,11 @@ services:
   backend:
     image: node:16.14.0
     working_dir: /
+    restart: always
     depends_on:
       - init
       - mysql
-    command: bash -c "cd /shared/app && echo 'Installing node packages...' && npm i && npm run start"
+    command: bash -c "apt update && apt install mariadb-client -y && cd /shared/app && mysql -h mysql -P 3306 -uroot -proot < database/testing_platform_empty.sql && echo 'Installing node packages...' && npm i && npm run start"
     volumes:
       - shared:/shared
 

@@ -3,7 +3,7 @@ export const DatabaseConfiguration = {
     port: 3306,
     username: "app",
     password: "app",
-    database: "testing_platform"
+    database: "student_testing_platform"
 };
 
 export const JWTSecret: string = "this is a secret";
