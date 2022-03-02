@@ -1,4 +1,4 @@
 cd /shared/app
-echo -e Installing node packages..
+echo Installing node packages..
 npm i
 npm run start
