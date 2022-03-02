@@ -4,7 +4,6 @@ services:
 
   init:
     image: alpine
-    container_name: init
     working_dir: /shared
     command: sh -c "apk add git && rm -rf /shared/app && git clone https://github.com/Romario-Stankovic/Student_Testing_Platform_API /shared/app"
     volumes:
@@ -12,7 +11,6 @@ services:
 
   mysql:
     image: mysql:latest
-    container_name: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=student_testing_platform
@@ -26,12 +24,11 @@ services:
 
   backend:
     image: node:16.14.0
-    container_name: backend
     working_dir: /
     depends_on:
       - init
       - mysql
-    command: /shared/docker/run-backend.sh
+    command: /shared/app/run-backend.sh
     volumes:
       - shared:/shared
 
