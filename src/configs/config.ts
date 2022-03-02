@@ -1,5 +1,5 @@
 export const DatabaseConfiguration = {
-    hostname: "localhost",
+    hostname: "mysql",
     port: 3306,
     username: "app",
     password: "app",
