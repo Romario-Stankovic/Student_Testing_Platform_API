@@ -5,7 +5,7 @@ services:
   init:
     image: alpine
     working_dir: /shared
-    command: sh -c "apk add git && rm -rf /shared/app && git clone https://github.com/Romario-Stankovic/Student_Testing_Platform_API /shared/app"
+    command: sh -c "apk add git && rm -rf /shared/backend && git clone https://github.com/Romario-Stankovic/Student_Testing_Platform_API /shared/backend"
     volumes:
       - shared:/shared
 
@@ -14,9 +14,6 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=student_testing_platform
-      - MYSQL_ROOT_HOST=localhost
-      - MYSQL_USER=app
-      - MYSQL_PASSWORD=app
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     working_dir: /
@@ -40,7 +37,7 @@ services:
     depends_on:
       - init
       - mysql
-    command: bash -c "apt update && apt install mariadb-client -y && cd /shared/app && mysql -h mysql -P 3306 -uroot -proot < database/testing_platform_empty.sql && echo 'Installing node packages...' && npm i && npm run start"
+    command: bash -c "apt update && apt install mariadb-client -y && cd /shared/backend && mysql -h mysql -P 3306 -uroot -proot < database/testing_platform_empty.sql && echo 'Installing node packages...' && npm i && npm run start"
     volumes:
       - shared:/shared
 

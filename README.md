@@ -2,21 +2,29 @@
 
 A Rest API developed using NestJS.
 
-# Built using
+# Languages & Tools:
 <p>
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width=25 alt="TypeScript">
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width=25  alt="Node.js">
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-plain.svg" width=25 alt="NestJs">
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" width=25 alt="MySQL">
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-plain.svg" width=25 alt="Docker">
 </p>
 
-# Quick Start
+# Quick Start - Manual
 
 1. Install Node.js [link](https://nodejs.org/en/)
 2. Clone the repository on your local machine
-3. Host the MySQL database provided on your local machine
-4. Go to src/configs/config.ts and change the username and password to the one used to access the database or
-5. Add a new user to manage the database with the credentials: (usename: app, password: app)
+3. Host the MySQL database provided in the ./database folder on your local machine
+4. Create a new user to manage your database (*optional)
+5. Create a `.env` file in the project directory and set the following parameters to match your mysql configuration:
+```
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=root
+MYSQL_DATABASE=student_testing_platform
+```
 6. Open a terminal in the directory of the project
 7. Execute the following commands:
 ```
@@ -24,6 +32,14 @@ A Rest API developed using NestJS.
 > npm run start
 ```
 6. Enjoy :)
+
+# Quick Start - Docker
+
+1. Install Docker [link](https://www.docker.com/get-started)
+2. Download or copy-paste the docker-compose.yml file from the repository into any directory on your local machine
+3. Open a terminal in the directory where the file lives
+4. Run `docker-compose up` to start composing the containers
+5. Enjoy :)
 
 # Documentation
 
