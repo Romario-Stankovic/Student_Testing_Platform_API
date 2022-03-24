@@ -5,9 +5,10 @@ services:
   init:
     image: alpine
     working_dir: /shared
-    command: sh -c "apk add git && rm -rf /shared/backend && git clone https://github.com/Romario-Stankovic/Student_Testing_Platform_API /shared/backend"
+    command: sh -c "apk add git && rm -rf /shared/backend && git clone https://github.com/Romario-Stankovic/StudentTestingPlatform_API /shared/backend"
     volumes:
       - shared:/shared
+    
 
   mysql:
     image: mysql:latest
