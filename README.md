@@ -1,6 +1,6 @@
 # Description
 
-A RESTful API developed using NestJS and TypeScript. It was given as a school project to learn web application development.
+A RESTful API developed using NestJS and TypeScript. It was given as a side project at Singidunum University to learn web application development.
 
 Project requirements were:
 - Use a relational database
