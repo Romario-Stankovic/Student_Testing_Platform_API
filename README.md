@@ -1,6 +1,13 @@
 # Description
 
-A Rest API developed using NestJS.
+A RESTful API developed using NestJS and TypeScript. It was given as a school project to learn web application development.
+
+Project requirements were:
+- Use a relational database
+- Created using Node.js
+- Frontend application
+- 3 Levels of validation
+- Project documentation
 
 # Languages & Tools:
 <p>
