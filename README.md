@@ -9,7 +9,7 @@ Project requirements were:
 - 3 Levels of validation
 - Project documentation
 
-# Languages & Tools:
+# Languages & Tools
 <p>
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width=25 alt="TypeScript">
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width=25  alt="Node.js">
@@ -38,7 +38,7 @@ MYSQL_DATABASE=student_testing_platform
 > npm install
 > npm run start
 ```
-6. Enjoy :)
+8. Enjoy :)
 
 # Quick Start - Docker
 
