@@ -94,4 +94,4 @@ Run `docker-compose up` to start composing the containers
 </ul>
 
 <h2>⚖ License</h2>
-This repository is under the <a href="LICENSE">MIT</a> license.
+This repository is under the <a href="LICENSE.md">MIT</a> license.
