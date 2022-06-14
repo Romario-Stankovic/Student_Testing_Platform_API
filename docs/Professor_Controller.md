@@ -56,8 +56,6 @@ Response codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | There are no professors matching this query |
 
----
-
 ### **Add professor**
 
 ```POST: /api/professor```
@@ -104,8 +102,6 @@ Response Codes:
 | 1001 | Service Error | Saving to the database failed |
 | 2002 | Controller Error | Username is already taken |
 
----
-
 ### **Update professor**
 
 ``` PATCH: /api/professor ```
@@ -142,8 +138,6 @@ Response Codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 1001 | Service Error | Saving to the database failed |
 | 2002 | Controller Error | Username is already taken |
-
----
 
 ### **Delete professor**
 

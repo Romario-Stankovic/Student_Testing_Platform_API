@@ -55,8 +55,6 @@ Response Codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | There are no tests matching this query |
 
----
-
 ### **Get active tests**
 
 ```GET: /api/test/active```
@@ -94,8 +92,6 @@ Response Codes:
 | 401 | Unauthorized | The user accessing this resource is not authorized |
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | There are no active tests |
-
----
 
 ### **Get test questions**
 
@@ -141,8 +137,6 @@ Response Codes:
 | 401 | Unauthorized | The user accessing this resource is not authorized |
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | There are no questions for this tests |
-
----
 
 ### **Add test**
 
@@ -192,8 +186,6 @@ Response Codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 1001 | Service Error | Saving to the database failed |
 
----
-
 ### **Update test**
 
 ``` PATCH: /api/test```
@@ -231,8 +223,6 @@ Response Codes:
 | 401 | Unauthorized | The user accessing this resource is not authorized |
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 1001 | Service Error | Saving to the database failed |
-
----
 
 ### **Modify test questions**
 
@@ -279,8 +269,6 @@ Response Codes:
 | 401 | Unauthorized | The user accessing this resource is not authorized |
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | Test does not exist |
-
----
 
 ### **Delete test**
 

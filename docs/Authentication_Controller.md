@@ -45,8 +45,6 @@ Response Codes:
 | 4001 | Authentication Error | Username not found |
 | 4002 | Authentication Error | Password does not match |
 
----
-
 ### **Professor Login**
 
 ```POST: /auth/login/professor```
@@ -90,8 +88,6 @@ Response Codes:
 | 4001 | Authentication Error | Username not found |
 | 4002 | Authentication Error | Password does not match |
 
----
-
 ### **Student Login**
 
 ```POST: /auth/login/student```
@@ -133,8 +129,6 @@ Response Codes:
 | 1001 | Service Error | Saving token to database failed |
 | 4001 | Authentication Error | Index number not found |
 
----
-
 ### **Refreshing the token**
 
 ``` POST: /auth/token/refresh```
@@ -175,8 +169,6 @@ Response Codes:
 | 4003 | Authentication Error | Token was not found in the body |
 | 4004 | Authentication Error | Token has expired or is no longer valid |
 | 4005 | Authentication Error | Token is bad |
-
----
 
 ### **Getting token holder identity**
 

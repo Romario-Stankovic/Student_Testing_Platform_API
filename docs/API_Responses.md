@@ -3,8 +3,6 @@
 
 This is a generalized list of response codes which can be received when making a request to the API.
 
----
-
 ## **Generic**
 
 Generic responses are used when the API does not need to return any relevant data, but some sort of response is needed to inform the end user of the outcome.
@@ -12,8 +10,6 @@ Generic responses are used when the API does not need to return any relevant dat
 | Response code | Response status | Reason |
 |---|---|---|
 |0|OK!|Everything is fine!|
-
----
 
 ## **Service**
 
@@ -23,8 +19,6 @@ Service responses are low level responses where the intended interaction with th
 |---|---|---|
 | 1001 | Service Error | Saving to the database failed |
 | 1002 | Service Error | Deleting from the database failed |
-
----
 
 ## **Controllers**
 
@@ -36,8 +30,6 @@ Controller responses are higher level responses caused before or after a service
 | 2002 | Controller Error | Insertion with a duplicate unique value |
 | 2003 | Controller Error | Failed to save uploaded asset |
 
----
-
 ## **Application**
 
 Application responses are application specific and are usually caused by the end users.
@@ -46,8 +38,6 @@ Application responses are application specific and are usually caused by the end
 |---|---|---|
 | 3001 | Application Error | Cannot generate work because the test doesn't have enough questions |
 | 3002 | Application Error | Cannot edit/end work because it has already ended |
-
----
 
 ## **Authentication**
 
@@ -60,8 +50,6 @@ Authentication is used to register the user to the API and allowing him to make 
 | 4003 | Authentication Error | Refresh token does not exist |
 | 4004 | Authentication Error | Expired or invalid token |
 | 4005 | Authentication Error | Bad token received |
-
----
 
 ## **HTTP**
 

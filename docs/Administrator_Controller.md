@@ -54,8 +54,6 @@ Response codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | There are no administrators matching this query |
 
----
-
 ### **Add administrator**
 
 ```POST: /api/admin```
@@ -101,8 +99,6 @@ Response Codes:
 | 1001 | Service Error | Saving to the database failed |
 | 2002 | Controller Error | Username is already taken |
 
----
-
 ### **Update administrator**
 
 ``` PATCH: /api/admin ```
@@ -139,8 +135,6 @@ Response Codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 1001 | Service Error | Saving to the database failed |
 | 2002 | Controller Error | Username is already taken |
-
----
 
 ### **Delete administrator**
 

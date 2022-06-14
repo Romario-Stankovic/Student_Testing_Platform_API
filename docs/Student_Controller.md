@@ -54,8 +54,6 @@ Response codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 2001 | Controller Warning | There are no students matching this query |
 
----
-
 ### **Add student**
 
 ```POST: /api/student```
@@ -100,8 +98,6 @@ Response Codes:
 | 1001 | Service Error | Saving to the database failed |
 | 2002 | Controller Error | Index Number is already taken |
 
----
-
 ### **Update student**
 
 ``` PATCH: /api/student ```
@@ -137,8 +133,6 @@ Response Codes:
 | 403 | Forbidden | Wrong user is accessing this resource |
 | 1001 | Service Error | Saving to the database failed |
 | 2002 | Controller Error | Index Number is already taken |
-
----
 
 ### **Delete student**
 
