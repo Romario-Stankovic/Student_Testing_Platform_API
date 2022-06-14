@@ -1,8 +1,8 @@
 <h1 align="center">Student Testing Platform API</h1>
 
-<p>A Rest API developed using the NestJS framework. This API was developed as part of a school project designed to learn the fundamentals of RESTful APIs and how they operate.</p>
+A Rest API developed using the NestJS framework. This API was developed as part of a school project designed to learn the fundamentals of RESTful APIs and how they operate.
 
-<h2>🧰 Languages & Tools</h2>
+## 🧰 Languages & Tools
 <p>
   <a href="https://code.visualstudio.com/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" width="30px" alt="VSCode"></a>
   <a href="https://www.typescriptlang.org/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="30px" alt="TypeScript"></a>
@@ -12,27 +12,21 @@
   <a href="https://www.docker.com/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-plain.svg" width="30px" alt="Docker"></a>
 </p>
 
-<h2>⚡ Getting Started</h2>
+## ⚡ Getting Started
 
-<p>Requirements:</p>
+Requirements:
 
-<ul>
-<li><a href="https://nodejs.org/en/">Node.js</a></li>
-<li><a href="https://www.mysql.com/">MySQL Server</a></li>
-</ul>
+- [Node.js](https://nodejs.org/en/)
+- [MySQL Server](https://www.mysql.com/)
 
-<p>Guide:</p>
+Guide:
 
-<ol>
-  <li>Install Node.js and MySQL Server</li>
-  <li>Clone the repository on to your machine</li>
-  <li>Host the MySQL database provided in the /database folder</li>
-  <li>Create a new user to manage the database (*optional)</li>
-  <li>Modify the .env file in the project directory to match your MySQL settings.
+  1. Install Node.js and MySQL Server
+  2. Clone the repository on to your machine
+  3. Host the MySQL database provided in the /database folder
+  4. Create a new user to manage the database (*optional)
+  5. Modify the .env file in the project directory to match your MySQL settings.
   
-  <br>
-
-  Template:
   ```
   MYSQL_HOST=localhost
   MYSQL_PORT=3306
@@ -40,58 +34,39 @@
   MYSQL_PASSWORD=root
   MYSQL_DATABASE=student_testing_platform
   ```
-  </li>
-  <li>Open a terminal window in the directory of the project</li>
-  <li>Execute
+  6. Open a terminal window in the directory of the project
+  7. Execute the following commands:
 
   ```
   > npm install
   > npm run start
   ```
+  
+  8. Enjoy :)
 
-  </li>
-  <li>Enjoy :)</li>
-</ol>
+## ⚡ Getting Started - Docker
 
-<h2>⚡ Getting Started - Docker</h2>
+Requirements:
 
-<p>Requirements:</p>
+- [Docker](https://www.docker.com/)
 
-<ul>
-<li> <a href="https://www.docker.com/">Docker</a> </li>
-</ul>
+Guide:
 
-<p>Guide: </p>
+1. Install Docker
+2. Download or copy/paste the `docker-compose.yml` file from the repository into any directory on your local machine
+3. Open a terminal window in the same directory as the compose file
+4. Run `docker-compose up` to start composing the containers
+5. Enjoy
 
-<ol>
-<li>Install Docker</li>
-<li>
+## 📚 Documentation
 
-Download or copy/paste the `docker-compose.yml` file from the repository into any directory on your local machine
+- [API Responses](docs/API_Responses.md)
+- [Authentication Controller](docs/Authentication_Controller.md)
+- [Administrator Controller](docs/Administrator_Controller.md)
+- [Professor Controller](docs/Professor_Controller.md)
+- [Student Controller](docs/Student_Controller.md)
+- [Test Controller](docs/Test_Controller.md)
+- [Work Controller](docs/Work_Controller.md)
 
-</li>
-
-<li>Open a terminal window in the same directory as the compose file</li>
-<li>
-
-Run `docker-compose up` to start composing the containers
-
-</li>
-
-<li>Enjoy</li>
-</ol>
-
-<h2>📚 Documentation</h2>
-
-<ul>
-  <li><a href="docs/API_Responses.md">API Responses</a></li>
-  <li><a href="docs/Authentication_Controller.md">Authentication Controller</a></li>
-  <li><a href="docs/Administrator_Controller.md">Administrator Controller</a></li>
-  <li><a href="docs/Professor_Controller.md">Professor Controller</a></li>
-  <li><a href="docs/Student_Controller.md">Student Controller</a></li>
-  <li><a href="docs/Test_Controller.md">Test Controller</a></li>
-  <li><a href="docs/Work_Controller.md">Work Controller</a></li>
-</ul>
-
-<h2>⚖ License</h2>
-This repository is under the <a href="LICENSE.md">MIT</a> license.
+## ⚖ License
+This repository is under the [MIT](LICENCE) license.
