@@ -69,4 +69,4 @@ Guide:
 - [Work Controller](docs/Work_Controller.md)
 
 ## ⚖ License
-This repository is under the [MIT](LICENCE) license.
+This repository is under the [MIT](LICENSE) license.
