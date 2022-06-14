@@ -1,59 +1,97 @@
-# Description
+<h1 align="center">Student Testing Platform API</h1>
 
-A RESTful API developed using NestJS and TypeScript. It was given as a side project at Singidunum University to learn web application development.
+<p>A Rest API developed using the NestJS framework. This API was developed as part of a school project designed to learn the fundamentals of RESTful APIs and how they operate.</p>
 
-Project requirements were:
-- Use a relational database
-- Created using Node.js
-- Frontend application
-- 3 Levels of validation
-- Project documentation
-
-# Languages & Tools
+<h2>🧰 Languages & Tools</h2>
 <p>
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width=25 alt="TypeScript">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width=25  alt="Node.js">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-plain.svg" width=25 alt="NestJs">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" width=25 alt="MySQL">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-plain.svg" width=25 alt="Docker">
+  <a href="https://code.visualstudio.com/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" width="30px" alt="VSCode"></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="30px" alt="TypeScript"></a>
+  <a href="https://nodejs.org/en/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width="30px" alt="Node.js"></a>
+  <a href="https://nestjs.com/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-plain.svg" width="30px" alt="NestJS"></a>
+  <a href="https://www.mysql.com/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" width="30px" alt="MySQL"></a>
+  <a href="https://www.docker.com/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-plain.svg" width="30px" alt="Docker"></a>
 </p>
 
-# Quick Start - Manual
+<h2>⚡ Getting Started</h2>
 
-1. Install Node.js [link](https://nodejs.org/en/)
-2. Clone the repository on your local machine
-3. Host the MySQL database provided in the ./database folder on your local machine
-4. Create a new user to manage your database (*optional)
-5. Create a `.env` file in the project directory and set the following parameters to match your mysql configuration:
-```
-MYSQL_HOST=localhost
-MYSQL_PORT=3306
-MYSQL_USER=root
-MYSQL_PASSWORD=root
-MYSQL_DATABASE=student_testing_platform
-```
-6. Open a terminal in the directory of the project
-7. Execute the following commands:
-```
-> npm install
-> npm run start
-```
-8. Enjoy :)
+<p>Requirements:</p>
 
-# Quick Start - Docker
+<ul>
+<li><a href="https://nodejs.org/en/">Node.js</a></li>
+<li><a href="https://www.mysql.com/">MySQL Server</a></li>
+</ul>
 
-1. Install Docker [link](https://www.docker.com/get-started)
-2. Download or copy-paste the docker-compose.yml file from the repository into any directory on your local machine
-3. Open a terminal in the directory where the file lives
-4. Run `docker-compose up` to start composing the containers
-5. Enjoy :)
+<p>Guide:</p>
 
-# Documentation
+<ol>
+  <li>Install Node.js and MySQL Server</li>
+  <li>Clone the repository on to your machine</li>
+  <li>Host the MySQL database provided in the /database folder</li>
+  <li>Create a new user to manage the database (*optional)</li>
+  <li>Modify the .env file in the project directory to match your MySQL settings.
+  
+  <br>
 
-- [API Responses](docs/API_Responses.md)
-- [Authentication Controller](docs/Authentication_Controller.md)
-- [Administrator Controller](docs/Administrator_Controller.md)
-- [Professor Controller](docs/Professor_Controller.md)
-- [Student Controller](docs/Student_Controller.md)
-- [Test Controller](docs/Test_Controller.md)
-- [Work Controller](docs/Work_Controller.md)
+  Template:
+  ```
+  MYSQL_HOST=localhost
+  MYSQL_PORT=3306
+  MYSQL_USER=root
+  MYSQL_PASSWORD=root
+  MYSQL_DATABASE=student_testing_platform
+  ```
+  </li>
+  <li>Open a terminal window in the directory of the project</li>
+  <li>Execute
+
+  ```
+  > npm install
+  > npm run start
+  ```
+
+  </li>
+  <li>Enjoy :)</li>
+</ol>
+
+<h2>⚡ Getting Started - Docker</h2>
+
+<p>Requirements:</p>
+
+<ul>
+<li> <a href="https://www.docker.com/">Docker</a> </li>
+</ul>
+
+<p>Guide: </p>
+
+<ol>
+<li>Install Docker</li>
+<li>
+
+Download or copy/paste the `docker-compose.yml` file from the repository into any directory on your local machine
+
+</li>
+
+<li>Open a terminal window in the same directory as the compose file</li>
+<li>
+
+Run `docker-compose up` to start composing the containers
+
+</li>
+
+<li>Enjoy</li>
+</ol>
+
+<h2>📚 Documentation</h2>
+
+<ul>
+  <li><a href="docs/API_Responses.md">API Responses</a></li>
+  <li><a href="docs/Authentication_Controller.md">Authentication Controller</a></li>
+  <li><a href="docs/Administrator_Controller.md">Administrator Controller</a></li>
+  <li><a href="docs/Professor_Controller.md">Professor Controller</a></li>
+  <li><a href="docs/Student_Controller.md">Student Controller</a></li>
+  <li><a href="docs/Test_Controller.md">Test Controller</a></li>
+  <li><a href="docs/Work_Controller.md">Work Controller</a></li>
+</ul>
+
+<h2>⚖ License</h2>
+This repository is under the <a href="LICENSE">MIT</a> license.
