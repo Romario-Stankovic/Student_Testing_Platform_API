@@ -21,7 +21,7 @@ Requirements:
 Guide:
 
   1. Install Node.js and MySQL Server
-  2. Clone the repository on to your machine
+  2. Clone the repository onto your machine
   3. Host the MySQL database provided in the /database folder
   4. Create a new user to manage the database (*optional)
   5. Modify the .env file in the project directory to match your MySQL settings.
