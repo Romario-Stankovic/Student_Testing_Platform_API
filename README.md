@@ -4,8 +4,8 @@ This project was given as an exercise and opportunity to learn Full-Stack web de
 
 The project is split into two repositories:
 
-- [Frontend]("https://github.com/Romario-Stankovic/StudentTestingPlatform")
-- [Backend]("https://github.com/Romario-Stankovic/StudentTestingPlatform_API")
+- [Frontend](https://github.com/Romario-Stankovic/StudentTestingPlatform)
+- [Backend](https://github.com/Romario-Stankovic/StudentTestingPlatform_API)
 
 The backend was made using NestJS framework.
 
