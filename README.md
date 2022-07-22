@@ -53,7 +53,7 @@ The backend allows for CRUD operations over the following tables:
   MYSQL_DATABASE=student_testing_platform
   ```
   6. Execute ```> npm install``` to install necessary packages
-  7. Execute ```npm run start``` to run the code
+  7. Execute ```> npm run start``` to run the code
   8. Enjoy 🙂
 
 ## ⚡ Getting Started - Docker
