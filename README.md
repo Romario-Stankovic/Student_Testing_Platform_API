@@ -1,31 +1,50 @@
 <h1 align="center">Student Testing Platform API</h1>
 
-A Rest API developed using the NestJS framework. This API was developed as part of a school project designed to learn the fundamentals of RESTful APIs and how they operate.
+This project was given as an exercise and opportunity to learn Full-Stack web development. The goal was to create a web application for student testing where professors could create tests and score students on said tests.
+
+The project is split into two repositories:
+
+- [Frontend]("https://github.com/Romario-Stankovic/StudentTestingPlatform")
+- [Backend]("https://github.com/Romario-Stankovic/StudentTestingPlatform_API")
+
+The backend was made using NestJS framework.
+
+## 💡 Features
+
+The backend allows for CRUD operations over the following tables:
+
+- Administrators
+- Answers
+- Professors
+- Questions
+- Students
+- Tests
+- Works
+- Work Answers
 
 ## 🧰 Languages & Tools
 
-  <a href="https://www.typescriptlang.org/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="30px" alt="TypeScript"></a>
-  <a href="https://nodejs.org/en/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width="30px" alt="Node.js"></a>
-  <a href="https://nestjs.com/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-plain.svg" width="30px" alt="NestJS"></a>
-  <a href="https://www.mysql.com/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" width="30px" alt="MySQL"></a>
-  <a href="https://www.docker.com/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-plain.svg" width="30px" alt="Docker"></a>
-  <a href="https://code.visualstudio.com/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" width="30px" alt="VSCode"></a>
+  <a href="https://code.visualstudio.com/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" width="30px" alt="VSCode" title="Visual Studio Code"></a>
+  <a href="https://nodejs.org/en/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" width="30px" alt="NodeJS" title="NodeJS"></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="30px" alt="TypeScript" title="TypeScript"></a>
+  <a href="https://nestjs.com/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-plain.svg" width="30px" alt="NestJS" title="NestJS"></a>
+  <a href="https://www.mysql.com/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" width="30px" alt="MySQL" title="MySQL"></a>
+  <a href="https://www.docker.com/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-plain.svg" width="30px" alt="Docker" title="Docker"></a>
 
 ## ⚡ Getting Started
 
-Requirements:
+### 🛠 Requirements:
 
-- [Node.js](https://nodejs.org/en/)
+- [NodeJS](https://nodejs.org/en/)
 - [MySQL Server](https://www.mysql.com/)
 
-Guide:
+### 📖 Guide:
 
-  1. Install Node.js and MySQL Server
-  2. Clone the repository onto your machine
-  3. Host the MySQL database provided in the /database folder
+  1. Download and install NodeJS and MySQL Server
+  2. Download the repository
+  3. Execute ```./database/testing_platform_empty.sql``` to load the database
   4. Create a new user to manage the database (*optional)
-  5. Modify the .env file in the project directory to match your MySQL settings.
-  
+  5. Modify the .env file in the project directory to match your MySQL settings:
   ```
   MYSQL_HOST=localhost
   MYSQL_PORT=3306
@@ -33,29 +52,22 @@ Guide:
   MYSQL_PASSWORD=root
   MYSQL_DATABASE=student_testing_platform
   ```
-  6. Open a terminal window in the directory of the project
-  7. Execute the following commands:
-
-  ```
-  > npm install
-  > npm run start
-  ```
-  
-  8. Enjoy :)
+  6. Execute ```> npm install``` to install necessary packages
+  7. Execute ```npm run start``` to run the code
+  8. Enjoy 🙂
 
 ## ⚡ Getting Started - Docker
 
-Requirements:
+### 🛠 Requirements:
 
 - [Docker](https://www.docker.com/)
 
-Guide:
+### 📖 Guide:
 
-1. Install Docker
-2. Download or copy/paste the `docker-compose.yml` file from the repository into any directory on your local machine
-3. Open a terminal window in the same directory as the compose file
-4. Run `docker-compose up` to start composing the containers
-5. Enjoy
+1. Download and Install Docker
+2. Download or copy/paste the ```docker-compose.yml``` file from the repository into any directory on your local machine
+3. Execute ```> docker-compose up``` to start composing the containers
+4. Enjoy 🙂
 
 ## 📚 Documentation
 
