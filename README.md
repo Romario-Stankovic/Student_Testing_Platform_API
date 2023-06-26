@@ -42,7 +42,13 @@ The backend allows for CRUD operations over the following tables:
   2. Download the repository
   3. Execute ```./database/testing_platform_empty.sql``` to load the database
   4. Create a new user to manage the database (*optional)
-  5. Modify the .env file in the project directory to match your MySQL settings:
+  5. Execute ```> npm install``` to install necessary packages
+  6. Execute ```> npm run start``` to run the code
+  7. Enjoy 🙂
+
+### ⚙ Configuration:
+
+  1. Modify the .env file in the project directory to match your MySQL settings:
   ```
   MYSQL_HOST=localhost
   MYSQL_PORT=3306
@@ -50,9 +56,6 @@ The backend allows for CRUD operations over the following tables:
   MYSQL_PASSWORD=root
   MYSQL_DATABASE=student_testing_platform
   ```
-  6. Execute ```> npm install``` to install necessary packages
-  7. Execute ```> npm run start``` to run the code
-  8. Enjoy 🙂
 
 ## ⚡ Getting Started - Docker
 
