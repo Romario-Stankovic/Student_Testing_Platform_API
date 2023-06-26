@@ -1,13 +1,11 @@
 <h1 align="center">Student Testing Platform API</h1>
 
-This project was given as an exercise and opportunity to learn Full-Stack web development. The goal was to create a web application for student testing where professors could create tests and score students on said tests.
+"Student Testing Platform" was a side project given as a practical task at Singidunum University. The project was given as a opportunity to learn full stack development using NodeJS. The project features a basic frontend that is build using vanilla HTML, CSS, and JavaScript, while the backend was developed using NestJS and TypeScript.
 
 The project is split into two repositories:
 
 - [Frontend](https://github.com/Romario-Stankovic/StudentTestingPlatform)
 - [Backend](https://github.com/Romario-Stankovic/StudentTestingPlatform_API)
-
-The backend was made using NestJS framework.
 
 ## 💡 Features
 
