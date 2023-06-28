@@ -39,7 +39,6 @@ Response (error):
 Response Codes:
 | Response code | Response status | Reason |
 |---|---|---|
-| 0 | OK! | Delete successful |
 | 400 | Bad Request | Field validation failed |
 | 1001 | Service Error | Saving token to database failed |
 | 4001 | Authentication Error | Username not found |
@@ -82,7 +81,6 @@ Response (error):
 Response Codes:
 | Response code | Response status | Reason |
 |---|---|---|
-| 0 | OK! | Delete successful |
 | 400 | Bad Request | Field validation failed |
 | 1001 | Service Error | Saving token to database failed |
 | 4001 | Authentication Error | Username not found |
@@ -124,7 +122,6 @@ Response (error):
 Response Codes:
 | Response code | Response status | Reason |
 |---|---|---|
-| 0 | OK! | Delete successful |
 | 400 | Bad Request | Field validation failed |
 | 1001 | Service Error | Saving token to database failed |
 | 4001 | Authentication Error | Index number not found |
